@@ -119,7 +119,7 @@
     "autoload": {
         "psr-4": {
             "BackendBase\\Shared\\": "src/BackendBase/Shared/",
-            "BackendBase\\Domain\\": "src/BackendBase/Shared/",
+            "BackendBase\\Domain\\": "src/BackendBase/Domain/",
             "BackendBase\\Infrastructure\\": "src/BackendBase/Infrastructure/",
             "BackendBase\\PrivateApi\\": "src/BackendBase/Infrastructure/Ui/PrivateApi/",
             "BackendBase\\PublicWeb\\": "src/BackendBase/Infrastructure/Ui/PublicWeb/"
