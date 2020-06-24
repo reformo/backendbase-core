@@ -146,34 +146,14 @@
         "development-enable": "laminas-development-mode enable",
         "development-status": "laminas-development-mode status",
         "expressive": "expressive --ansi",
-        "generate-mo-files": "php bin/generate-mo-files.php",
         "check": [
             "@cs-check",
             "@check-assumptions",
             "@test"
         ],
-        "clear-config-cache": "php bin/clear-config-cache.php",
-        "clear-route-cache": "php bin/clear-route-cache.php",
-        "clear-twig-cache": "php bin/clear-twig-cache.php",
-        "clear-cache-files": [
-            "@clear-config-cache",
-            "@clear-route-cache",
-            "@clear-twig-cache",
-            "@generate-mo-files"
-        ],
         "cs-check": "vendor/bin/phpcs --standard=Doctrine",
         "cs-fix": "vendor/bin/phpcbf --standard=Doctrine",
-        "check-assumptions": "vendor/bin/phpa",
-        "serve-private-api": "php -S 0.0.0.0:10081 -t src/public/PrivateApi",
-        "serve-public-web": "php -S 0.0.0.0:10080 -t src/public/PublicWeb",
-        "start-private-api": [
-            "@clear-cache-files",
-            "@serve-private-api"
-        ],
-        "start-public-web": [
-            "@clear-cache-files",
-            "@serve-public-web"
-        ],
+
         "test": "phpunit --colors=always",
         "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
     }

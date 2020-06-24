@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Reformo\Shared\ValueObject;
+namespace BackendBase\Shared\ValueObject;
 
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
-use Reformo\Shared\ValueObject\Exception\InvalidDateTimeProvided;
+use BackendBase\Shared\ValueObject\Exception\InvalidDateTimeProvided;
 
 class LocalizedDateTime
 {

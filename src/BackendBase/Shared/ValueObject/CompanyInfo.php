@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Reformo\Shared\ValueObject;
+namespace BackendBase\Shared\ValueObject;
 
 use InvalidArgumentException;
-use Reformo\Shared\ValueObject\Exception\InvalidCompanyLegalName;
-use Reformo\Shared\ValueObject\Exception\InvalidCompanyShortName;
-use Reformo\Shared\ValueObject\Exception\InvalidCompanyType;
+use BackendBase\Shared\ValueObject\Exception\InvalidCompanyLegalName;
+use BackendBase\Shared\ValueObject\Exception\InvalidCompanyShortName;
+use BackendBase\Shared\ValueObject\Exception\InvalidCompanyType;
 use Webmozart\Assert\Assert;
 use function implode;
 use function sprintf;

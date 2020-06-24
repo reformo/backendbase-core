@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Reformo\Shared\ValueObject;
+namespace BackendBase\Shared\ValueObject;
 
 use InvalidArgumentException;
-use Reformo\Shared\ValueObject\Exception\InvalidPersonFamilyName;
-use Reformo\Shared\ValueObject\Exception\InvalidPersonFirstName;
+use BackendBase\Shared\ValueObject\Exception\InvalidPersonFamilyName;
+use BackendBase\Shared\ValueObject\Exception\InvalidPersonFirstName;
 use Webmozart\Assert\Assert;
 use function array_pop;
 use function explode;

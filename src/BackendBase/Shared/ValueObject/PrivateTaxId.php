@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Reformo\Shared\ValueObject;
+namespace BackendBase\Shared\ValueObject;
 
-use Reformo\Shared\ValueObject\Exception\InvalidPrivateTaxIdNumber;
+use BackendBase\Shared\ValueObject\Exception\InvalidPrivateTaxIdNumber;
 use function array_map;
 use function str_split;
 use function strlen;

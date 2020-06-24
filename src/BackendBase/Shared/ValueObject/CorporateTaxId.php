@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Reformo\Shared\ValueObject;
+namespace BackendBase\Shared\ValueObject;
 
 use Reformo\Shared\ValueObject\Exception\InvalidCorporateTaxIdNumber;
 use function array_map;

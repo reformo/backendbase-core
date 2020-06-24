@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Reformo\Shared\ValueObject;
+namespace BackendBase\Shared\ValueObject;
 
 use InvalidArgumentException;
-use Reformo\Shared\ValueObject\Exception\InvalidPhoneNumber;
+use BackendBase\Shared\ValueObject\Exception\InvalidPhoneNumber;
 use Webmozart\Assert\Assert;
 use function preg_replace;
 use function str_replace;

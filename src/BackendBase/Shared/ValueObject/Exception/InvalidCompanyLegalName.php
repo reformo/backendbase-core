@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Reformo\Shared\ValueObject\Exception;
+namespace BackendBase\Shared\ValueObject\Exception;
 
 use Exception;
-use Reformo\Shared\Exception\DomainException;
+use BackendBase\Shared\Exception\DomainException;
 
 final class InvalidCompanyLegalName extends Exception
 {
