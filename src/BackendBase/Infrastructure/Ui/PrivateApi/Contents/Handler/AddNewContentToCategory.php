@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\Contents\Handler;
 
+use Cocur\Slugify\Slugify;
 use DateTimeImmutable;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
@@ -41,6 +42,7 @@ class AddNewContentToCategory implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Contents::CMS_CREATE) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to add new content');
         }
+        $slugify = new  Slugify(['rulesets' => ['default', 'turkish']]);
         $loggedUserId = $request->getAttribute('loggedUserId');
         $allowHtml    = [
             '$.body' => [
@@ -51,6 +53,9 @@ class AddNewContentToCategory implements RequestHandlerInterface
         ];
 
         $payload = PayloadSanitizer::sanitize($request->getParsedBody(), $allowHtml);
+        $metadata = $payload['metadata'] ?? [];
+        $categoryData = $this->contentsRepository->getCategory($request->getAttribute('category'));
+        $metadata['slug'] = $categoryData['slug'] .'/' . $slugify->slugify($payload['title']);
 
         $content = new Content();
         $content->setId($payload['tenantId'] ?? Uuid::uuid4()->toString());
@@ -63,7 +68,7 @@ class AddNewContentToCategory implements RequestHandlerInterface
         $content->setKeywords($payload['keywords'] ?? null);
         $content->setRobots($payload['robots'] ?? null);
         $content->setCanonical($payload['canonical'] ?? null);
-        $content->setMetadata($payload['metadata'] ?? []);
+        $content->setMetadata($metadata);
         $content->setRedirect($payload['redirect'] ?? null);
         $content->setBody($payload['body'] ?? '');
         $content->setIsActive(Content::CONTENT_IS_ACTIVE);

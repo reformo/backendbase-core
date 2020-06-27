@@ -154,6 +154,22 @@ SQL;
         return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
     }
 
+    public function getContentBySlugForClient(string $slug) : array
+    {
+
+        $sql       =<<<SQL
+            SELECT C.id
+              FROM public.contents C 
+             WHERE C.metadata.slug = :slug
+             LIMIT 1
+SQL;
+        $statement = $this->connection->executeQuery($sql, ['slug' => $slug]);
+        $data      = $statement->fetch();
+        if ($data === false) {
+            throw ContentNotFound::create('Content not found. It may be deleted.');
+        }
+        return $this->getContentByIdForClient($data['id']);
+    }
 
 
     public function getContentsByCategory(string $category, ?bool $withBody = false) : array

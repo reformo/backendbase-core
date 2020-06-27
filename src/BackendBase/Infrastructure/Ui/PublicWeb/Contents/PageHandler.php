@@ -41,13 +41,13 @@ class PageHandler implements RequestHandlerInterface
     {
         $guard            = $request->getAttribute(CsrfMiddleware::GUARD_ATTRIBUTE);
         $token            = $guard->generateToken();
-        $pageSlug = explode('-',$request->getAttribute('pageSlug'));
-        $pageShortId = array_pop($pageSlug);
+        $pageSlug = $request->getAttribute('pageSlug');
+
 
         $shortener = Shortener::make(
             Dictionary::createUnmistakable() // or pass your own characters set
         );
-        $page      = $this->contentRepository->getContentByIdForClient($shortener->expand($pageShortId));
+        $page      = $this->contentRepository->getContentBySlugForClient($pageSlug);
 
 
 
