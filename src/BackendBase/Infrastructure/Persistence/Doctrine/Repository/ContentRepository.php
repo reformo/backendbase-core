@@ -158,6 +158,10 @@ SQL;
 
     public function getContentsByCategory(string $category, ?bool $withBody = false) : array
     {
+        $slugify = new  Slugify(['rulesets' => ['default', 'turkish']]);
+        $shortener = Shortener::make(
+            Dictionary::createUnmistakable() // or pass your own characters set
+        );
         $returnData  = [];
         $withBodySql = '';
         $sql         = '
@@ -192,6 +196,8 @@ SQL;
         foreach ($data as $datum) {
             $datum['images']   = json_decode($datum['images'], true, 512, JSON_THROW_ON_ERROR);
             $datum['metadata'] = json_decode($datum['metadata'], true, 512, JSON_THROW_ON_ERROR);
+            $datum['slug'] = $category .'/'. $slugify->slugify($datum['title']).'-'.$shortener->reduce($datum['id']);
+
             $returnData[]      = $datum;
         }
 
