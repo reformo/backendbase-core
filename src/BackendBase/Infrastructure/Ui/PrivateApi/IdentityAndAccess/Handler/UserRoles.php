@@ -36,6 +36,7 @@ class UserRoles implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Users::USERS_PERMISSIONS) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to edit permissions');
         }
+        $permissionTypes = $this->rolesRepository->getPermissionsTypesList();
         $permissions = $this->rolesRepository->getPermissionsList();
         $rolesData   = $this->rolesRepository->getUserRoles();
         $roles       = [];
@@ -43,14 +44,10 @@ class UserRoles implements RequestHandlerInterface
             $role['permissions'] = json_decode($role['permissions'], true, 512, JSON_THROW_ON_ERROR);
             $roles[]             = $role;
         }
-        $sections = [
-            'collections' => 'Collections',
-            'users' => 'Kullancılar',
-            'cms' => 'CMS',
-            'sizden-gelenler' => 'Sizden Gelenler',
-
-            'nereden-satin-alinir' => 'Nereden Satın Alınır'
-        ];
+        $sections = [];
+        foreach ($permissionTypes as $permissionType) {
+            $sections[$permissionType['slug']] = $permissionType['name'];
+        }
 
         $permissionsTable = [];
 

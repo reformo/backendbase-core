@@ -14,7 +14,6 @@ class RolesRepository
 {
     protected EntityManager $entityManager;
     protected Connection $connection;
-
     private ReJSON $reJSON;
 
     public function __construct(EntityManager $entityManager, Connection $connection, ReJSON $reJSON)
@@ -22,6 +21,22 @@ class RolesRepository
         $this->connection    = $connection;
         $this->entityManager = $entityManager;
         $this->reJSON        = $reJSON;
+    }
+
+    public function getPermissionsTypesList() : array
+    {
+        $sql       = '
+            SELECT name, slug
+              FROM admin.permissions_types
+             ORDER BY created_at ASC
+        ';
+        $statement = $this->connection->executeQuery($sql);
+        $data      = $statement->fetchAll();
+        if ($data === false) {
+            return [];
+        }
+
+        return $data;
     }
 
     public function getPermissionsList() : array
