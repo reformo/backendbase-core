@@ -59,7 +59,7 @@ class AddNewContentToCategory implements RequestHandlerInterface
 
         $content = new Content();
         $content->setId($payload['tenantId'] ?? Uuid::uuid4()->toString());
-        $content->setType($payload['contentType']);
+        $content->setType('full');
         $content->setCategory($request->getAttribute('category'));
         $content->setTitle($payload['title']);
         $content->setSerpTitle($payload['serpTitle'] ?? $payload['title']);
