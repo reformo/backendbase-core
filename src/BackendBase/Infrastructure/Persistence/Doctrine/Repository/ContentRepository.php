@@ -161,7 +161,7 @@ SQL;
         $sql       =<<<SQL
             SELECT C.id
               FROM public.contents C 
-             WHERE C.metadata.slug = :slug
+             WHERE C.metadata->>'slug' = :slug
              LIMIT 1
 SQL;
         $statement = $this->connection->executeQuery($sql, ['slug' => $slug]);
