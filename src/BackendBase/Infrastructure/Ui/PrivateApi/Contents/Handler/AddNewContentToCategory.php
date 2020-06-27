@@ -55,7 +55,7 @@ class AddNewContentToCategory implements RequestHandlerInterface
         $payload = PayloadSanitizer::sanitize($request->getParsedBody(), $allowHtml);
         $metadata = $payload['metadata'] ?? [];
         $categoryData = $this->contentsRepository->getCategory($request->getAttribute('category'));
-        $metadata['slug'] = $categoryData['slug'] .'/' . $slugify->slugify($payload['title']);
+        $metadata['slug'] = $metadata['slug'] ?? ('/' . $categoryData['slug'] .'/' . $slugify->slugify($payload['title']));
 
         $content = new Content();
         $content->setId($payload['tenantId'] ?? Uuid::uuid4()->toString());
