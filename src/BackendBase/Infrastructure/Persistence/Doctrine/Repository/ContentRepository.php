@@ -169,6 +169,7 @@ SQL;
                    C.title, 
                    C.type, 
                    L.name as category_str, 
+                   L.slug as category_slug,
                    C.category, 
                    C.created_at, 
                    C.updated_at, 
@@ -196,7 +197,7 @@ SQL;
         foreach ($data as $datum) {
             $datum['images']   = json_decode($datum['images'], true, 512, JSON_THROW_ON_ERROR);
             $datum['metadata'] = json_decode($datum['metadata'], true, 512, JSON_THROW_ON_ERROR);
-            $datum['slug'] = $category .'/'. $slugify->slugify($datum['title']).'-'.$shortener->reduce($datum['id']);
+            $datum['slug'] = $datum['category_slug'] .'/'. $slugify->slugify($datum['title']).'-'.$shortener->reduce($datum['id']);
 
             $returnData[]      = $datum;
         }
