@@ -156,6 +156,7 @@ SQL;
 
     public function getContentBySlugForClient(string $slug) : array
     {
+        $slug = '/' . $slug;
 
         $sql       =<<<SQL
             SELECT C.id
