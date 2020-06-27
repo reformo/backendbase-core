@@ -64,7 +64,7 @@ class ChangeContentDetails implements RequestHandlerInterface
         $content->setMetadata($payload['metadata'] ?? $content->metadata());
         $content->setRedirect($payload['redirect'] ?? $content->redirect());
         $content->setBody($payload['body'] ?? $content->body());
-        $content->setIsActive($payload['is_active'] ?? $content->isActive());
+        $content->setIsActive($payload['isActive'] ?? $content->isActive());
         $content->setUpdatedAt(new DateTimeImmutable());
         $content->setUpdatedBy($loggedUserId);
         $this->genericRepository->persistGeneric($content);
