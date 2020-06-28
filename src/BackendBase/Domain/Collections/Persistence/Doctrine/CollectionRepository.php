@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Collections\Persistence\Doctrine;
 
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\ORM\EntityManager;
 use BackendBase\Domain\Collections\Interfaces\CollectionRepository as CollectionRepositoryInterface;
 use BackendBase\Domain\Collections\Model\Collection;
 use BackendBase\Domain\Collections\Persistence\Doctrine\ResultObject\Collection as CollectionResultObject;
 use BackendBase\Domain\Collections\Persistence\Doctrine\SqlQuery\GetCollectionItem;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Collection as DoctrineCollectionEntity;
+use Doctrine\DBAL\Driver\Connection;
+use Doctrine\ORM\EntityManager;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Redislabs\Module\ReJSON\ReJSON;

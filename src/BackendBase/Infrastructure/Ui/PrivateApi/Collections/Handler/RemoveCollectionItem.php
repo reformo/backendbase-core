@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\Collections\Handler;
 
+use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
-use function apcu_delete;
 
 class RemoveCollectionItem implements RequestHandlerInterface
 {

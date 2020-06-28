@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\Contents\Handler;
 
-use Cocur\Slugify\Slugify;
-use BackendBase\Domain\Collections\Interfaces\CollectionRepository;
-use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
-use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
-use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Content;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\FileRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
+use BackendBase\Shared\Services\MessageBus\Interfaces\CommandBus;
+use Cocur\Slugify\Slugify;
 use Intervention\Image\ImageManagerStatic as Image;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Permissions\Rbac\Role;
@@ -19,8 +16,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
-use BackendBase\Shared\Services\MessageBus\Interfaces\CommandBus;
-use function apcu_delete;
 use function array_key_exists;
 use function basename;
 use function str_replace;
@@ -44,12 +39,12 @@ class GenericUploadImage implements RequestHandlerInterface
         Filesystem $fileSystem,
         array $config
     ) {
-        $this->config               = $config;
-        $this->commandBus           = $commandBus;
-        $this->fileSystem           = $fileSystem;
-        $this->fileRepository       = $fileRepository;
-        $this->genericRepository    = $genericRepository;
-        $this->slugifier            = new Slugify(['rulesets' => ['default', 'turkish']]);
+        $this->config            = $config;
+        $this->commandBus        = $commandBus;
+        $this->fileSystem        = $fileSystem;
+        $this->fileRepository    = $fileRepository;
+        $this->genericRepository = $genericRepository;
+        $this->slugifier         = new Slugify(['rulesets' => ['default', 'turkish']]);
     }
 
     private static function findExtension(string $mimetype) : string
@@ -81,7 +76,7 @@ class GenericUploadImage implements RequestHandlerInterface
         $type              = $queryParams['type'] ?? 'CONTENTS';
 
         $uploadedFile = $request->getAttribute('uploadedFilePath');
-        $module    = $request->getAttribute('moduleName');
+        $module       = $request->getAttribute('moduleName');
         $fileId       = Uuid::uuid4()->toString();
         $filePath     =  'app/images/' . $module . '/' . $fileId . '.' . self::findExtension($this->fileSystem->getMimetype($uploadedFile));
 
@@ -102,6 +97,7 @@ class GenericUploadImage implements RequestHandlerInterface
             ],
         ];
         $this->fileRepository->addNewFile($fileData);
+
         return new JsonResponse(['image' => str_replace('app/', '/', $filePath) ], 201);
     }
 }

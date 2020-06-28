@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\ValueObject;
 
-use Reformo\Shared\ValueObject\Exception\InvalidCorporateTaxIdNumber;
+use BackendBase\Shared\ValueObject\Exception\InvalidCorporateTaxIdNumber;
 use function array_map;
 use function count;
 use function pow;

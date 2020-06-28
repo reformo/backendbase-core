@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\IdentityAndAccess\Handler;
 
-use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
-use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Domain\User\Interfaces\UserQuery;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
+use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\JsonResponse;
-use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
+use function apcu_cache_info;
+use function apcu_clear_cache;
 
 class ResetApcuCache implements RequestHandlerInterface
 {
@@ -45,6 +44,7 @@ class ResetApcuCache implements RequestHandlerInterface
 
             return new JsonResponse(['before' => $before, 'after' => $after]);
         }
+
         return new EmptyResponse(403);
     }
 }

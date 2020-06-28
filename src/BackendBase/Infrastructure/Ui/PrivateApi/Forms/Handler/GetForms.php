@@ -7,13 +7,13 @@ namespace BackendBase\PrivateApi\Forms\Handler;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Forms;
-use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use function count;
 
 class GetForms implements RequestHandlerInterface
 {
@@ -22,7 +22,7 @@ class GetForms implements RequestHandlerInterface
     public function __construct(
         GenericRepository $genericRepository
     ) {
-        $this->genericRepository  = $genericRepository;
+        $this->genericRepository = $genericRepository;
     }
 
     public function handle(ServerRequestInterface $request) : ResponseInterface

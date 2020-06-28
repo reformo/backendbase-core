@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\Contents\Handler;
 
-use Cocur\Slugify\Slugify;
 use BackendBase\Domain\Collections\Interfaces\CollectionRepository;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
-use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Content;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\FileRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
+use BackendBase\Shared\Services\MessageBus\Interfaces\CommandBus;
+use Cocur\Slugify\Slugify;
 use Intervention\Image\ImageManagerStatic as Image;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Permissions\Rbac\Role;
@@ -19,8 +19,6 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
-use BackendBase\Shared\Services\MessageBus\Interfaces\CommandBus;
-use function apcu_delete;
 use function array_key_exists;
 use function basename;
 use function str_replace;
@@ -104,6 +102,7 @@ class UploadImages implements RequestHandlerInterface
             ],
         ];
         $this->fileRepository->addNewFile($fileData);
+
         return new JsonResponse(['image' => str_replace('app/', '/', $filePath) ], 201);
     }
 }

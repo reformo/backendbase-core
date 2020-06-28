@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Repository;
 
+use BackendBase\Infrastructure\Persistence\Doctrine\Entity\File;
+use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Order;
 use DateTimeImmutable;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\EntityManager;
-use BackendBase\Infrastructure\Persistence\Doctrine\Entity\File;
-use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Order;
 use Redislabs\Module\ReJSON\ReJSON;
 
 class FileRepository

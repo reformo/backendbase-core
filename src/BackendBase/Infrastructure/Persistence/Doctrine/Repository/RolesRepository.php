@@ -105,6 +105,7 @@ class RolesRepository
 
         return json_decode($data['permissions'], true, 512, JSON_THROW_ON_ERROR);
     }
+
     public function getRolePermissionsByRoleNameForUser(string $userId) : array
     {
         $sql       = '

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Collections\Persistence\Doctrine\SqlQuery;
 
-use Doctrine\DBAL\FetchMode;
 use BackendBase\Domain\Collections\Exception\CollectionNotFound;
 use BackendBase\Domain\Collections\Model\Collections;
 use BackendBase\Domain\Collections\Persistence\Doctrine\ResultObject\Collection;
 use BackendBase\Domain\Shared\Exception\ExecutionFailed;
 use BackendBase\Shared\Services\Persistence\SqlQuery;
+use Doctrine\DBAL\FetchMode;
 use Throwable;
 use function count;
 use function sprintf;

@@ -7,14 +7,13 @@ namespace BackendBase\PrivateApi\Forms\Handler;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\FormData;
-use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Forms;
-use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use function ceil;
 
 class GetFormsData implements RequestHandlerInterface
 {
@@ -23,7 +22,7 @@ class GetFormsData implements RequestHandlerInterface
     public function __construct(
         GenericRepository $genericRepository
     ) {
-        $this->genericRepository  = $genericRepository;
+        $this->genericRepository = $genericRepository;
     }
 
     public function handle(ServerRequestInterface $request) : ResponseInterface
@@ -37,33 +36,34 @@ class GetFormsData implements RequestHandlerInterface
         }
         $formData = [];
 
-        $limit = 25;
+        $limit       = 25;
         $queryParams = $request->getQueryParams();
-        $page = $queryParams['page'] ?? 1;
-        $total = $this->genericRepository->getListTotal(FormData::class, ['form_id'=> $request->getAttribute('formId')]);
-        $pageCount = ceil($total/$limit);
+        $page        = $queryParams['page'] ?? 1;
+        $total       = $this->genericRepository->getListTotal(FormData::class, ['form_id' => $request->getAttribute('formId')]);
+        $pageCount   = ceil($total/$limit);
         if ($page > $pageCount) {
             $page = $pageCount;
         }
         if ($page <1) {
             $page = 1;
         }
-        $offset = $limit * ($page-1);
+        $offset     = $limit * ($page-1);
         $pagination = [
             'offset' => $offset,
-            'limit' => $limit
+            'limit' => $limit,
         ];
         if ($total > 0) {
             $formData = $this->genericRepository->getList(
                 FormData::class,
                 ['form_id' => $request->getAttribute('formId')],
-                "created_at DESC",
+                'created_at DESC',
                 $pagination
             );
         }
+
         return new JsonResponse([
             'formData' => $formData,
-            'total'=> $total
+            'total'=> $total,
         ], 200);
     }
 }

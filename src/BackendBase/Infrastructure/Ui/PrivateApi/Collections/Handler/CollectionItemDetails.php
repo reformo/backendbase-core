@@ -7,12 +7,12 @@ namespace BackendBase\PrivateApi\Collections\Handler;
 use BackendBase\Domain\Collections\Query\GetCollectionItemByKey;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
+use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
 
 class CollectionItemDetails implements RequestHandlerInterface
 {

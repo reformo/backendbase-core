@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\Contents\Handler;
 
-use Cocur\Slugify\Slugify;
-use DateTimeImmutable;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Content;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
+use BackendBase\Shared\Services\PayloadSanitizer;
+use Cocur\Slugify\Slugify;
+use DateTimeImmutable;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
-use BackendBase\Shared\Services\PayloadSanitizer;
-use function apcu_delete;
 
 class AddNewContentToCategory implements RequestHandlerInterface
 {
@@ -42,7 +41,7 @@ class AddNewContentToCategory implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Contents::CMS_CREATE) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to add new content');
         }
-        $slugify = new  Slugify(['rulesets' => ['default', 'turkish']]);
+        $slugify      = new Slugify(['rulesets' => ['default', 'turkish']]);
         $loggedUserId = $request->getAttribute('loggedUserId');
         $allowHtml    = [
             '$.body' => [
@@ -52,10 +51,10 @@ class AddNewContentToCategory implements RequestHandlerInterface
             '$.serpDescription' => ['allowedTags' => 'b;strong;'],
         ];
 
-        $payload = PayloadSanitizer::sanitize($request->getParsedBody(), $allowHtml);
-        $metadata = $payload['metadata'] ?? [];
-        $categoryData = $this->contentsRepository->getCategory($request->getAttribute('category'));
-        $metadata['slug'] = $metadata['slug'] ?? ('/' . $categoryData['slug'] .'/' . $slugify->slugify($payload['title']));
+        $payload          = PayloadSanitizer::sanitize($request->getParsedBody(), $allowHtml);
+        $metadata         = $payload['metadata'] ?? [];
+        $categoryData     = $this->contentsRepository->getCategory($request->getAttribute('category'));
+        $metadata['slug'] = $metadata['slug'] ?? ('/' . $categoryData['slug'] . '/' . $slugify->slugify($payload['title']));
 
         $content = new Content();
         $content->setId($payload['tenantId'] ?? Uuid::uuid4()->toString());

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\ValueObject;
 
+use BackendBase\Shared\ValueObject\Exception\InvalidDateTimeProvided;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
-use BackendBase\Shared\ValueObject\Exception\InvalidDateTimeProvided;
 
 class LocalizedDateTime
 {

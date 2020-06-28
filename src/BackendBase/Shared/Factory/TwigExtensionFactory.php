@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\Factory;
 
+use BackendBase\Shared\Services\TwigExtension;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use BackendBase\Shared\Services\TwigExtension;
 
 class TwigExtensionFactory implements FactoryInterface
 {

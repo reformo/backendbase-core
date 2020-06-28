@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Repository;
 
+use BackendBase\Domain\Contents\Exception\ContentNotFound;
+use BackendBase\Shared\Services\ArrayKeysCamelCaseConverter;
+use Carbon\CarbonImmutable;
+use Cocur\Slugify\Slugify;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\EntityManager;
-use BackendBase\Domain\Contents\Exception\ContentNotFound;
-use Redislabs\Module\ReJSON\ReJSON;
-use BackendBase\Shared\Services\ArrayKeysCamelCaseConverter;
-use const JSON_THROW_ON_ERROR;
-use function json_decode;
-use function str_replace;
-use Cocur\Slugify\Slugify;
 use Keiko\Uuid\Shortener\Dictionary;
 use Keiko\Uuid\Shortener\Shortener;
-use Carbon\CarbonImmutable;
+use Redislabs\Module\ReJSON\ReJSON;
+use const DATE_ATOM;
+use const JSON_THROW_ON_ERROR;
+use function array_key_exists;
+use function count;
+use function json_decode;
+use function str_replace;
+use function strpos;
 
 class ContentRepository
 {
@@ -104,14 +110,14 @@ class ContentRepository
 
     public function getContentByIdForClient(string $contentId) : array
     {
-        $slugify = new  Slugify(['rulesets' => ['default', 'turkish']]);
-        $shortener = Shortener::make(
+        $slugify             = new Slugify(['rulesets' => ['default', 'turkish']]);
+        $shortener           = Shortener::make(
             Dictionary::createUnmistakable() // or pass your own characters set
         );
-        $now = new \DateTimeImmutable();
-        $nowLocale = $now->setTimezone(new \DateTimeZone('Europe/Istanbul'));
+        $now                 = new DateTimeImmutable();
+        $nowLocale           = $now->setTimezone(new DateTimeZone('Europe/Istanbul'));
         $nowLocaleDateString = $nowLocale->format(DATE_ATOM);
-        $sql       =<<<SQL
+        $sql                 =<<<SQL
             SELECT *
               FROM public.contents C 
              WHERE C.id = :id
@@ -121,19 +127,19 @@ class ContentRepository
                AND (jsonb_path_exists(C.metadata, '$.expireDate') = false OR C.metadata->>'expireDate' >= :nowLocaleDate)
              LIMIT 1
 SQL;
-        $statement = $this->connection->executeQuery($sql, ['id' => $contentId, 'nowLocaleDate' => $nowLocaleDateString]);
-        $data      = $statement->fetch();
+        $statement           = $this->connection->executeQuery($sql, ['id' => $contentId, 'nowLocaleDate' => $nowLocaleDateString]);
+        $data                = $statement->fetch();
         if ($data === false) {
             throw ContentNotFound::create('Content not found. It may be deleted.');
         }
         unset($data['is_deleted']);
-        $data['type'] = 'plain';
-        $data['useCdn'] = 0;
-        $data['images']   = json_decode($data['images'], true, 512, JSON_THROW_ON_ERROR);
-        $data['metadata'] = json_decode($data['metadata'] ?? '[]', true, 512, JSON_THROW_ON_ERROR);
-        $data['heroImage'] =  '';
+        $data['type']        = 'plain';
+        $data['useCdn']      = 0;
+        $data['images']      = json_decode($data['images'], true, 512, JSON_THROW_ON_ERROR);
+        $data['metadata']    = json_decode($data['metadata'] ?? '[]', true, 512, JSON_THROW_ON_ERROR);
+        $data['heroImage']   =  '';
         $data['publishDate'] = new CarbonImmutable($data['created_at'], 'UTC');
-        $data['publishDate'] = $data['publishDate']->setTimezone(new \DateTimeZone('europe/istanbul'))
+        $data['publishDate'] = $data['publishDate']->setTimezone(new DateTimeZone('europe/istanbul'))
             ->format('d.m.Y');
         if (array_key_exists('publishDate', $data['metadata'])) {
             $data['publishDate'] = new CarbonImmutable($data['metadata']['publishDate']);
@@ -144,13 +150,14 @@ SQL;
         if (count($data['images']) > 0) {
             $data['heroImage'] = $data['images'][0];
         }
-        if ($data['heroImage'] === '' && array_key_exists('headerVideo', $data['metadata']) && !empty($data['metadata']['headerVideo']) ) {
-            $videoId = str_replace('https://www.youtube.com/embed/', '', $data['metadata']['headerVideo']);
-            $data['heroImage'] = str_replace('{videoId}', $videoId, "https://i3.ytimg.com/vi/{videoId}/maxresdefault.jpg");
+        if ($data['heroImage'] === '' && array_key_exists('headerVideo', $data['metadata']) && ! empty($data['metadata']['headerVideo'])) {
+            $videoId           = str_replace('https://www.youtube.com/embed/', '', $data['metadata']['headerVideo']);
+            $data['heroImage'] = str_replace('{videoId}', $videoId, 'https://i3.ytimg.com/vi/{videoId}/maxresdefault.jpg');
         }
-        if (!empty($data['heroImage']) && strpos($data['heroImage'], 'http') !== 0) {
+        if (! empty($data['heroImage']) && strpos($data['heroImage'], 'http') !== 0) {
             $data['useCdn'] = 1;
         }
+
         return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
     }
 
@@ -169,14 +176,14 @@ SQL;
         if ($data === false) {
             throw ContentNotFound::create('Content not found. It may be deleted.');
         }
+
         return $this->getContentByIdForClient($data['id']);
     }
 
-
     public function getContentsByCategory(string $category, ?bool $withBody = false) : array
     {
-        $slugify = new  Slugify(['rulesets' => ['default', 'turkish']]);
-        $shortener = Shortener::make(
+        $slugify     = new Slugify(['rulesets' => ['default', 'turkish']]);
+        $shortener   = Shortener::make(
             Dictionary::createUnmistakable() // or pass your own characters set
         );
         $returnData  = [];
@@ -214,39 +221,40 @@ SQL;
         foreach ($data as $datum) {
             $datum['images']   = json_decode($datum['images'], true, 512, JSON_THROW_ON_ERROR);
             $datum['metadata'] = json_decode($datum['metadata'], true, 512, JSON_THROW_ON_ERROR);
-            $datum['slug'] = $datum['category_slug'] .'/'. $slugify->slugify($datum['title']).'-'.$shortener->reduce($datum['id']);
+            $datum['slug']     = $datum['category_slug'] . '/' . $slugify->slugify($datum['title']) . '-' . $shortener->reduce($datum['id']);
 
-            $returnData[]      = $datum;
+            $returnData[] = $datum;
         }
 
         return ArrayKeysCamelCaseConverter::convertArrayKeys($returnData);
     }
-    public function getRandomExcludingOne(string $category, $contentId, $limit, ?bool $withBody = false) :array
+
+    public function getRandomExcludingOne(string $category, $contentId, $limit, ?bool $withBody = false) : array
     {
         $postsData = $this->getContentsByCategoryForClient($category, 0, $limit+1, $withBody);
-        $posts = [];
+        $posts     = [];
         for ($i=0; $i < $limit; $i++) {
             if ($postsData[$i]['id'] === $contentId) {
                 $i++;
             }
             $posts[] = $postsData[$i];
         }
+
         return $posts;
     }
 
-
     public function getContentsByCategoryForClient(string $category, int $offset, int $limit, ?bool $withBody = false) : array
     {
-        $slugify = new  Slugify(['rulesets' => ['default', 'turkish']]);
-        $shortener = Shortener::make(
+        $slugify             = new Slugify(['rulesets' => ['default', 'turkish']]);
+        $shortener           = Shortener::make(
             Dictionary::createUnmistakable() // or pass your own characters set
         );
-        $now = new \DateTimeImmutable();
-        $nowLocale = $now->setTimezone(new \DateTimeZone('Europe/Istanbul'));
+        $now                 = new DateTimeImmutable();
+        $nowLocale           = $now->setTimezone(new DateTimeZone('Europe/Istanbul'));
         $nowLocaleDateString = $nowLocale->format(DATE_ATOM);
-        $returnData  = [];
-        $withBodySql = '';
-        $sql         = <<<SQL
+        $returnData          = [];
+        $withBodySql         = '';
+        $sql                 = <<<SQL
             SELECT C.id, 
                    C.title, 
                    C.type, 
@@ -277,7 +285,7 @@ SQL;
             'category' => $category,
             'offset'=> $offset,
             'limit' => $limit,
-            'nowLocaleDate' => $nowLocaleDateString
+            'nowLocaleDate' => $nowLocaleDateString,
         ]);
         $data      = $statement->fetchAll();
         if ($data === false) {
@@ -285,12 +293,12 @@ SQL;
         }
 
         foreach ($data as $datum) {
-            $datum['useCdn'] = 0;
-            $datum['images']   = json_decode($datum['images'], true, 512, JSON_THROW_ON_ERROR);
-            $datum['metadata'] = json_decode($datum['metadata'] ?? '[]', true, 512, JSON_THROW_ON_ERROR);
-            $datum['heroImage'] =  '';
+            $datum['useCdn']      = 0;
+            $datum['images']      = json_decode($datum['images'], true, 512, JSON_THROW_ON_ERROR);
+            $datum['metadata']    = json_decode($datum['metadata'] ?? '[]', true, 512, JSON_THROW_ON_ERROR);
+            $datum['heroImage']   =  '';
             $datum['publishDate'] = new CarbonImmutable($datum['created_at'], 'UTC');
-            $datum['publishDate'] = $datum['publishDate']->setTimezone(new \DateTimeZone('europe/istanbul'))
+            $datum['publishDate'] = $datum['publishDate']->setTimezone(new DateTimeZone('europe/istanbul'))
             ->format('d.m.Y');
             if (array_key_exists('publishDate', $datum['metadata'])) {
                 $datum['publishDate'] = new CarbonImmutable($datum['metadata']['publishDate']);
@@ -300,20 +308,19 @@ SQL;
             if (count($datum['images']) > 0) {
                 $datum['heroImage'] = $datum['images'][0];
             }
-            if ($datum['heroImage'] === '' && array_key_exists('headerVideo', $datum['metadata']) && !empty($datum['metadata']['headerVideo']) ) {
-                $videoId = str_replace('https://www.youtube.com/embed/', '', $datum['metadata']['headerVideo']);
-                $datum['heroImage'] = str_replace('{videoId}', $videoId, "https://i3.ytimg.com/vi/{videoId}/maxresdefault.jpg");
+            if ($datum['heroImage'] === '' && array_key_exists('headerVideo', $datum['metadata']) && ! empty($datum['metadata']['headerVideo'])) {
+                $videoId            = str_replace('https://www.youtube.com/embed/', '', $datum['metadata']['headerVideo']);
+                $datum['heroImage'] = str_replace('{videoId}', $videoId, 'https://i3.ytimg.com/vi/{videoId}/maxresdefault.jpg');
             }
             $datum['slug'] = $slugify->slugify($datum['title']) . '-' . $shortener->reduce($datum['id']);
-            if (!empty($datum['heroImage']) && strpos($datum['heroImage'], 'http') !== 0) {
+            if (! empty($datum['heroImage']) && strpos($datum['heroImage'], 'http') !== 0) {
                 $datum['useCdn'] = 1;
             }
-            $returnData[]      = $datum;
+            $returnData[] = $datum;
         }
 
         return ArrayKeysCamelCaseConverter::convertArrayKeys($returnData);
     }
-
 
     public function getContentMenuByCategory(string $category) : array
     {
@@ -352,13 +359,14 @@ SQL;
               FROM public.contents C
              WHERE C.metadata->>'module' = :moduleName      
 SQL;
-        $statement = $this->connection->executeQuery($sql, ['moduleName' => $moduleName]);
-        $data      = $statement->fetch();
+        $statement  = $this->connection->executeQuery($sql, ['moduleName' => $moduleName]);
+        $data       = $statement->fetch();
         if ($data === false) {
             return $returnData;
         }
-        $data['images'] = json_decode($data['images'], true, 512, JSON_THROW_ON_ERROR);
+        $data['images']   = json_decode($data['images'], true, 512, JSON_THROW_ON_ERROR);
         $data['metadata'] = json_decode($data['metadata'], true, 512, JSON_THROW_ON_ERROR);
+
         return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
     }
 
@@ -390,5 +398,4 @@ SQL;
 
         return ArrayKeysCamelCaseConverter::convertArrayKeys($returnData);
     }
-
 }

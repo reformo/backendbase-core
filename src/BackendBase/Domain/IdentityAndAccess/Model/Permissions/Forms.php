@@ -6,6 +6,5 @@ namespace BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 
 class Forms
 {
-    public const FORMS_MENU        = 'forms-menu';
-
+    public const FORMS_MENU = 'forms-menu';
 }

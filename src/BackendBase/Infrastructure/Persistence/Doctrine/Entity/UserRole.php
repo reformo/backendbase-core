@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
-use DateTimeImmutable;
 use BackendBase\Infrastructure\Persistence\Doctrine\AbstractDoctrineEntity;
+use DateTimeImmutable;
 
 /**
  * @Entity

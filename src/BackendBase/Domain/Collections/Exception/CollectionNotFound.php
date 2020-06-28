@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Collections\Exception;
 
-use Exception;
 use BackendBase\Domain\Shared\Exception\DomainException;
+use Exception;
 use Mezzio\ProblemDetails\Exception\ProblemDetailsExceptionInterface;
 
 class CollectionNotFound extends Exception implements ProblemDetailsExceptionInterface

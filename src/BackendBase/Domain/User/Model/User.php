@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\User\Model;
 
-use Carbon\CarbonImmutable;
-use DateTimeImmutable;
 use BackendBase\Domain\User\Exception\InvalidFirstName;
 use BackendBase\Domain\User\Interfaces\UserId as UserIdInterface;
 use BackendBase\Shared\ValueObject\Email;
+use Carbon\CarbonImmutable;
+use DateTimeImmutable;
 use Throwable;
 use Webmozart\Assert\Assert;
 use function password_verify;

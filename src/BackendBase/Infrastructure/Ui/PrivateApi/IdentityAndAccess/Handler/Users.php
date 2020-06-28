@@ -8,12 +8,12 @@ use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Domain\User\Interfaces\UserQuery;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
+use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
 
 class Users implements RequestHandlerInterface
 {

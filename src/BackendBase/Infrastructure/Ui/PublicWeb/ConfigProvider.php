@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace BackendBase\PublicWeb;
 
-
-
+use BackendBase\Shared\Interfaces\MezzioHandlerConfigProvider;
 use Mezzio\Application;
 use Mezzio\MiddlewareFactory;
-use BackendBase\Shared\Interfaces\MezzioHandlerConfigProvider;
 use function array_merge_recursive;
 
 class ConfigProvider
@@ -18,7 +16,6 @@ class ConfigProvider
 
     public function __construct()
     {
-
     }
 
     private function addConfigProviders(MezzioHandlerConfigProvider $configProvider) : void

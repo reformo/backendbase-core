@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\Contents\Handler;
 
-use DateTimeImmutable;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Content;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
+use BackendBase\Shared\Services\PayloadSanitizer;
+use DateTimeImmutable;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use BackendBase\Shared\Services\PayloadSanitizer;
-use function apcu_delete;
 
 class ChangeContentDetails implements RequestHandlerInterface
 {

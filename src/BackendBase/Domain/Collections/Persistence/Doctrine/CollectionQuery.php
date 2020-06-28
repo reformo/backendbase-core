@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Collections\Persistence\Doctrine;
 
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\ORM\EntityManager;
 use BackendBase\Domain\Collections\Interfaces\CollectionQuery as CollectionQueryInterface;
 use BackendBase\Domain\Collections\Model\Collections;
 use BackendBase\Domain\Collections\Persistence\Doctrine\ResultObject\Collection as CollectionResultObject;
 use BackendBase\Domain\Collections\Persistence\Doctrine\SqlQuery\GetCollectionItem;
+use Doctrine\DBAL\Driver\Connection;
+use Doctrine\ORM\EntityManager;
 use Redislabs\Module\ReJSON\ReJSON;
 use const JSON_OBJECT_AS_ARRAY;
 use const SORT_NATURAL;

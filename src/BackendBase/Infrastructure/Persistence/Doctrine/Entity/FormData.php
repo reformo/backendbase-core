@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
-
-use DateTimeImmutable;
 use BackendBase\Infrastructure\Persistence\Doctrine\AbstractDoctrineEntity;
+use DateTimeImmutable;
 
 /**
  * @Entity
@@ -53,26 +53,17 @@ class FormData
         $this->createdAt = $datetime;
     }
 
-    /**
-     * @param string $id
-     */
-    public function setId(string $id): void
+    public function setId(string $id) : void
     {
         $this->id = $id;
     }
 
-    /**
-     * @param string $clientIp
-     */
-    public function setClientIp(string $clientIp): void
+    public function setClientIp(string $clientIp) : void
     {
         $this->clientIp = $clientIp;
     }
 
-    /**
-     * @param string $formId
-     */
-    public function setFormId(string $formId): void
+    public function setFormId(string $formId) : void
     {
         $this->formId = $formId;
     }
@@ -80,18 +71,13 @@ class FormData
     /**
      * @param array $postData
      */
-    public function setPostData(array $postData): void
+    public function setPostData(array $postData) : void
     {
         $this->postData = $postData;
     }
 
-    /**
-     * @param int $isModerated
-     */
-    public function setIsModerated(int $isModerated): void
+    public function setIsModerated(int $isModerated) : void
     {
         $this->isModerated = $isModerated;
     }
-
-
 }

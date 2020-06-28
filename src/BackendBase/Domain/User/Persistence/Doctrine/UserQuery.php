@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\User\Persistence\Doctrine;
 
-use Doctrine\DBAL\Driver\Connection;
 use BackendBase\Domain\User\Interfaces\UserId;
 use BackendBase\Domain\User\Interfaces\UserQuery as UserQueryInterface;
 use BackendBase\Domain\User\Model\Users;
@@ -13,6 +12,7 @@ use BackendBase\Domain\User\Persistence\Doctrine\SqlQuery\GetAllUsers;
 use BackendBase\Domain\User\Persistence\Doctrine\SqlQuery\GetUserByEmail;
 use BackendBase\Domain\User\Persistence\Doctrine\SqlQuery\GetUserById;
 use BackendBase\Shared\ValueObject\Interfaces\Email;
+use Doctrine\DBAL\Driver\Connection;
 
 class UserQuery implements UserQueryInterface
 {

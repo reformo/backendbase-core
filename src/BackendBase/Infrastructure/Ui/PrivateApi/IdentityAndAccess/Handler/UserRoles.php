@@ -37,9 +37,9 @@ class UserRoles implements RequestHandlerInterface
             throw InsufficientPrivileges::create('You dont have privilege to edit permissions');
         }
         $permissionTypes = $this->rolesRepository->getPermissionsTypesList();
-        $permissions = $this->rolesRepository->getPermissionsList();
-        $rolesData   = $this->rolesRepository->getUserRoles();
-        $roles       = [];
+        $permissions     = $this->rolesRepository->getPermissionsList();
+        $rolesData       = $this->rolesRepository->getUserRoles();
+        $roles           = [];
         foreach ($rolesData as $role) {
             $role['permissions'] = json_decode($role['permissions'], true, 512, JSON_THROW_ON_ERROR);
             $roles[]             = $role;

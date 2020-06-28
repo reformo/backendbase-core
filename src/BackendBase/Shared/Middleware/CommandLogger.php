@@ -13,6 +13,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
 use const DATE_ATOM;
+use const JSON_THROW_ON_ERROR;
 use function array_key_exists;
 use function in_array;
 use function json_decode;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\User\Persistence\Doctrine\ResultObject;
 
-use JsonSerializable;
 use BackendBase\Shared\Services\Persistence\ResultObject;
+use JsonSerializable;
 
 class User implements JsonSerializable
 {

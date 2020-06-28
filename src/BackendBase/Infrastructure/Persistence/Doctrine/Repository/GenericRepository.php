@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Repository;
 
-use BackendBase\Shared\Services\ArrayKeysCamelCaseConverter;
-use BackendBase\Domain\Contents\Exception\ContentNotFound;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\ORM\EntityManager;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Newsletter;
+use BackendBase\Shared\Services\ArrayKeysCamelCaseConverter;
+use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Redislabs\Module\ReJSON\ReJSON;
+use const JSON_THROW_ON_ERROR;
+use function array_key_exists;
+use function count;
+use function json_decode;
 use function ucfirst;
 
 class GenericRepository
@@ -61,36 +63,36 @@ class GenericRepository
 
     public function getList(string $className, array $criteria, ?string $orderByString = '', ?array $pagination = []) : array
     {
-        $genericEntityMeta     = $this->entityManager->getClassMetadata($className);
-        $tableName = $genericEntityMeta->getTableName();
-        $columns = $genericEntityMeta->getFieldNames();
-        $whereSQL = '';
-        $select = '*';
-        $offset = '';
-        $limit = '';
-        $orderBy = '';
+        $genericEntityMeta = $this->entityManager->getClassMetadata($className);
+        $tableName         = $genericEntityMeta->getTableName();
+        $columns           = $genericEntityMeta->getFieldNames();
+        $whereSQL          = '';
+        $select            = '*';
+        $offset            = '';
+        $limit             = '';
+        $orderBy           = '';
 
         if (count($criteria) > 0) {
             $whereSQL = ' WHERE ';
-            $useAnd = 0;
+            $useAnd   = 0;
             foreach ($criteria as $key => $value) {
                 if ($useAnd === 1) {
                     $whereSQL .= ' AND ';
                 }
-                $whereSQL .= $key . '= :'.$key;
-                $useAnd = 1;
+                $whereSQL .= $key . '= :' . $key;
+                $useAnd    = 1;
             }
         }
         if (array_key_exists('offset', $pagination)) {
-            $offset = 'OFFSET :offset';
+            $offset             = 'OFFSET :offset';
             $criteria['offset'] = $pagination['offset'];
         }
         if (array_key_exists('limit', $pagination)) {
-            $offset = 'LIMIT :limit';
+            $offset            = 'LIMIT :limit';
             $criteria['limit'] = $pagination['limit'];
         }
-        if (!empty($orderByString)) {
-            $orderBy =' ORDER BY '. $orderByString;;
+        if (! empty($orderByString)) {
+            $orderBy =' ORDER BY ' . $orderByString;
         }
         $sql       = <<<SQL
             SELECT {$select}
@@ -107,9 +109,11 @@ SQL;
         foreach ($data as $datum) {
             foreach ($columns as $column) {
                 $mappingData = $genericEntityMeta->getFieldMapping($column);
-                if ($mappingData['type'] === 'json' || $mappingData['type'] === 'jsonb') {
-                    $datum[$mappingData['columnName']] = json_decode($datum[$mappingData['columnName']], true, 512, JSON_THROW_ON_ERROR);
+                if ($mappingData['type'] !== 'json' && $mappingData['type'] !== 'jsonb') {
+                    continue;
                 }
+
+                $datum[$mappingData['columnName']] = json_decode($datum[$mappingData['columnName']], true, 512, JSON_THROW_ON_ERROR);
             }
             $returnData[] = $datum;
         }
@@ -119,29 +123,29 @@ SQL;
 
     public function getListTotal(string $className, array $criteria) : int
     {
-        $genericEntityMeta     = $this->entityManager->getClassMetadata($className);
-        $tableName = $genericEntityMeta->getTableName();
-        $whereSQL = '';
+        $genericEntityMeta = $this->entityManager->getClassMetadata($className);
+        $tableName         = $genericEntityMeta->getTableName();
+        $whereSQL          = '';
 
         if (count($criteria) > 0) {
             $whereSQL = ' WHERE ';
-            $useAnd = 0;
+            $useAnd   = 0;
             foreach ($criteria as $key => $value) {
                 if ($useAnd === 1) {
                     $whereSQL .= ' AND ';
                 }
-                $whereSQL .= $key . '= :'.$key;
-                $useAnd = 1;
+                $whereSQL .= $key . '= :' . $key;
+                $useAnd    = 1;
             }
         }
-        $sql       = <<<SQL
+        $sql = <<<SQL
             SELECT count(*) as count
               FROM {$tableName}
               {$whereSQL}
 SQL;
 
         $statement = $this->connection->executeQuery($sql, $criteria);
+
         return (int) $statement->fetch()['count'];
     }
-
 }

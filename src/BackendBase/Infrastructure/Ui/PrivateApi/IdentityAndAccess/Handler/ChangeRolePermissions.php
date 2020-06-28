@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\IdentityAndAccess\Handler;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\UserRole;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;

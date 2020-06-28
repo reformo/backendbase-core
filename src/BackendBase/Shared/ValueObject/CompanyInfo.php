@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\ValueObject;
 
-use InvalidArgumentException;
 use BackendBase\Shared\ValueObject\Exception\InvalidCompanyLegalName;
 use BackendBase\Shared\ValueObject\Exception\InvalidCompanyShortName;
 use BackendBase\Shared\ValueObject\Exception\InvalidCompanyType;
+use InvalidArgumentException;
 use Webmozart\Assert\Assert;
 use function implode;
 use function sprintf;

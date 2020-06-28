@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\User\Persistence\Doctrine\SqlQuery;
 
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\FetchMode;
 use BackendBase\Domain\Shared\Exception\ExecutionFailed;
 use BackendBase\Domain\Shared\Exception\InvalidArgument;
 use BackendBase\Domain\User\Exception\UserNotFound;
 use BackendBase\Domain\User\Persistence\Doctrine\ResultObject\User;
 use BackendBase\Shared\Services\Persistence\SqlQuery;
+use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\FetchMode;
 use Throwable;
 use function array_key_exists;
 use function count;

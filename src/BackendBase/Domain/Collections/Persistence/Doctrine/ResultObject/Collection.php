@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Collections\Persistence\Doctrine\ResultObject;
 
-use JsonSerializable;
 use BackendBase\Shared\Services\Persistence\ResultObject;
+use JsonSerializable;
 use const JSON_OBJECT_AS_ARRAY;
 use function gettype;
 use function json_decode;

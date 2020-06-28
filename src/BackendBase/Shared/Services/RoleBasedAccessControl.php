@@ -8,11 +8,9 @@ use Laminas\Permissions\Rbac\Role;
 
 final class RoleBasedAccessControl
 {
-
     public static function fromPermissions(string $role, array $permissions) : Role
     {
-
-        $role          = new Role($role);
+        $role = new Role($role);
 
         foreach ($permissions as $permission) {
             $role->addPermission($permission);

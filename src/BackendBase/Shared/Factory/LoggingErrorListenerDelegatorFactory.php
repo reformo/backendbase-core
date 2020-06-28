@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\Factory;
 
+use BackendBase\Shared\Middleware\LoggingErrorListener;
 use Mezzio\ProblemDetails\ProblemDetailsMiddleware;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
-use BackendBase\Shared\Middleware\LoggingErrorListener;
 
 class LoggingErrorListenerDelegatorFactory
 {

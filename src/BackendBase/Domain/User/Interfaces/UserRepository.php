@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\User\Interfaces;
 
-use BackendBase\Shared\Exception\ExecutionFailed;
 use BackendBase\Domain\User\Exception\UserNotFound;
 use BackendBase\Domain\User\Model\User;
+use BackendBase\Shared\Exception\ExecutionFailed;
 use BackendBase\Shared\ValueObject\Email;
 
 interface UserRepository

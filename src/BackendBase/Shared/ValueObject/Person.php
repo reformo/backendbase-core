@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\ValueObject;
 
-use InvalidArgumentException;
 use BackendBase\Shared\ValueObject\Exception\InvalidPersonFamilyName;
 use BackendBase\Shared\ValueObject\Exception\InvalidPersonFirstName;
+use InvalidArgumentException;
 use Webmozart\Assert\Assert;
 use function array_pop;
 use function explode;

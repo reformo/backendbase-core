@@ -19,7 +19,7 @@ class ConnectionFactory implements FactoryInterface
     {
         Type::overrideType('datetime', VarDateTimeType::class);
         Type::overrideType('datetimetz', VarDateTimeType::class);
-        Type::overrideType('time',VarDateTimeType::class);
+        Type::overrideType('time', VarDateTimeType::class);
 
         Type::overrideType('datetime_immutable', VarDateTimeImmutableType::class);
         Type::overrideType('datetimetz_immutable', VarDateTimeImmutableType::class);

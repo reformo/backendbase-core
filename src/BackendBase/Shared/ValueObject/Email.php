@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\ValueObject;
 
-use InvalidArgumentException;
 use BackendBase\Shared\ValueObject\Exception\InvalidEmailAddress;
+use InvalidArgumentException;
 use Webmozart\Assert\Assert;
 
 final class Email
@@ -22,6 +22,7 @@ final class Email
 
         $this->email = $email;
     }
+
     public static function createFromString(string $email) : self
     {
         return new self($email);

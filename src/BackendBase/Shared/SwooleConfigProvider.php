@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared;
 
+use BackendBase\Shared\Console\Swoole;
 use Laminas\HttpHandlerRunner\RequestHandlerRunner;
 use Mezzio\Swoole\HotCodeReload\FileWatcher\InotifyFileWatcher;
 use Mezzio\Swoole\HotCodeReload\FileWatcherInterface;
@@ -21,7 +22,6 @@ use Mezzio\Swoole\SwooleRequestHandlerRunner;
 use Mezzio\Swoole\SwooleRequestHandlerRunnerFactory;
 use Mezzio\Swoole\WhoopsPrettyPageHandlerDelegator;
 use Psr\Http\Message\ServerRequestInterface;
-use BackendBase\Shared\Console\Swoole;
 use Swoole\Http\Server as SwooleHttpServer;
 use const PHP_SAPI;
 use function extension_loaded;

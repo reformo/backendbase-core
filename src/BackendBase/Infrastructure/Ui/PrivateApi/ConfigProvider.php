@@ -6,12 +6,11 @@ namespace BackendBase\PrivateApi;
 
 use BackendBase\PrivateApi\Collections\ConfigProvider as CollectionsConfigProvider;
 use BackendBase\PrivateApi\Contents\ConfigProvider as ContentsConfigProvider;
-use BackendBase\PrivateApi\IdentityAndAccess\ConfigProvider as IdentityAndAccessConfigProvider;
 use BackendBase\PrivateApi\Forms\ConfigProvider as FormsConfigProvider;
-
+use BackendBase\PrivateApi\IdentityAndAccess\ConfigProvider as IdentityAndAccessConfigProvider;
+use BackendBase\Shared\Interfaces\MezzioHandlerConfigProvider;
 use Mezzio\Application;
 use Mezzio\MiddlewareFactory;
-use BackendBase\Shared\Interfaces\MezzioHandlerConfigProvider;
 use function array_merge_recursive;
 
 class ConfigProvider

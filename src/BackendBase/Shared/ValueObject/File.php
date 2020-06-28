@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\ValueObject;
 
+use const DIRECTORY_SEPARATOR;
 use function pathinfo;
 
 class File
@@ -13,7 +14,7 @@ class File
 
     public function __construct(string $filePath, LocalizedDateTime $createdAt)
     {
-        $this->pathInfo = pathinfo($filePath);
+        $this->pathInfo  = pathinfo($filePath);
         $this->createdAt = $createdAt;
     }
 
@@ -37,11 +38,8 @@ class File
         return $this->pathInfo['extension'];
     }
 
-    public function getCreatedAt(): LocalizedDateTime
+    public function getCreatedAt() : LocalizedDateTime
     {
         return $this->createdAt;
     }
-
-
-
 }

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\Contents;
 
-use Mezzio\Application;
-use Mezzio\MiddlewareFactory;
 use BackendBase\Shared\Factory\RequestHandlerFactory;
 use BackendBase\Shared\Interfaces\MezzioHandlerConfigProvider;
+use Mezzio\Application;
+use Mezzio\MiddlewareFactory;
 
 /**
  * The configuration provider for the App module
@@ -36,9 +36,6 @@ class ConfigProvider implements MezzioHandlerConfigProvider
         $app->delete('/cms/contents/{contentId}', Handler\RemoveContent::class, 'contents.delete');
 
         $app->put('/module/{moduleName}/images', Handler\GenericUploadImage::class, 'module.upload_image');
-
-
-
     }
 
     /**
@@ -57,7 +54,7 @@ class ConfigProvider implements MezzioHandlerConfigProvider
                 Handler\UploadImages::class => RequestHandlerFactory::class,
                 Handler\RemoveImage::class => RequestHandlerFactory::class,
                 Handler\RemoveContent::class => RequestHandlerFactory::class,
-                Handler\GenericUploadImage::class => RequestHandlerFactory::class
+                Handler\GenericUploadImage::class => RequestHandlerFactory::class,
 
             ],
         ];

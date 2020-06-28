@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\User\Persistence\Doctrine;
 
-use Doctrine\DBAL\Driver\Connection;
 use BackendBase\Domain\User\Exception\CantUnregisterUserDoesNotExists;
 use BackendBase\Domain\User\Exception\UserAlreadyExists;
 use BackendBase\Domain\User\Exception\UserNotFound;
@@ -16,6 +15,7 @@ use BackendBase\Domain\User\Persistence\Doctrine\SqlQuery\GetUserById;
 use BackendBase\Shared\Exception\ExecutionFailed;
 use BackendBase\Shared\Exception\InvalidArgument;
 use BackendBase\Shared\ValueObject\Email;
+use Doctrine\DBAL\Driver\Connection;
 use Throwable;
 use function sprintf;
 

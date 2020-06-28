@@ -9,6 +9,7 @@ use BackendBase\Domain\IdentityAndAccess\Model\Login;
 use BackendBase\Domain\User\Exception\UserNotFound;
 use BackendBase\Domain\User\Interfaces\UserRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
+use BackendBase\Shared\ValueObject\Email;
 use Laminas\Diactoros\Response\JsonResponse;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
@@ -19,8 +20,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 use RateLimit\Exception\LimitExceeded;
 use RateLimit\Rate;
 use RateLimit\RedisRateLimiter;
-use BackendBase\Shared\ValueObject\Email;
-
 use function hash;
 use function time;
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\ValueObject\Exception;
 
-use Exception;
 use BackendBase\Shared\Exception\DomainException;
+use Exception;
 
 final class InvalidCorporateTaxIdNumber extends Exception
 {

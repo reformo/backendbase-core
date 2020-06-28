@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\Forms;
 
-use Mezzio\Application;
-use Mezzio\MiddlewareFactory;
 use BackendBase\Shared\Factory\RequestHandlerFactory;
 use BackendBase\Shared\Interfaces\MezzioHandlerConfigProvider;
+use Mezzio\Application;
+use Mezzio\MiddlewareFactory;
 
 /**
  * The configuration provider for the App module
@@ -28,7 +28,6 @@ class ConfigProvider implements MezzioHandlerConfigProvider
         $app->get('/forms', Handler\GetForms::class, 'forms.list');
         $app->get('/forms/{formId}', Handler\GetFormsData::class, 'forms.data');
         $app->patch('/forms/{formId}', Handler\ChangeFormsData::class, 'forms.update');
-
     }
 
     /**

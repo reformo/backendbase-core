@@ -8,6 +8,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
 use function ngettext;
+use function var_dump;
 
 class TwigExtension extends AbstractExtension implements GlobalsInterface
 {
@@ -48,7 +49,7 @@ class TwigExtension extends AbstractExtension implements GlobalsInterface
         return ngettext($messageId, $messageId . '_PLURAL', $number);
     }
 
-    public function varDump(...$arguments)
+    public function varDump(...$arguments) : void
     {
         var_dump($arguments);
     }

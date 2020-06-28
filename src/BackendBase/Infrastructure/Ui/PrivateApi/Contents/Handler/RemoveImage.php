@@ -10,13 +10,12 @@ use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Content;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\QuotationRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\VehicleRepository;
+use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
-use function apcu_delete;
 use function array_values;
 
 class RemoveImage implements RequestHandlerInterface

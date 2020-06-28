@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\Middleware;
 
-use Interop\Container\ContainerInterface;
-use Psr\Http\Server\MiddlewareInterface;
-use Laminas\ServiceManager\Factory\FactoryInterface;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
+use Interop\Container\ContainerInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Http\Server\MiddlewareInterface;
 
 final class PrivateApiAuthorizationMiddlewareFactory implements FactoryInterface
 {

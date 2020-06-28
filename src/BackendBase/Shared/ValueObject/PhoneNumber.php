@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\ValueObject;
 
-use InvalidArgumentException;
 use BackendBase\Shared\ValueObject\Exception\InvalidPhoneNumber;
+use InvalidArgumentException;
 use Webmozart\Assert\Assert;
 use function preg_replace;
 use function str_replace;
