@@ -17,9 +17,9 @@ final class PersonTest extends TestCase
     public function shouldSuccessfullyInit() : void
     {
         $person = Person::fromFullName('Theodor Seuss Ted Geisel');
-        $this->assertSame('Theodor Seuss Ted', $person->getFirstName());
-        $this->assertSame('Geisel', $person->getFamilyName());
-        $this->assertSame('Theodor Seuss Ted Geisel', $person->getFullName());
+        $this->assertSame('Theodor Seuss Ted', $person->firstName());
+        $this->assertSame('Geisel', $person->familyName());
+        $this->assertSame('Theodor Seuss Ted Geisel', $person->fullName());
     }
 
     /**

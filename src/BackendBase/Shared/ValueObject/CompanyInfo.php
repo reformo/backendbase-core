@@ -59,23 +59,29 @@ final class CompanyInfo
         $this->companyType = $companyType;
     }
 
-    public function getTaxIdentity() : TaxIdentity
+    public static function companyTypes()
+    {
+        return self::$companyTypes;
+    }
+
+    public function taxIdentity(): TaxIdentity
     {
         return $this->taxIdentity;
     }
 
-    public function getLegalName() : string
+    public function legalName(): string
     {
         return $this->legalName;
     }
 
-    public function getShortName() : string
+    public function shortName(): string
     {
         return $this->shortName;
     }
 
-    public function getCompanyType() : string
+    public function companyType(): string
     {
         return $this->companyType;
     }
+
 }

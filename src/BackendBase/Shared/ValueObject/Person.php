@@ -49,17 +49,17 @@ class Person
         return new self(implode(' ', $names), $familyName);
     }
 
-    public function getFirstName() : string
+    public function firstName() : string
     {
         return $this->firstName;
     }
 
-    public function getFamilyName() : string
+    public function familyName() : string
     {
         return $this->familyName;
     }
 
-    public function getFullName() : string
+    public function fullName() : string
     {
         return $this->firstName . ' ' . $this->familyName;
     }

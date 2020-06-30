@@ -21,11 +21,11 @@ final class TaxIdendityTest extends TestCase
         $corporateTaxId = new CorporateTaxId(GeneratedValues::CORPORATE_TAX_ID_VALID_EXAMPLE);
 
         $privateTaxIdentity = TaxIdentity::fromPrivateCompany($privateTaxId, 'Anville', '2000');
-        $this->assertSame(TaxIdentity::TAXPAYER_PRIVATE, $privateTaxIdentity->getTaxPayerType());
-        $this->assertSame('Anville', $privateTaxIdentity->getTaxAdministrationOfficeName());
-        $this->assertSame('2000', $privateTaxIdentity->getTaxAdministrationOfficeCode());
-        $this->assertSame($privateTaxId->taxId(), $privateTaxIdentity->getTaxIdNumber());
+        $this->assertSame(TaxIdentity::TAXPAYER_PRIVATE, $privateTaxIdentity->taxPayerType());
+        $this->assertSame('Anville', $privateTaxIdentity->taxAdministrationOfficeName());
+        $this->assertSame('2000', $privateTaxIdentity->taxAdministrationOfficeCode());
+        $this->assertSame($privateTaxId->taxId(), $privateTaxIdentity->taxIdNumber());
         $corporateTaxIdentity = TaxIdentity::fromCorporateCompany($corporateTaxId, 'Anville', '2000');
-        $this->assertSame(TaxIdentity::TAXPAYER_CORPORATE, $corporateTaxIdentity->getTaxPayerType());
+        $this->assertSame(TaxIdentity::TAXPAYER_CORPORATE, $corporateTaxIdentity->taxPayerType());
     }
 }

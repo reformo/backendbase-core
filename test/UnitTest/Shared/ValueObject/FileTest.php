@@ -18,10 +18,10 @@ final class FileTest extends TestCase
         $filePath = 'storage/temp/clover.xml';
 
         $file = new File($filePath, LocalizedDateTime::now());
-        $this->assertSame('clover.xml', $file->getBasename());
-        $this->assertSame('storage/temp', $file->getDirname());
-        $this->assertSame('xml', $file->getExtension());
-        $this->assertSame($filePath, $file->getFilePath());
-        $this->assertSame('UTC', $file->getCreatedAt()->getTimezone()->getName());
+        $this->assertSame('clover.xml', $file->basename());
+        $this->assertSame('storage/temp', $file->dirname());
+        $this->assertSame('xml', $file->extension());
+        $this->assertSame($filePath, $file->filePath());
+        $this->assertSame('UTC', $file->createdAt()->getTimezone()->getName());
     }
 }

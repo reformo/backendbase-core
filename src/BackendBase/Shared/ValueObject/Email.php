@@ -7,8 +7,9 @@ namespace BackendBase\Shared\ValueObject;
 use BackendBase\Shared\ValueObject\Exception\InvalidEmailAddress;
 use InvalidArgumentException;
 use Webmozart\Assert\Assert;
+use BackendBase\Shared\ValueObject\Interfaces\Email as EmailInterface;
 
-final class Email
+final class Email implements EmailInterface
 {
     private string $email;
 

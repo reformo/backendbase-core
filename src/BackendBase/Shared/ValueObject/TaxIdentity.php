@@ -51,22 +51,22 @@ final class TaxIdentity
         );
     }
 
-    public function getTaxIdNumber() : string
+    public function taxIdNumber() : string
     {
         return $this->taxIdNumber;
     }
 
-    public function getTaxAdministrationOfficeName() : string
+    public function taxAdministrationOfficeName() : string
     {
         return $this->taxAdministrationOfficeName;
     }
 
-    public function getTaxAdministrationOfficeCode() : string
+    public function taxAdministrationOfficeCode() : string
     {
         return $this->taxAdministrationOfficeCode;
     }
 
-    public function getTaxPayerType() : string
+    public function taxPayerType() : string
     {
         return $this->taxPayerType;
     }

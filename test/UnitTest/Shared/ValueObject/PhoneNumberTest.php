@@ -16,9 +16,9 @@ final class PhoneNumberTest extends TestCase
     public function shouldSuccessfullyInit() : void
     {
         $phoneNumber = new PhoneNumber('90', '555', '555  55 55');
-        $this->assertSame('90', $phoneNumber->getCountryCode());
-        $this->assertSame('555', $phoneNumber->getAreaCode());
-        $this->assertSame('5555555', $phoneNumber->getPhoneNumber());
+        $this->assertSame('90', $phoneNumber->countryCode());
+        $this->assertSame('555', $phoneNumber->areaCode());
+        $this->assertSame('5555555', $phoneNumber->phoneNumber());
         $this->assertSame('+905555555555', $phoneNumber->getE164FormattedNumber());
     }
 
@@ -28,9 +28,9 @@ final class PhoneNumberTest extends TestCase
     public function shouldSuccessfullyInitUsingNamedConstructor() : void
     {
         $phoneNumber = PhoneNumber::fromString('+90 555 555 5555');
-        $this->assertSame('90', $phoneNumber->getCountryCode());
-        $this->assertSame('555', $phoneNumber->getAreaCode());
-        $this->assertSame('5555555', $phoneNumber->getPhoneNumber());
+        $this->assertSame('90', $phoneNumber->countryCode());
+        $this->assertSame('555', $phoneNumber->areaCode());
+        $this->assertSame('5555555', $phoneNumber->phoneNumber());
         $this->assertSame('+905555555555', $phoneNumber->getE164FormattedNumber());
     }
 

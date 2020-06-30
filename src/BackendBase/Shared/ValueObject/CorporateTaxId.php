@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace BackendBase\Shared\ValueObject;
 
 use BackendBase\Shared\ValueObject\Exception\InvalidCorporateTaxIdNumber;
+use BackendBase\Shared\ValueObject\Interfaces\TaxId;
 use function array_map;
 use function count;
 use function pow;
 use function str_split;
 use function strlen;
 
-final class CorporateTaxId
+final class CorporateTaxId implements TaxId
 {
     private string $taxId;
 

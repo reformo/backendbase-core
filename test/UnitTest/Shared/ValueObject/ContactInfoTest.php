@@ -20,7 +20,7 @@ final class ContactInfoTest extends TestCase
             new Email('mehmet@mkorkmaz.com'),
             PhoneNumber::fromString('+90 555 555 55 55')
         );
-        $this->assertSame('mehmet@mkorkmaz.com', $contactInfo->getEmail()->toString());
-        $this->assertSame('+905555555555', $contactInfo->getPhoneNumber()->getE164FormattedNumber());
+        $this->assertSame('mehmet@mkorkmaz.com', $contactInfo->email()->toString());
+        $this->assertSame('+905555555555', $contactInfo->phoneNumber()->getE164FormattedNumber());
     }
 }

@@ -33,11 +33,11 @@ final class CompanyInfoTest extends TestCase
         );
         $this->assertSame(
             GeneratedValues::CORPORATE_TAX_ID_VALID_EXAMPLE,
-            $companyInfo->getTaxIdentity()->getTaxIdNumber()
+            $companyInfo->taxIdentity()->taxIdNumber()
         );
-        $this->assertSame(CompanyInfo::COMPANY_TYPE_CORPORATION, $companyInfo->getCompanyType());
-        $this->assertSame('Lorax Inc', $companyInfo->getLegalName());
-        $this->assertSame('Lorax', $companyInfo->getShortName());
+        $this->assertSame(CompanyInfo::COMPANY_TYPE_CORPORATION, $companyInfo->companyType());
+        $this->assertSame('Lorax Inc', $companyInfo->legalName());
+        $this->assertSame('Lorax', $companyInfo->shortName());
     }
 
     /**

@@ -76,17 +76,17 @@ final class PhoneNumber
         return new self($countryCode, $areaCode, $phoneNumber);
     }
 
-    public function getCountryCode() : string
+    public function countryCode() : string
     {
         return $this->countryCode;
     }
 
-    public function getAreaCode() : string
+    public function areaCode() : string
     {
         return $this->areaCode;
     }
 
-    public function getPhoneNumber() : string
+    public function phoneNumber() : string
     {
         return $this->phoneNumber;
     }

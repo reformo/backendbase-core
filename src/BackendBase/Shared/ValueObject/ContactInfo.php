@@ -15,12 +15,12 @@ final class ContactInfo
         $this->phoneNumber = $phoneNumber;
     }
 
-    public function getEmail() : Email
+    public function email() : Email
     {
         return $this->email;
     }
 
-    public function getPhoneNumber() : PhoneNumber
+    public function phoneNumber() : PhoneNumber
     {
         return $this->phoneNumber;
     }

@@ -18,27 +18,27 @@ class File
         $this->createdAt = $createdAt;
     }
 
-    public function getFilePath() : string
+    public function filePath() : string
     {
         return $this->pathInfo['dirname'] . DIRECTORY_SEPARATOR . $this->pathInfo['basename'];
     }
 
-    public function getDirname() : string
+    public function dirname() : string
     {
         return $this->pathInfo['dirname'];
     }
 
-    public function getBasename() : string
+    public function basename() : string
     {
         return $this->pathInfo['basename'];
     }
 
-    public function getExtension() : string
+    public function extension() : string
     {
         return $this->pathInfo['extension'];
     }
 
-    public function getCreatedAt() : LocalizedDateTime
+    public function createdAt() : LocalizedDateTime
     {
         return $this->createdAt;
     }
