@@ -25,6 +25,20 @@ final class TaxIdentity
         $this->taxPayerType                = $taxPayerType;
     }
 
+    public static function fromTaxId(
+        string $taxId,
+        string $taxAdministrationOfficeName,
+        string $taxAdministrationOfficeCode
+    ) : self {
+        $taxIdLength = strlen(trim($taxId));
+        if ($taxIdLength === 11) {
+            return self::fromPrivateCompany(new PrivateTaxId($taxId), $taxAdministrationOfficeName, $taxAdministrationOfficeCode);
+        }
+        if ($taxIdLength === 10) {
+            return self::fromCorporateCompany(new CorporateTaxId($taxId), $taxAdministrationOfficeName, $taxAdministrationOfficeCode);
+        }
+    }
+
     public static function fromPrivateCompany(
         PrivateTaxId $taxId,
         string $taxAdministrationOfficeName,

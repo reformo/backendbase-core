@@ -270,7 +270,7 @@ SQL;
                    C.is_active
               FROM public.contents C
               LEFT JOIN lookup_table L ON L.key=C.category
-             WHERE C.category = :category AND C.is_deleted = 0
+             WHERE C.category = :category AND C.is_deleted = 0 AND  AND C.is_active = 1
                 AND (jsonb_path_exists(C.metadata, '$.publishDate') = false OR C.metadata->>'publishDate' <= :nowLocaleDate)
                AND (jsonb_path_exists(C.metadata, '$.expireDate') = false OR C.metadata->>'expireDate' >= :nowLocaleDate)
              ORDER BY C.sort_order DESC
