@@ -28,15 +28,18 @@ class StartSession implements RequestHandlerInterface
     private UserRepository $userRepository;
     private RedisRateLimiter $redisRateLimiter;
     private RolesRepository $rolesRepository;
+    private array $config;
 
     public function __construct(
         UserRepository $userRepository,
         RolesRepository $rolesRepository,
-        RedisRateLimiter $redisRateLimiter
+        RedisRateLimiter $redisRateLimiter,
+        array $config
     ) {
         $this->userRepository   = $userRepository;
         $this->redisRateLimiter = $redisRateLimiter;
         $this->rolesRepository  = $rolesRepository;
+        $this->config = $config;
     }
 
     public function handle(ServerRequestInterface $request) : ResponseInterface
@@ -58,7 +61,7 @@ class StartSession implements RequestHandlerInterface
             throw UserNotFound::create('Invalid username and/or password');
         }
 
-        $key = InMemory::base64Encoded('d81c8751fdd0a01e62b7acac5bea23a0d7d29beb03e428b863d02376aea628c1');
+        $key = InMemory::base64Encoded($this->config['jwt']['key']);
         $configuration = Configuration::forSymmetricSigner(
             new Sha256(),
             $key
@@ -66,7 +69,8 @@ class StartSession implements RequestHandlerInterface
 
         $now   = new DateTimeImmutable();
         $token = $configuration->builder()
-            ->issuedBy('storage')
+            ->issuedBy($this->config['jwt']['issuer'])
+            ->identifiedBy($this->config['jwt']['identifier'])
             ->issuedAt($now) // Configures the time that the token was issue (iat claim)
             ->canOnlyBeUsedAfter($now) // Configures the time that the token can be used (nbf claim)
             ->expiresAt($now->modify('+12 hours')) // Configures the expiration time of the token (exp claim)
