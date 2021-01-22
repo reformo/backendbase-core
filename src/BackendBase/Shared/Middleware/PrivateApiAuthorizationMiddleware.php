@@ -8,6 +8,10 @@ use BackendBase\Domain\IdentityAndAccess\Exception\AuthenticationFailed;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
 use BackendBase\Shared\Services\RoleBasedAccessControl;
 use Lcobucci\JWT\Parser;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Validation\Constraint\IdentifiedBy;
+use Lcobucci\JWT\Validation\Constraint\IssuedBy;
 use Lcobucci\JWT\ValidationData;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -15,14 +19,18 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 use function str_replace;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Token\Plain;
 
 final class PrivateApiAuthorizationMiddleware implements MiddlewareInterface
 {
     private RolesRepository $rolesRepository;
+    private array $config;
 
-    public function __construct(RolesRepository $rolesRepository)
+    public function __construct(RolesRepository $rolesRepository, array $config)
     {
         $this->rolesRepository = $rolesRepository;
+        $this->config = $config;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
@@ -35,10 +43,18 @@ final class PrivateApiAuthorizationMiddleware implements MiddlewareInterface
             throw AuthenticationFailed::create('Authentication failed.');
         }
         try {
-            $token = (new Parser())->parse((string) $authHeader);
-            $data  = new ValidationData(); // It will use the current time to validate (iat, nbf and exp)
-            $data->setIssuer('storage');
-            if ($token->validate($data) === false) {
+
+            $key = InMemory::base64Encoded($this->config['jwt']['key']);
+            $configuration = Configuration::forSymmetricSigner(
+                new Sha256(),
+                $key
+            );
+            $token = $configuration->parser()->parse((string) $authHeader);
+            $constraints = [
+                new IssuedBy($this->config['jwt']['issuer']),
+                new IdentifiedBy($this->config['jwt']['identifier'])
+            ];
+            if (! $configuration->validator()->validate($token, ...$constraints)) {
                 throw AuthenticationFailed::create('Authentication failed. Invalid Token or token expired.');
             }
             $userId   = $token->getClaim('userId');

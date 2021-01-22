@@ -11,9 +11,7 @@ use BackendBase\Domain\User\Interfaces\UserRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
 use BackendBase\Shared\ValueObject\Email;
 use Laminas\Diactoros\Response\JsonResponse;
-use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
-use Lcobucci\JWT\Signer\Key;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -21,7 +19,9 @@ use RateLimit\Exception\LimitExceeded;
 use RateLimit\Rate;
 use RateLimit\RedisRateLimiter;
 use function hash;
-use function time;
+use Lcobucci\JWT\Signer\Key\InMemory;
+use Lcobucci\JWT\Configuration;
+use DateTimeImmutable;
 
 class StartSession implements RequestHandlerInterface
 {
@@ -58,24 +58,28 @@ class StartSession implements RequestHandlerInterface
             throw UserNotFound::create('Invalid username and/or password');
         }
 
-        $signer = new Sha256();
-        $time   = time();
-        $token  = (new Builder())->issuedBy('storage') // Configures the issuer (iss claim)
-        //    ->permittedFor('http://example.org') // Configures the audience (aud claim)
-        //    ->identifiedBy('4f1g23a12aa', true) // Configures the id (jti claim), replicating as a header item
-        ->issuedAt($time) // Configures the time that the token was issue (iat claim)
-        ->canOnlyBeUsedAfter($time) // Configures the time that the token can be used (nbf claim)
-        ->expiresAt($time + 60*60*12) // Configures the expiration time of the token (exp claim)
-        ->withClaim('userId', $user->id()->toString()) // Configures a new claim, called "uid"
-        ->withClaim('role', $user->role()) // Configures a new claim, called "uid"
-        ->getToken($signer, new Key('d81c8751fdd0a01e62b7acac5bea23a0d7d29beb03e428b863d02376aea628c1'));
+        $key = InMemory::base64Encoded('d81c8751fdd0a01e62b7acac5bea23a0d7d29beb03e428b863d02376aea628c1');
+        $configuration = Configuration::forSymmetricSigner(
+            new Sha256(),
+            $key
+        );
+
+        $now   = new DateTimeImmutable();
+        $token = $configuration->builder()
+            ->issuedBy('storage')
+            ->issuedAt($now) // Configures the time that the token was issue (iat claim)
+            ->canOnlyBeUsedAfter($now) // Configures the time that the token can be used (nbf claim)
+            ->expiresAt($now->modify('+12 hours')) // Configures the expiration time of the token (exp claim)
+            ->withClaim('userId', $user->id()->toString()) // Configures a new claim, called "uid"
+            ->withClaim('role', $user->role()) // Configures a new claim, called "uid"
+            ->getToken($configuration->signer(), $configuration->signingKey());
 
         $permissions = $this->rolesRepository->getRolePermissionsByRoleName($user->role());
 
         $data = [
             'accessToken' => (string) $token,
-            'createdAt' => $time,
-            'willExpireAt' => $time + 3600,
+            'createdAt' => $now->format(DATE_ATOM),
+            'willExpireAt' => $now->modify('+12 hours')->format(DATE_ATOM),
             'userData' => [
                 'firstName' => $user->firstName(),
                 'lastName' => $user->lastName(),
