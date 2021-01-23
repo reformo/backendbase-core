@@ -12,8 +12,8 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\EntityManager;
-use Keiko\Uuid\Shortener\Dictionary;
-use Keiko\Uuid\Shortener\Shortener;
+use PascalDeVink\ShortUuid\ShortUuid;
+use Ramsey\Uuid\Uuid;
 use Redislabs\Module\ReJSON\ReJSON;
 use const DATE_ATOM;
 use const JSON_THROW_ON_ERROR;
@@ -183,9 +183,8 @@ SQL;
     public function getContentsByCategory(string $category, ?bool $withBody = false) : array
     {
         $slugify     = new Slugify(['rulesets' => ['default', 'turkish']]);
-        $shortener   = Shortener::make(
-            Dictionary::createUnmistakable() // or pass your own characters set
-        );
+        $shortener   = new ShortUuid();
+
         $returnData  = [];
         $withBodySql = '';
         $sql         = '
@@ -221,7 +220,7 @@ SQL;
         foreach ($data as $datum) {
             $datum['images']   = json_decode($datum['images'], true, 512, JSON_THROW_ON_ERROR);
             $datum['metadata'] = json_decode($datum['metadata'], true, 512, JSON_THROW_ON_ERROR);
-            $datum['slug']     = $datum['category_slug'] . '/' . $slugify->slugify($datum['title']) . '-' . $shortener->reduce($datum['id']);
+            $datum['slug']     = $datum['category_slug'] . '/' . $slugify->slugify($datum['title']) . '-' . $shortener->encode(Uuid::fromString($datum['id']));
 
             $returnData[] = $datum;
         }
@@ -299,7 +298,7 @@ SQL;
             $datum['heroImage']   =  '';
             $datum['publishDate'] = new CarbonImmutable($datum['created_at'], 'UTC');
             $datum['publishDate'] = $datum['publishDate']->setTimezone(new DateTimeZone('europe/istanbul'))
-            ->format('d.m.Y');
+                ->format('d.m.Y');
             if (array_key_exists('publishDate', $datum['metadata'])) {
                 $datum['publishDate'] = new CarbonImmutable($datum['metadata']['publishDate']);
                 $datum['publishDate'] = $datum['publishDate']->format('d.m.Y');

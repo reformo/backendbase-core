@@ -6,8 +6,7 @@ namespace BackendBase\PublicWeb\Contents;
 
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
-use Keiko\Uuid\Shortener\Dictionary;
-use Keiko\Uuid\Shortener\Shortener;
+use PascalDeVink\ShortUuid\ShortUuid;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Csrf\CsrfMiddleware;
 use Mezzio\Template\TemplateRendererInterface;
@@ -41,9 +40,7 @@ class PageHandler implements RequestHandlerInterface
         $token    = $guard->generateToken();
         $pageSlug = $request->getAttribute('pageSlug');
 
-        $shortener = Shortener::make(
-            Dictionary::createUnmistakable() // or pass your own characters set
-        );
+        $shortener = new ShortUuid();
         $page      = $this->contentRepository->getContentBySlugForClient($pageSlug);
 
         $data = ['page' => $page];
