@@ -81,7 +81,7 @@ class StartSession implements RequestHandlerInterface
         $permissions = $this->rolesRepository->getRolePermissionsByRoleName($user->role());
 
         $data = [
-            'accessToken' => (string) $token,
+            'accessToken' => $token->toString(),
             'createdAt' => $now->format(DATE_ATOM),
             'willExpireAt' => $now->modify('+12 hours')->format(DATE_ATOM),
             'userData' => [
