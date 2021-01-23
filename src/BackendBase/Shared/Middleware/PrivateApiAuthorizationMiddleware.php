@@ -57,8 +57,9 @@ final class PrivateApiAuthorizationMiddleware implements MiddlewareInterface
             if (! $configuration->validator()->validate($token, ...$constraints)) {
                 throw AuthenticationFailed::create('Authentication failed. Invalid Token or token expired.');
             }
-            $userId   = $token->getClaim('userId');
-            $roleName = $token->getClaim('role');
+            $claims = $token->claims();
+            $userId   = $claims->get('userId');
+            $roleName = $claims->get('role');
 
             $role = RoleBasedAccessControl::fromPermissions($roleName, $this->rolesRepository->getRolePermissionsByRoleNameForUser($userId));
 
