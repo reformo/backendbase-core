@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\PublicWeb\Contents;
 
+use BackendBase\Domain\Contents\Exception\ContentNotFound;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
 use PascalDeVink\ShortUuid\ShortUuid;
@@ -36,15 +37,21 @@ class PageHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request) : ResponseInterface
     {
-        $guard    = $request->getAttribute(CsrfMiddleware::GUARD_ATTRIBUTE);
-        $token    = $guard->generateToken();
         $pageSlug = $request->getAttribute('pageSlug');
+        $template = 'app::default-page';
+        try {
+            $page      = $this->contentRepository->getContentBySlugForClient($pageSlug);
 
-        $shortener = new ShortUuid();
-        $page      = $this->contentRepository->getContentBySlugForClient($pageSlug);
+            $data = ['page' => $page];
+        } catch (ContentNotFound $exception) {
+            $template = 'error::404';
+            $data = ['error' => 404];
+        } catch (\Throwable $throwable) {
+            $template = 'error::500';
+            $data = ['error' => $throwable->getMessage()];
+        }
 
-        $data = ['page' => $page];
 
-        return new HtmlResponse($this->template->render('app::default-page', $data));
+        return new HtmlResponse($this->template->render($template, $data));
     }
 }
