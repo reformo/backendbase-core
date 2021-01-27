@@ -22,42 +22,42 @@ class User implements JsonSerializable
     private string $createdAt;
     private int $isActive;
 
-    public function id() : string
+    public function id(): string
     {
         return $this->id;
     }
 
-    public function email() : string
+    public function email(): string
     {
         return $this->email;
     }
 
-    public function firstName() : string
+    public function firstName(): string
     {
         return $this->firstName;
     }
 
-    public function lastName() : string
+    public function lastName(): string
     {
         return $this->lastName;
     }
 
-    public function passwordHash() : string
+    public function passwordHash(): string
     {
         return $this->passwordHash;
     }
 
-    public function role() : string
+    public function role(): string
     {
         return $this->role;
     }
 
-    public function roleStr() : string
+    public function roleStr(): string
     {
         return $this->roleStr;
     }
 
-    public function createdAt() : string
+    public function createdAt(): string
     {
         return $this->createdAt;
     }

@@ -34,7 +34,7 @@ class Users implements RequestHandlerInterface
         $this->rolesRepository = $rolesRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -43,6 +43,7 @@ class Users implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Users::USERS_MENU) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to list users');
         }
+
         $limit     = 100;
         $usersData = $this->userQuery->getAllUsersPaginated(0, $limit);
         $users     = [];
@@ -58,6 +59,7 @@ class Users implements RequestHandlerInterface
                 'isActive' => $user->isActive(),
             ];
         }
+
         $rolesData = $this->rolesRepository->getUserRoleNames();
         $roles     = [];
         foreach ($rolesData as $roleItem) {

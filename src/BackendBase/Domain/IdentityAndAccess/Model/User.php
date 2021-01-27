@@ -24,27 +24,27 @@ class User
         $this->createdAt          = $createdAt;
     }
 
-    public function getId() : UuidInterface
+    public function getId(): UuidInterface
     {
         return $this->id;
     }
 
-    public function getPerson() : Person
+    public function getPerson(): Person
     {
         return $this->person;
     }
 
-    public function getContactInformation() : ContactInformation
+    public function getContactInformation(): ContactInformation
     {
         return $this->contactInformation;
     }
 
-    public function isActive() : bool
+    public function isActive(): bool
     {
         return $this->isActive;
     }
 
-    public function getCreatedAt() : DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }

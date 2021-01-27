@@ -12,6 +12,7 @@ use BackendBase\Shared\Services\Persistence\SqlQuery;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\FetchMode;
 use Throwable;
+
 use function array_key_exists;
 
 final class GetAllUsers
@@ -37,14 +38,16 @@ final class GetAllUsers
          LIMIT  :limit
 SQL;
 
-    public static function execute(Connection $connection, array $parameters) : ?Users
+    public static function execute(Connection $connection, array $parameters): ?Users
     {
         if (! array_key_exists('offset', $parameters)) {
             throw InvalidArgument::create('Query needs parameter named: offset');
         }
+
         if (! array_key_exists('limit', $parameters)) {
             throw InvalidArgument::create('Query needs parameter named: limit');
         }
+
         $query     = new static($connection);
         $statement = $query->executeQuery(self::$sql, $parameters);
         try {

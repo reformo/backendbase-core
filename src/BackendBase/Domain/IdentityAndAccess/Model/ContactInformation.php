@@ -17,12 +17,12 @@ class ContactInformation
         $this->mobile = $mobile;
     }
 
-    public function email() : Email
+    public function email(): Email
     {
         return $this->email;
     }
 
-    public function mobile() : string
+    public function mobile(): string
     {
         return $this->mobile;
     }

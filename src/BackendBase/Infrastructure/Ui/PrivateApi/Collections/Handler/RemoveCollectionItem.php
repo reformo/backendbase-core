@@ -23,7 +23,7 @@ class RemoveCollectionItem implements RequestHandlerInterface
         $this->queryBus = $queryBus;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
        /* $query = new GetAllUsers(0, 25);
         $users = $this->queryBus->handle($query);

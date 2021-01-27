@@ -10,6 +10,7 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ulid\Ulid;
+
 use function base64_decode;
 use function explode;
 use function fclose;
@@ -18,7 +19,7 @@ use function fwrite;
 
 final class CatchUploadedFile implements MiddlewareInterface
 {
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $contentType             = $request->getHeaderLine('Content-Type');
         $contentTransferEncoding = $request->getHeaderLine('Content-Transfer-Encoding');
@@ -30,7 +31,7 @@ final class CatchUploadedFile implements MiddlewareInterface
         return $handler->handle($request);
     }
 
-    private function storeUploadedFile(StreamInterface $body, ?string $contentTransferEncoding) : string
+    private function storeUploadedFile(StreamInterface $body, ?string $contentTransferEncoding): string
     {
         $fileName    = (string) Ulid::generate();
         $filePath    = 'data/storage/temp/' . $fileName;
@@ -38,11 +39,13 @@ final class CatchUploadedFile implements MiddlewareInterface
         while (! $body->eof()) {
             $fileContent .= $body->read(4096);
         }
+
         $fileHandle = fopen($filePath, 'w');
         if ($contentTransferEncoding === 'Base64') {
             $data        = explode(',', $fileContent);
             $fileContent = base64_decode($data[1]);
         }
+
         fwrite($fileHandle, $fileContent);
         fclose($fileHandle);
 

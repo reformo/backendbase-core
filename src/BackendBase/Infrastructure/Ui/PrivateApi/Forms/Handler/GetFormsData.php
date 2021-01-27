@@ -13,6 +13,7 @@ use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
 use function ceil;
 
 class GetFormsData implements RequestHandlerInterface
@@ -25,7 +26,7 @@ class GetFormsData implements RequestHandlerInterface
         $this->genericRepository = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -34,20 +35,23 @@ class GetFormsData implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Forms::FORMS_MENU) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to list forms');
         }
+
         $formData = [];
 
         $limit       = 25;
         $queryParams = $request->getQueryParams();
         $page        = $queryParams['page'] ?? 1;
         $total       = $this->genericRepository->getListTotal(FormData::class, ['form_id' => $request->getAttribute('formId')]);
-        $pageCount   = ceil($total/$limit);
+        $pageCount   = ceil($total / $limit);
         if ($page > $pageCount) {
             $page = $pageCount;
         }
-        if ($page <1) {
+
+        if ($page < 1) {
             $page = 1;
         }
-        $offset     = $limit * ($page-1);
+
+        $offset     = $limit * ($page - 1);
         $pagination = [
             'offset' => $offset,
             'limit' => $limit,
@@ -63,7 +67,7 @@ class GetFormsData implements RequestHandlerInterface
 
         return new JsonResponse([
             'formData' => $formData,
-            'total'=> $total,
+            'total' => $total,
         ], 200);
     }
 }

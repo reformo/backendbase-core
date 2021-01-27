@@ -15,7 +15,7 @@ class UserMapper
         $this->user = $user;
     }
 
-    public function toDatabasePayload() : array
+    public function toDatabasePayload(): array
     {
         return [
             'id' => $this->user->id()->toString(),

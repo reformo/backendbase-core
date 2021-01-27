@@ -11,7 +11,7 @@ use Psr\Http\Server\MiddlewareInterface;
 
 final class CommandLoggerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : MiddlewareInterface
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): MiddlewareInterface
     {
         $doctrineDbal = $container->get(Connection::class);
 

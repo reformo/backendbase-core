@@ -7,6 +7,7 @@ namespace BackendBase\Shared\ValueObject;
 use BackendBase\Shared\ValueObject\Exception\InvalidPhoneNumber;
 use InvalidArgumentException;
 use Webmozart\Assert\Assert;
+
 use function preg_replace;
 use function str_replace;
 use function strlen;
@@ -58,7 +59,7 @@ final class PhoneNumber
         $this->phoneNumber = $phoneNumber;
     }
 
-    public static function fromString(string $e164FormattedPhoneNumber) : self
+    public static function fromString(string $e164FormattedPhoneNumber): self
     {
         $e164FormattedPhoneNumber = preg_replace('/\s+/', '', trim($e164FormattedPhoneNumber));
         if (strpos($e164FormattedPhoneNumber, '+') !== 0) {
@@ -69,29 +70,29 @@ final class PhoneNumber
         }
 
         $e164FormattedPhoneNumber = str_replace('+', '', $e164FormattedPhoneNumber);
-        $phoneNumber              = substr($e164FormattedPhoneNumber, strlen($e164FormattedPhoneNumber)-7, 7);
-        $areaCode                 = substr($e164FormattedPhoneNumber, strlen($e164FormattedPhoneNumber)-10, 3);
+        $phoneNumber              = substr($e164FormattedPhoneNumber, strlen($e164FormattedPhoneNumber) - 7, 7);
+        $areaCode                 = substr($e164FormattedPhoneNumber, strlen($e164FormattedPhoneNumber) - 10, 3);
         $countryCode              =  str_replace([$phoneNumber, $areaCode], '', $e164FormattedPhoneNumber);
 
         return new self($countryCode, $areaCode, $phoneNumber);
     }
 
-    public function countryCode() : string
+    public function countryCode(): string
     {
         return $this->countryCode;
     }
 
-    public function areaCode() : string
+    public function areaCode(): string
     {
         return $this->areaCode;
     }
 
-    public function phoneNumber() : string
+    public function phoneNumber(): string
     {
         return $this->phoneNumber;
     }
 
-    public function getE164FormattedNumber() : string
+    public function getE164FormattedNumber(): string
     {
         return '+' . $this->countryCode . $this->areaCode . $this->phoneNumber;
     }

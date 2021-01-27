@@ -13,7 +13,7 @@ use League\Tactician\Handler\Mapping\MethodName\Invoke;
 
 class TacticianCommandBusFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : CommandBus
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CommandBus
     {
         $handlerMiddleware = new CommandHandlerMiddleware(
             $container,

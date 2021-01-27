@@ -13,6 +13,7 @@ use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
 use function count;
 
 class GetForms implements RequestHandlerInterface
@@ -25,7 +26,7 @@ class GetForms implements RequestHandlerInterface
         $this->genericRepository = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -34,6 +35,7 @@ class GetForms implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Forms::FORMS_MENU) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to list forms');
         }
+
         $forms = $this->genericRepository->getList(Forms::class, ['is_active' => 1], 'created_at DESC');
 
         return new JsonResponse(['forms' => $forms, 'total' => count($forms)], 200);

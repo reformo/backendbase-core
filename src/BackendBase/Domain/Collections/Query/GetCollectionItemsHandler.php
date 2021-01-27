@@ -16,7 +16,7 @@ class GetCollectionItemsHandler
         $this->collectionQuery = $collectionQuery;
     }
 
-    public function __invoke(GetCollectionItems $query) : Collections
+    public function __invoke(GetCollectionItems $query): Collections
     {
         $parentId = $query->parentId();
         if ($parentId === null) {

@@ -11,7 +11,7 @@ use Redislabs\Module\ReJSON\ReJSON;
 
 final class ReJSONFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : ReJSON
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ReJSON
     {
         /**
          * @var Redis

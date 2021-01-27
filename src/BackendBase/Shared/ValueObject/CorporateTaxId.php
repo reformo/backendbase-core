@@ -6,6 +6,7 @@ namespace BackendBase\Shared\ValueObject;
 
 use BackendBase\Shared\ValueObject\Exception\InvalidCorporateTaxIdNumber;
 use BackendBase\Shared\ValueObject\Interfaces\TaxId;
+
 use function array_map;
 use function count;
 use function pow;
@@ -22,12 +23,12 @@ final class CorporateTaxId implements TaxId
         $this->taxId = $taxId;
     }
 
-    public function taxId() : string
+    public function taxId(): string
     {
         return $this->taxId;
     }
 
-    private static function validateTaxId(string $taxId) : bool
+    private static function validateTaxId(string $taxId): bool
     {
         if (strlen($taxId) !== 10) {
             throw InvalidCorporateTaxIdNumber::create('Corporate tax id length must be 10: ' . $taxId);
@@ -36,9 +37,9 @@ final class CorporateTaxId implements TaxId
         $digits = str_split($taxId, 1);
         $digits = array_map('self::parseInt', $digits);
         $sum    = 0;
-        for ($i=0; $i<count($digits)-1; $i++) {
-            $temp = ($digits[$i] + 10 - ($i+1)) % 10;
-            $incr = ($temp === 9 ? 9 : ($temp * pow(2, 10 - ($i+1))) % 9);
+        for ($i = 0; $i < count($digits) - 1; $i++) {
+            $temp = ($digits[$i] + 10 - ($i + 1)) % 10;
+            $incr = ($temp === 9 ? 9 : ($temp * pow(2, 10 - ($i + 1))) % 9);
             $sum += $incr;
         }
 
@@ -50,7 +51,7 @@ final class CorporateTaxId implements TaxId
         return true;
     }
 
-    private static function parseInt(string $item) : int
+    private static function parseInt(string $item): int
     {
         return (int) $item;
     }

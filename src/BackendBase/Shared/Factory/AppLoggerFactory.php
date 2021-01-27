@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 
 final class AppLoggerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : LoggerInterface
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LoggerInterface
     {
         $config = $container->get('config');
         $logger = new Logger($config['logger']['name']);

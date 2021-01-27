@@ -16,7 +16,7 @@ class GetCollectionItemByIdHandler
         $this->collectionQuery = $collectionQuery;
     }
 
-    public function __invoke(GetCollectionItemById $query) : Collection
+    public function __invoke(GetCollectionItemById $query): Collection
     {
         return $this->collectionQuery->findById($query->id());
     }

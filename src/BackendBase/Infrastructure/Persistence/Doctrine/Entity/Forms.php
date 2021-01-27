@@ -22,27 +22,21 @@ class Forms
      */
     protected string $id;
 
-    /**
-     * @Column(type="string",)
-     */
+    /** @Column(type="string",) */
     protected string $name;
 
-    /**
-     * @Column(type="uuid", name="created_by")
-     */
+    /** @Column(type="uuid", name="created_by") */
     protected string $createdBy;
 
-    /**
-     * @Column(type="json",nullable=true,options={"jsonb":true}, name="metadata")
-     */
+    /** @Column(type="json",nullable=true,options={"jsonb":true}, name="metadata") */
     protected array $metadata;
 
-    public function setName(string $name) : void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
 
-    public function setCreatedBy(string $createdBy) : void
+    public function setCreatedBy(string $createdBy): void
     {
         $this->createdBy = $createdBy;
     }
@@ -50,43 +44,39 @@ class Forms
     /**
      * @param array $metadata
      */
-    public function setMetadata(array $metadata) : void
+    public function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;
     }
 
-    public function setIsActive(int $isActive) : void
+    public function setIsActive(int $isActive): void
     {
         $this->isActive = $isActive;
     }
 
-    /**
-     * @Column(type="integer", name="is_active")
-     */
-    protected int $isActive =1;
+    /** @Column(type="integer", name="is_active") */
+    protected int $isActive = 1;
 
-    /**
-     * @Column(type="datetimetz_immutable", name="created_at")
-     */
+    /** @Column(type="datetimetz_immutable", name="created_at") */
 
     protected DateTimeImmutable $createdAt;
 
-    public function setCreatedAt(DateTimeImmutable $datetime) : void
+    public function setCreatedAt(DateTimeImmutable $datetime): void
     {
         $this->createdAt = $datetime;
     }
 
-    public function setId(string $id) : void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
 
-    public function setClientIp(string $clientIp) : void
+    public function setClientIp(string $clientIp): void
     {
         $this->clientIp = $clientIp;
     }
 
-    public function setFormId(string $formId) : void
+    public function setFormId(string $formId): void
     {
         $this->formId = $formId;
     }
@@ -94,12 +84,12 @@ class Forms
     /**
      * @param array $postData
      */
-    public function setPostData(array $postData) : void
+    public function setPostData(array $postData): void
     {
         $this->postData = $postData;
     }
 
-    public function setIsModerated(int $isModerated) : void
+    public function setIsModerated(int $isModerated): void
     {
         $this->isModerated = $isModerated;
     }

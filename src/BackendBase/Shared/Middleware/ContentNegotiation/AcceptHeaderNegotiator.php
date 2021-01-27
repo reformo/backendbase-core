@@ -16,7 +16,7 @@ class AcceptHeaderNegotiator
     {
     }
 
-    public static function createFromAcceptHeader(string $acceptHeaderString, ?array $priorities = null) : self
+    public static function createFromAcceptHeader(string $acceptHeaderString, ?array $priorities = null): self
     {
         $acceptHeader             = new self();
         $acceptHeader->priorities = $priorities;
@@ -25,7 +25,7 @@ class AcceptHeaderNegotiator
         return $acceptHeader;
     }
 
-    private function setPriorities(string $acceptHeaderString) : void
+    private function setPriorities(string $acceptHeaderString): void
     {
         $clientPriorities = explode(',', $acceptHeaderString);
         foreach ($clientPriorities as $priority) {
@@ -33,7 +33,7 @@ class AcceptHeaderNegotiator
         }
     }
 
-    public function getBest() : AcceptHeaderPriority
+    public function getBest(): AcceptHeaderPriority
     {
         if ($this->priorities === null || count($this->priorities) === 0) {
             return $this->clientPriorities[0];

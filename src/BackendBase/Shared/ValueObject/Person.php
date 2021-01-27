@@ -8,6 +8,7 @@ use BackendBase\Shared\ValueObject\Exception\InvalidPersonFamilyName;
 use BackendBase\Shared\ValueObject\Exception\InvalidPersonFirstName;
 use InvalidArgumentException;
 use Webmozart\Assert\Assert;
+
 use function array_pop;
 use function explode;
 use function implode;
@@ -41,7 +42,7 @@ class Person
         $this->familyName = $familyName;
     }
 
-    public static function fromFullName(string $fullName) : self
+    public static function fromFullName(string $fullName): self
     {
         $names      = explode(' ', $fullName);
         $familyName = array_pop($names);
@@ -49,17 +50,17 @@ class Person
         return new self(implode(' ', $names), $familyName);
     }
 
-    public function firstName() : string
+    public function firstName(): string
     {
         return $this->firstName;
     }
 
-    public function familyName() : string
+    public function familyName(): string
     {
         return $this->familyName;
     }
 
-    public function fullName() : string
+    public function fullName(): string
     {
         return $this->firstName . ' ' . $this->familyName;
     }

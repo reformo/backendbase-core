@@ -16,7 +16,7 @@ class UpdateCollectionItemHandler
         $this->repository = $repository;
     }
 
-    public function __invoke(UpdateCollectionItem $command) : void
+    public function __invoke(UpdateCollectionItem $command): void
     {
         $payload = $command->payload();
         $id      = Uuid::fromString($command->id());

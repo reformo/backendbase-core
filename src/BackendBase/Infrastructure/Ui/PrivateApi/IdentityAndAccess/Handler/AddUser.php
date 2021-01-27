@@ -20,6 +20,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
 use Throwable;
+
 use function ucfirst;
 
 class AddUser implements RequestHandlerInterface
@@ -35,7 +36,7 @@ class AddUser implements RequestHandlerInterface
         $this->genericRepository = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -44,21 +45,25 @@ class AddUser implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Users::USERS_CREATE) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to create a user');
         }
+
         $payload   = PayloadSanitizer::sanitize($request->getParsedBody());
         $userExist = false;
         try {
             $userExist = $this->userRepository->getUserByEmail(Email::createFromString($payload['email']));
         } catch (Throwable $e) {
         }
+
         if ($userExist !== false) {
             throw UserAlreadyExists::create('User with this email exists');
         }
+
         $user = new User();
         $user->setId(Uuid::uuid4()->toString());
         foreach ($payload as $key => $value) {
             $method = 'set' . ucfirst($key);
             $user->{$method}($value);
         }
+
         $user->setCreatedAt(new DateTimeImmutable());
 
         $this->genericRepository->persistGeneric($user);

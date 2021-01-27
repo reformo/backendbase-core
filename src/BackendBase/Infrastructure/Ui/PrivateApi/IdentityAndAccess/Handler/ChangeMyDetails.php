@@ -26,7 +26,7 @@ class ChangeMyDetails implements RequestHandlerInterface
         $this->genericRepository = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $loggedUserId = $request->getAttribute('loggedUserId');
         $payload      = PayloadSanitizer::sanitize($request->getParsedBody());

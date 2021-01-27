@@ -7,6 +7,7 @@ namespace BackendBase\Shared\Services;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
+
 use function ngettext;
 use function var_dump;
 
@@ -19,7 +20,7 @@ class TwigExtension extends AbstractExtension implements GlobalsInterface
         $this->globals = $globals ?? [];
     }
 
-    public function getGlobals() : array
+    public function getGlobals(): array
     {
         return $this->globals;
     }
@@ -27,7 +28,7 @@ class TwigExtension extends AbstractExtension implements GlobalsInterface
     /**
      * @return TwigFunction[]
      */
-    public function getFunctions() : array
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('translate', 'gettext'),
@@ -44,12 +45,12 @@ class TwigExtension extends AbstractExtension implements GlobalsInterface
         ];
     }
 
-    public function translatePlural($messageId, $number) : string
+    public function translatePlural($messageId, $number): string
     {
         return ngettext($messageId, $messageId . '_PLURAL', $number);
     }
 
-    public function varDump(...$arguments) : void
+    public function varDump(...$arguments): void
     {
         var_dump($arguments);
     }

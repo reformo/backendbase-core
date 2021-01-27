@@ -25,7 +25,7 @@ class SessionDetails implements RequestHandlerInterface
         $this->rolesRepository = $rolesRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $user = $this->userRepository
             ->getUserById(UserId::createFromString($request->getAttribute('loggedUserId')));

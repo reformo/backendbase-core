@@ -17,7 +17,7 @@ class GetUserByIdHandler
         $this->query = $repository;
     }
 
-    public function __invoke(GetUserById $command) : User
+    public function __invoke(GetUserById $command): User
     {
         return $this->query
             ->getUserById(UserId::createFromString($command->id()));

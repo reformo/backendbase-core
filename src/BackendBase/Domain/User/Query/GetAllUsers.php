@@ -15,12 +15,12 @@ class GetAllUsers
         $this->limit  = $limit;
     }
 
-    public function offset() : int
+    public function offset(): int
     {
         return $this->offset;
     }
 
-    public function limit() : int
+    public function limit(): int
     {
         return $this->limit;
     }

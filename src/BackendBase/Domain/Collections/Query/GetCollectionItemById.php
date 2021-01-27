@@ -13,14 +13,14 @@ class GetCollectionItemById
         $this->id = $id;
     }
 
-    public function payload() : array
+    public function payload(): array
     {
         return [
             'id' => $this->id,
         ];
     }
 
-    public function id() : string
+    public function id(): string
     {
         return $this->id;
     }

@@ -28,7 +28,7 @@ class UpdateCollectionItem implements RequestHandlerInterface
         $this->commandBus = $commandBus;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -37,6 +37,7 @@ class UpdateCollectionItem implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Collections::COLLECTIONS_EDIT) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to edit collections');
         }
+
         $id      = $request->getAttribute('collectionId');
         $payload = PayloadSanitizer::sanitize($request->getParsedBody());
         $query   = new UpdateCollectionItemCommand($id, $payload);

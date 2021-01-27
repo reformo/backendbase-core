@@ -27,7 +27,7 @@ class CollectionItemDetails implements RequestHandlerInterface
         $this->queryBus = $queryBus;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -36,6 +36,7 @@ class CollectionItemDetails implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Collections::COLLECTIONS_MENU) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to list collections');
         }
+
         $collectionKey = $request->getAttribute('collection_key');
         $query         = new GetCollectionItemByKey($collectionKey);
         $collection    = $this->queryBus->handle($query);

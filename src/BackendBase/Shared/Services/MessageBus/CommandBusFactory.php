@@ -11,7 +11,7 @@ use League\Tactician\CommandBus as TacticianCommandBus;
 
 class CommandBusFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : CommandBusInterface
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CommandBusInterface
     {
         $commandBus = $container->get(TacticianCommandBus::class);
 

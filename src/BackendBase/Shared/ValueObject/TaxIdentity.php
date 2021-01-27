@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\ValueObject;
 
+use function strlen;
+use function trim;
+
 final class TaxIdentity
 {
     public const TAXPAYER_PRIVATE   = 'private';
@@ -29,11 +32,12 @@ final class TaxIdentity
         string $taxId,
         string $taxAdministrationOfficeName,
         string $taxAdministrationOfficeCode
-    ) : self {
+    ): self {
         $taxIdLength = strlen(trim($taxId));
         if ($taxIdLength === 11) {
             return self::fromPrivateCompany(new PrivateTaxId($taxId), $taxAdministrationOfficeName, $taxAdministrationOfficeCode);
         }
+
         if ($taxIdLength === 10) {
             return self::fromCorporateCompany(new CorporateTaxId($taxId), $taxAdministrationOfficeName, $taxAdministrationOfficeCode);
         }
@@ -43,7 +47,7 @@ final class TaxIdentity
         PrivateTaxId $taxId,
         string $taxAdministrationOfficeName,
         string $taxAdministrationOfficeCode
-    ) : self {
+    ): self {
         return new self(
             $taxId->taxId(),
             $taxAdministrationOfficeName,
@@ -56,7 +60,7 @@ final class TaxIdentity
         CorporateTaxId $taxId,
         string $taxAdministrationOfficeName,
         string $taxAdministrationOfficeCode
-    ) : self {
+    ): self {
         return new self(
             $taxId->taxId(),
             $taxAdministrationOfficeName,
@@ -65,22 +69,22 @@ final class TaxIdentity
         );
     }
 
-    public function taxIdNumber() : string
+    public function taxIdNumber(): string
     {
         return $this->taxIdNumber;
     }
 
-    public function taxAdministrationOfficeName() : string
+    public function taxAdministrationOfficeName(): string
     {
         return $this->taxAdministrationOfficeName;
     }
 
-    public function taxAdministrationOfficeCode() : string
+    public function taxAdministrationOfficeCode(): string
     {
         return $this->taxAdministrationOfficeCode;
     }
 
-    public function taxPayerType() : string
+    public function taxPayerType(): string
     {
         return $this->taxPayerType;
     }

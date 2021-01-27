@@ -7,6 +7,7 @@ namespace BackendBase\Shared\Factory;
 use Doctrine\DBAL\Driver\Connection;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+
 use function str_replace;
 
 final class DomainRepositoryFactory implements FactoryInterface

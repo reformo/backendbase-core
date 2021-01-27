@@ -22,48 +22,38 @@ class FormData
      */
     protected string $id;
 
-    /**
-     * @Column(type="uuid", name="form_id")
-     */
+    /** @Column(type="uuid", name="form_id") */
     protected string $formId;
 
-    /**
-     * @Column(type="json",nullable=true,options={"jsonb":true}, name="post_data")
-     */
+    /** @Column(type="json",nullable=true,options={"jsonb":true}, name="post_data") */
     protected array $postData;
 
-    /**
-     * @Column(type="string", name="client_ip")
-     */
+    /** @Column(type="string", name="client_ip") */
     protected string $clientIp;
 
-    /**
-     * @Column(type="integer", name="is_moderated")
-     */
-    protected int $isModerated =1;
+    /** @Column(type="integer", name="is_moderated") */
+    protected int $isModerated = 1;
 
-    /**
-     * @Column(type="datetimetz_immutable", name="created_at")
-     */
+    /** @Column(type="datetimetz_immutable", name="created_at") */
 
     protected DateTimeImmutable $createdAt;
 
-    public function setCreatedAt(DateTimeImmutable $datetime) : void
+    public function setCreatedAt(DateTimeImmutable $datetime): void
     {
         $this->createdAt = $datetime;
     }
 
-    public function setId(string $id) : void
+    public function setId(string $id): void
     {
         $this->id = $id;
     }
 
-    public function setClientIp(string $clientIp) : void
+    public function setClientIp(string $clientIp): void
     {
         $this->clientIp = $clientIp;
     }
 
-    public function setFormId(string $formId) : void
+    public function setFormId(string $formId): void
     {
         $this->formId = $formId;
     }
@@ -71,12 +61,12 @@ class FormData
     /**
      * @param array $postData
      */
-    public function setPostData(array $postData) : void
+    public function setPostData(array $postData): void
     {
         $this->postData = $postData;
     }
 
-    public function setIsModerated(int $isModerated) : void
+    public function setIsModerated(int $isModerated): void
     {
         $this->isModerated = $isModerated;
     }

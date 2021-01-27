@@ -12,14 +12,16 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
-use const DATE_ATOM;
-use const JSON_THROW_ON_ERROR;
+
 use function array_key_exists;
 use function in_array;
 use function json_decode;
 use function json_encode;
 use function stripos;
 use function strpos;
+
+use const DATE_ATOM;
+use const JSON_THROW_ON_ERROR;
 
 class CommandLogger implements MiddlewareInterface
 {
@@ -30,11 +32,12 @@ class CommandLogger implements MiddlewareInterface
         $this->doctrineDbal = $doctrineDbal;
     }
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if (! in_array($request->getMethod(), ['POST', 'PATCH', 'PUT', 'DELETE'])) {
             return $handler->handle($request);
         }
+
         $response     = $handler->handle($request);
         $parsedBody   = $request->getParsedBody() ?? [];
         $attributes   = $request->getAttributes();
@@ -45,13 +48,16 @@ class CommandLogger implements MiddlewareInterface
             $source     = 'private-api';
             $apiVersion = $acceptHeader;
         }
+
         if (strpos($acceptHeader, 'public-backendbase') !== false) {
             $source     = 'public-web';
             $apiVersion = $acceptHeader;
         }
+
         if (array_key_exists('password', $parsedBody)) {
             $parsedBody['password'] = '**********';
         }
+
         unset($attributes['rawBody']);
         $serverParamsData = $request->getServerParams();
         $serverParams     = [];
@@ -63,6 +69,7 @@ class CommandLogger implements MiddlewareInterface
 
             $serverParams[$param] = '********';
         }
+
         $requestData  = [
             'method' => $request->getMethod(),
             'endPoint' => $request->getUri()->getPath(),

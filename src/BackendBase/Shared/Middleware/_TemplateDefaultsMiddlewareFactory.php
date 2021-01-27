@@ -10,7 +10,7 @@ use Mezzio\Template\TemplateRendererInterface;
 
 final class TemplateDefaultsMiddlewareFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : TemplateDefaultsMiddleware
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TemplateDefaultsMiddleware
     {
         return new TemplateDefaultsMiddleware($container->get(TemplateRendererInterface::class));
     }

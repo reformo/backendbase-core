@@ -17,26 +17,26 @@ trait IdentifierTrait
         $this->id = $id;
     }
 
-    public static function createFromString(string $uuid) : self
+    public static function createFromString(string $uuid): self
     {
         Assert::uuid($uuid, 'Invalid uuid provided!');
 
         return new static(Uuid::fromString($uuid));
     }
 
-    public static function createFromUuidObject(UuidInterface $uuid) : self
+    public static function createFromUuidObject(UuidInterface $uuid): self
     {
         Assert::uuid($uuid->toString(), 'Invalid uuid object provided!');
 
         return new static($uuid);
     }
 
-    public function id() : UuidInterface
+    public function id(): UuidInterface
     {
         return $this->id;
     }
 
-    public function toString() : string
+    public function toString(): string
     {
         return $this->id->toString();
     }

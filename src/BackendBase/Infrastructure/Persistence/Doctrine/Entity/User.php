@@ -22,55 +22,37 @@ class User
      */
     protected string $id;
 
-    /**
-     * @Column(type="string", name="email")
-     */
+    /** @Column(type="string", name="email") */
     protected string $email;
 
 
 
-    /**
-     * @Column(type="string", name="password_hash")
-     */
+    /** @Column(type="string", name="password_hash") */
     protected string $passwordHash;
 
-    /**
-     * @Column(type="string", name="password_hash_algo")
-     */
+    /** @Column(type="string", name="password_hash_algo") */
     protected string $passwordHashAlgo;
 
-    /**
-     * @Column(type="string", name="first_name")
-     */
+    /** @Column(type="string", name="first_name") */
     protected string $firstName;
 
-    /**
-     * @Column(type="string", name="last_name")
-     */
+    /** @Column(type="string", name="last_name") */
     protected string $lastName;
 
 
-    /**
-     * @Column(type="integer", name="is_active")
-     */
-    protected int $isActive =1;
-    /**
-     * @Column(type="integer", name="is_deleted")
-     */
-    protected int $isDeleted =0;
+    /** @Column(type="integer", name="is_active") */
+    protected int $isActive = 1;
+    /** @Column(type="integer", name="is_deleted") */
+    protected int $isDeleted = 0;
 
-    /**
-     * @Column(type="string", name="role")
-     */
+    /** @Column(type="string", name="role") */
     protected string $role = '';
 
-    /**
-     * @Column(type="datetimetz_immutable", name="created_at")
-     */
+    /** @Column(type="datetimetz_immutable", name="created_at") */
 
     protected DateTimeImmutable $createdAt;
 
-    public function setCreatedAt(DateTimeImmutable $datetime) : void
+    public function setCreatedAt(DateTimeImmutable $datetime): void
     {
         $this->createdAt = $datetime;
     }
@@ -80,7 +62,7 @@ class User
         $this->setFields();
     }
 
-    public function getFullName() : string
+    public function getFullName(): string
     {
         return $this->firstName . ' ' . $this->lastName;
     }

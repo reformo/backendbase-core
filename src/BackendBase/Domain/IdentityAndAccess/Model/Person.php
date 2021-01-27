@@ -19,22 +19,22 @@ class Person
         $this->contactInformation = $contactInformation;
     }
 
-    public function firstName() : string
+    public function firstName(): string
     {
         return $this->firstName;
     }
 
-    public function lastName() : string
+    public function lastName(): string
     {
         return $this->lastName;
     }
 
-    public function fullName() : string
+    public function fullName(): string
     {
         return implode(' ', [$this->firstName, $this->lastName]);
     }
 
-    public function contactInformation() : ContactInformation
+    public function contactInformation(): ContactInformation
     {
         return $this->contactInformation;
     }

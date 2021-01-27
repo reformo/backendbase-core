@@ -27,7 +27,7 @@ class GetCategoryList implements RequestHandlerInterface
         $this->genericRepository  = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -36,6 +36,7 @@ class GetCategoryList implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Contents::CMS_MENU) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to list categories');
         }
+
         $categories = $this->contentsRepository->getCategories('lt:cms:categories');
 
         return new JsonResponse(['categories' => $categories], 200);

@@ -11,7 +11,7 @@ use Psr\Http\Server\MiddlewareInterface;
 
 final class PrivateApiAuthorizationMiddlewareFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : MiddlewareInterface
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): MiddlewareInterface
     {
         return new PrivateApiAuthorizationMiddleware($container->get(RolesRepository::class), $container->get('config'));
     }

@@ -16,12 +16,12 @@ class UpdateCollectionItem
         $this->payload = $payload;
     }
 
-    public function id() : string
+    public function id(): string
     {
         return $this->id;
     }
 
-    public function payload() : array
+    public function payload(): array
     {
         return $this->payload;
     }

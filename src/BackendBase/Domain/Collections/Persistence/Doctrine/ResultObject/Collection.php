@@ -6,9 +6,11 @@ namespace BackendBase\Domain\Collections\Persistence\Doctrine\ResultObject;
 
 use BackendBase\Shared\Services\Persistence\ResultObject;
 use JsonSerializable;
-use const JSON_OBJECT_AS_ARRAY;
+
 use function gettype;
 use function json_decode;
+
+use const JSON_OBJECT_AS_ARRAY;
 
 class Collection implements JsonSerializable
 {
@@ -32,7 +34,7 @@ class Collection implements JsonSerializable
 
     private int $isActive = 1;
 
-    public function metadata() : ?array
+    public function metadata(): ?array
     {
         if (gettype($this->metadata) === 'string') {
             return json_decode($this->metadata, (bool) JSON_OBJECT_AS_ARRAY);

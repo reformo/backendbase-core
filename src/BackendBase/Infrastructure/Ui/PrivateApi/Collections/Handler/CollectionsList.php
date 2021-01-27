@@ -29,7 +29,7 @@ class CollectionsList implements RequestHandlerInterface
         $this->queryBus = $queryBus;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -38,6 +38,7 @@ class CollectionsList implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Collections::COLLECTIONS_MENU) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to list collections');
         }
+
         $parentId      = null;
         $collectionKey = $request->getAttribute('collection_key', null);
         if ($collectionKey !== null) {
@@ -45,6 +46,7 @@ class CollectionsList implements RequestHandlerInterface
             $collection               = $this->queryBus->handle($collectionItemByKeyQuery);
             $parentId                 = $collection->id();
         }
+
         $queryParams = $request->getQueryParams();
         $pageNumber  = $queryParams['pageNumber'] ?? 1;
 

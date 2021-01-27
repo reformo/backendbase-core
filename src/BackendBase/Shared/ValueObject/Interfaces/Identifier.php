@@ -8,7 +8,7 @@ use Ramsey\Uuid\UuidInterface;
 
 interface Identifier
 {
-    public function id() : UuidInterface;
+    public function id(): UuidInterface;
 
-    public function toString() : string;
+    public function toString(): string;
 }

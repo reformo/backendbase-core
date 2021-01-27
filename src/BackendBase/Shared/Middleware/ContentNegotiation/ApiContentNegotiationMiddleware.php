@@ -11,7 +11,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class ApiContentNegotiationMiddleware implements MiddlewareInterface
 {
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $acceptHeader     = $request->getHeaderLine('accept');
         $negotiator       = AcceptHeaderNegotiator::createFromAcceptHeader($acceptHeader);
@@ -28,6 +28,7 @@ class ApiContentNegotiationMiddleware implements MiddlewareInterface
             // See: RFC 6648 https://tools.ietf.org/html/rfc6648
             $customHeaders['Reformo-Api-Version'] = $preferredContent->version();
         }
+
         $request = $request->withAttribute('custom-headers', $customHeaders);
 
         return $handler->handle($request);

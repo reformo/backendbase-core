@@ -11,12 +11,14 @@ use BackendBase\Domain\Collections\Persistence\Doctrine\SqlQuery\GetCollectionIt
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\EntityManager;
 use Redislabs\Module\ReJSON\ReJSON;
-use const JSON_OBJECT_AS_ARRAY;
-use const SORT_NATURAL;
+
 use function array_keys;
 use function array_multisort;
 use function array_values;
 use function json_decode;
+
+use const JSON_OBJECT_AS_ARRAY;
+use const SORT_NATURAL;
 
 class CollectionQuery implements CollectionQueryInterface
 {
@@ -31,37 +33,37 @@ class CollectionQuery implements CollectionQueryInterface
         $this->reJSON        = $reJSON;
     }
 
-    public function findById(string $id) : CollectionResultObject
+    public function findById(string $id): CollectionResultObject
     {
         $collectionItem = new GetCollectionItem($this->connection);
 
         return $collectionItem->byId($id);
     }
 
-    public function findByKey(string $key) : CollectionResultObject
+    public function findByKey(string $key): CollectionResultObject
     {
         $collectionItem = new GetCollectionItem($this->connection);
 
         return $collectionItem->byKey($key);
     }
 
-    public function findBySlug(?string $parentId, string $slug) : CollectionResultObject
+    public function findBySlug(?string $parentId, string $slug): CollectionResultObject
     {
         $collectionItem = new GetCollectionItem($this->connection);
 
         return $collectionItem->bySlug($parentId, $slug);
     }
 
-    public function findSubItems(?string $parentId, int $offset, int $limit) : Collections
+    public function findSubItems(?string $parentId, int $offset, int $limit): Collections
     {
          $collectionItem = new GetCollectionItem($this->connection);
 
         return $collectionItem->subItemsById($parentId, $offset, $limit);
     }
 
-    public function buildLookupData() : array
+    public function buildLookupData(): array
     {
-        $sql ="
+        $sql = "
             SELECT LT.*, LTP.key as parent_key
               FROM lookup_table LT
               LEFT JOIN lookup_table LTP ON LTP.id=LT.parent_id
@@ -87,9 +89,9 @@ class CollectionQuery implements CollectionQueryInterface
         return $lookupTable;
     }
 
-    public function buildLookupTable() : array
+    public function buildLookupTable(): array
     {
-        $sql ="
+        $sql = "
             SELECT LT.key, LT.name
               FROM lookup_table LT
              WHERE LT.is_active = 1
@@ -108,9 +110,9 @@ class CollectionQuery implements CollectionQueryInterface
         return $lookupTable;
     }
 
-    private function getChildrenKeys(string $parentId) : array
+    private function getChildrenKeys(string $parentId): array
     {
-        $sql ='
+        $sql = '
             SELECT LT.key, LT.name
               FROM lookup_table LT
              WHERE LT.is_active = 1
@@ -123,6 +125,7 @@ class CollectionQuery implements CollectionQueryInterface
         foreach ($data as $item) {
             $keysData[$item['name']] = $item['key'];
         }
+
         $arrayKeys = array_keys($keysData);
         array_multisort($arrayKeys, SORT_NATURAL, $keysData);
 

@@ -6,6 +6,7 @@ namespace BackendBase\Shared\Services\Persistence;
 
 use Iterator;
 use JsonSerializable;
+
 use function count;
 
 abstract class ResultObjectsCollection implements Iterator, JsonSerializable
@@ -19,12 +20,12 @@ abstract class ResultObjectsCollection implements Iterator, JsonSerializable
         $this->items = $items ?? [];
     }
 
-    public function rewind() : void
+    public function rewind(): void
     {
         $this->index = 0;
     }
 
-    public function push($item) : void
+    public function push($item): void
     {
         $this->items[count($this->items)] = $item;
     }
@@ -39,22 +40,22 @@ abstract class ResultObjectsCollection implements Iterator, JsonSerializable
         return $this->index;
     }
 
-    public function next() : void
+    public function next(): void
     {
         ++$this->index;
     }
 
-    public function valid() : bool
+    public function valid(): bool
     {
         return isset($this->items[$this->index]);
     }
 
-    public function count() : int
+    public function count(): int
     {
         return count($this->items);
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
         $data = [];
         foreach ($this->items as $item) {
@@ -64,7 +65,7 @@ abstract class ResultObjectsCollection implements Iterator, JsonSerializable
         return $data;
     }
 
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return $this->items;
     }

@@ -16,14 +16,14 @@ use Mezzio\MiddlewareFactory;
  */
 class ConfigProvider implements MezzioHandlerConfigProvider
 {
-    public function __invoke() : array
+    public function __invoke(): array
     {
         return [
             'dependencies'  => $this->getDependencies(),
         ];
     }
 
-    public function registerRoutes(Application $app, MiddlewareFactory $factory) : void
+    public function registerRoutes(Application $app, MiddlewareFactory $factory): void
     {
         $app->post('/_reset', Handler\ResetApcuCache::class, 'apcu_cache.reset');
         $app->post('/sessions', Handler\StartSession::class, 'sessions.start');
@@ -41,7 +41,7 @@ class ConfigProvider implements MezzioHandlerConfigProvider
     /**
      * Returns the container dependencies
      */
-    public function getDependencies() : array
+    public function getDependencies(): array
     {
         return [
             'invokables' => [],

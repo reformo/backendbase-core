@@ -15,7 +15,7 @@ class GetCollectionItemBySlug
         $this->slug     = $slug;
     }
 
-    public function payload() : array
+    public function payload(): array
     {
         return [
             'parentId' => $this->parentId,
@@ -23,12 +23,12 @@ class GetCollectionItemBySlug
         ];
     }
 
-    public function parentId() : ?string
+    public function parentId(): ?string
     {
         return $this->parentId;
     }
 
-    public function slug() : string
+    public function slug(): string
     {
         return $this->slug;
     }

@@ -11,7 +11,7 @@ use Redis;
 
 final class RedisRateLimiterFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : RedisRateLimiter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RedisRateLimiter
     {
         $redisClient = $container->get(Redis::class);
 

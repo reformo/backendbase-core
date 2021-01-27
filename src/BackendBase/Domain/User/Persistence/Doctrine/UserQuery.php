@@ -24,17 +24,17 @@ class UserQuery implements UserQueryInterface
         $this->connection = $connection;
     }
 
-    public function getUserById(UserId $userId) : ?User
+    public function getUserById(UserId $userId): ?User
     {
         return GetUserById::execute($this->connection, ['userId' => $userId->toString()]);
     }
 
-    public function getUserByEmail(Email $email) : ?User
+    public function getUserByEmail(Email $email): ?User
     {
         return GetUserByEmail::execute($this->connection, ['email' => $email->toString()]);
     }
 
-    public function getAllUsersPaginated(int $offset, int $limit) : Users
+    public function getAllUsersPaginated(int $offset, int $limit): Users
     {
         return GetAllUsers::execute($this->connection, ['offset' => $offset, 'limit' => $limit]);
     }

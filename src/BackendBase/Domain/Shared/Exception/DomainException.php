@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BackendBase\Domain\Shared\Exception;
 
 use Mezzio\ProblemDetails\Exception\CommonProblemDetailsExceptionTrait;
+
 use function array_merge;
 use function defined;
 
@@ -22,7 +23,7 @@ trait DomainException
         parent::__construct($detail, $status);
     }
 
-    public static function create(string $details, ?array $additional = []) : self
+    public static function create(string $details, ?array $additional = []): self
     {
         return new static(
             self::STATUS,

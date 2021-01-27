@@ -16,6 +16,7 @@ use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
 use function array_values;
 
 class RemoveImage implements RequestHandlerInterface
@@ -38,7 +39,7 @@ class RemoveImage implements RequestHandlerInterface
         $this->genericRepository = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -47,6 +48,7 @@ class RemoveImage implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Contents::CMS_EDIT) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to edit content');
         }
+
         $index = (int) $request->getAttribute('index');
 
         $contentId = $request->getAttribute('contentId');

@@ -29,7 +29,7 @@ class CollectionRepository implements CollectionRepositoryInterface
         $this->reJSON        = $reJSON;
     }
 
-    private function convertResultObjectToCollection(CollectionResultObject $persistedObject) : Collection
+    private function convertResultObjectToCollection(CollectionResultObject $persistedObject): Collection
     {
         return new Collection(
             Uuid::fromString($persistedObject->id()),
@@ -41,7 +41,7 @@ class CollectionRepository implements CollectionRepositoryInterface
         );
     }
 
-    private function convertCollectionToDoctrineEntity(Collection $collection) : DoctrineCollectionEntity
+    private function convertCollectionToDoctrineEntity(Collection $collection): DoctrineCollectionEntity
     {
         $doctrineCollectionEntity = new DoctrineCollectionEntity();
         $doctrineCollectionEntity->setId($collection->id()->toString());
@@ -55,7 +55,7 @@ class CollectionRepository implements CollectionRepositoryInterface
         return $doctrineCollectionEntity;
     }
 
-    private function convertCollectionToDoctrineEntityWithPayload(Collection $collection, $payload) : DoctrineCollectionEntity
+    private function convertCollectionToDoctrineEntityWithPayload(Collection $collection, $payload): DoctrineCollectionEntity
     {
         $doctrineCollectionEntity = $this->entityManager->find(
             DoctrineCollectionEntity::class,
@@ -71,7 +71,7 @@ class CollectionRepository implements CollectionRepositoryInterface
         return $doctrineCollectionEntity;
     }
 
-    public function findById(UuidInterface $id) : Collection
+    public function findById(UuidInterface $id): Collection
     {
         $collectionItem  = new GetCollectionItem($this->connection);
         $persistedObject = $collectionItem->byId($id->toString());
@@ -79,7 +79,7 @@ class CollectionRepository implements CollectionRepositoryInterface
         return $this->convertResultObjectToCollection($persistedObject);
     }
 
-    public function findByKey(string $key) : Collection
+    public function findByKey(string $key): Collection
     {
         $collectionItem  = new GetCollectionItem($this->connection);
         $persistedObject = $collectionItem->byKey($key);
@@ -87,7 +87,7 @@ class CollectionRepository implements CollectionRepositoryInterface
         return $this->convertResultObjectToCollection($persistedObject);
     }
 
-    public function findBySlug(?UuidInterface $parentId, string $slug) : Collection
+    public function findBySlug(?UuidInterface $parentId, string $slug): Collection
     {
         $collectionItem  = new GetCollectionItem($this->connection);
         $persistedObject = $collectionItem->bySlug($parentId->toString(), $slug);
@@ -95,7 +95,7 @@ class CollectionRepository implements CollectionRepositoryInterface
         return $this->convertResultObjectToCollection($persistedObject);
     }
 
-    public function updateCollection(UuidInterface $id, array $payload) : void
+    public function updateCollection(UuidInterface $id, array $payload): void
     {
         $collection               = $this->findById($id);
         $doctrineCollectionEntity = $this->convertCollectionToDoctrineEntityWithPayload($collection, $payload);
@@ -103,7 +103,7 @@ class CollectionRepository implements CollectionRepositoryInterface
         $this->entityManager->flush();
     }
 
-    public function addNewCollection(Collection $collection) : void
+    public function addNewCollection(Collection $collection): void
     {
         $doctrineCollectionEntity = $this->convertCollectionToDoctrineEntity($collection);
         $doctrineCollectionEntity->setIsDeleted(0);

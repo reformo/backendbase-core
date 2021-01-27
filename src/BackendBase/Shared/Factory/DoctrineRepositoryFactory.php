@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManager;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Redislabs\Module\ReJSON\ReJSON;
+
 use function str_replace;
 
 final class DoctrineRepositoryFactory implements FactoryInterface

@@ -11,9 +11,9 @@ use BackendBase\Shared\ValueObject\Interfaces\Email;
 
 interface UserQuery
 {
-    public function getUserById(UserIdInterface $id) : ?User;
+    public function getUserById(UserIdInterface $id): ?User;
 
-    public function getUserByEmail(Email $email) : ?User;
+    public function getUserByEmail(Email $email): ?User;
 
-    public function getAllUsersPaginated(int $offset, int $limit) : Users;
+    public function getAllUsersPaginated(int $offset, int $limit): Users;
 }

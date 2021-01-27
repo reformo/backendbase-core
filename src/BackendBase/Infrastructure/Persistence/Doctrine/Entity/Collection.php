@@ -37,39 +37,25 @@ class Collection
      */
     protected string $id;
 
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected string $key;
 
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected string $name;
 
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected string $slug;
 
-    /**
-     * @Column(type="uuid",nullable=true, name="parent_id")
-     */
+    /** @Column(type="uuid",nullable=true, name="parent_id") */
     protected ?string $parentId;
 
-    /**
-     * @Column(type="json_array",nullable=true,options={"jsonb"=true})
-     */
+    /** @Column(type="json_array",nullable=true,options={"jsonb"=true}) */
     protected array $metadata;
 
-    /**
-     * @Column(type="integer",name="is_active")
-     */
+    /** @Column(type="integer",name="is_active") */
     protected int $isActive;
 
-    /**
-     * @Column(type="integer",name="is_deleted",options={"default":0})
-     */
+    /** @Column(type="integer",name="is_deleted",options={"default":0}) */
     protected int $isDeleted;
 
     public function __construct()

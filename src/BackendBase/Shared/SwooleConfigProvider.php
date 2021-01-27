@@ -23,12 +23,14 @@ use Mezzio\Swoole\SwooleRequestHandlerRunnerFactory;
 use Mezzio\Swoole\WhoopsPrettyPageHandlerDelegator;
 use Psr\Http\Message\ServerRequestInterface;
 use Swoole\Http\Server as SwooleHttpServer;
-use const PHP_SAPI;
+
 use function extension_loaded;
+
+use const PHP_SAPI;
 
 class SwooleConfigProvider
 {
-    public function __invoke() : array
+    public function __invoke(): array
     {
         $config = PHP_SAPI === 'cli' && extension_loaded('swoole')
             ? ['dependencies' => $this->getDependencies()]
@@ -39,7 +41,7 @@ class SwooleConfigProvider
         return PHP_SAPI === 'cli' && extension_loaded('swoole') ? $config : [];
     }
 
-    public function getDefaultConfig() : array
+    public function getDefaultConfig(): array
     {
         return [
             'swoole-http-server' => [
@@ -62,7 +64,7 @@ class SwooleConfigProvider
         ];
     }
 
-    public function getDependencies() : array
+    public function getDependencies(): array
     {
         return [
             'factories'  => [

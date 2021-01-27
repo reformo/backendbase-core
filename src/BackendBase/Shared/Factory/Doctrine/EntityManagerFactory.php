@@ -17,7 +17,7 @@ use Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql as DqlFunctions
 
 final class EntityManagerFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : EntityManager
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): EntityManager
     {
         $appConfig = $container->get('config');
         if ($appConfig['debug'] === true) {
@@ -25,6 +25,7 @@ final class EntityManagerFactory implements FactoryInterface
         } else {
             $cache = new ApcuCache();
         }
+
         Type::addType('uuid', UuidType::class);
         $client      = $container->get(Connection::class);
         $doctrineDir = $appConfig['app']['data_dir'] . '/cache/Doctrine';

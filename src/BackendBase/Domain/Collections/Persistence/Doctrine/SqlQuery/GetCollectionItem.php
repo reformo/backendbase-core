@@ -11,6 +11,7 @@ use BackendBase\Domain\Shared\Exception\ExecutionFailed;
 use BackendBase\Shared\Services\Persistence\SqlQuery;
 use Doctrine\DBAL\FetchMode;
 use Throwable;
+
 use function count;
 use function sprintf;
 
@@ -59,22 +60,22 @@ SQL;
          OFFSET :offset
 SQL;
 
-    public function byId(string $id) : ?Collection
+    public function byId(string $id): ?Collection
     {
         return $this->execute(self::$byIdSql, ['collectionId' => $id], 'id', 'collectionId');
     }
 
-    public function byKey(string $key) : ?Collection
+    public function byKey(string $key): ?Collection
     {
         return $this->execute(self::$byKeySql, ['collectionKey' => $key], 'key', 'collectionKey');
     }
 
-    public function bySlug(?string $parentId, string $slug) : ?Collection
+    public function bySlug(?string $parentId, string $slug): ?Collection
     {
         return $this->execute(self::$bySlugSql, ['slug' => $slug, 'parentId' => $parentId], 'slug', 'slug');
     }
 
-    public function subItemsById(?string $id, ?int $offset = 0, ?int $limit = 25) : Collections
+    public function subItemsById(?string $id, ?int $offset = 0, ?int $limit = 25): Collections
     {
         $sql       = $id === null ? self::$rootItemsSql : self::$subItemsSql;
         $params    = $id === null ? ['offset' => $offset, 'limit' => $limit] : ['parentId' => $id, 'offset' => $offset, 'limit' => $limit];
@@ -91,7 +92,7 @@ SQL;
         }
     }
 
-    public function execute(string $sql, array $parameters, string $paramName, string $keyParameter) : ?Collection
+    public function execute(string $sql, array $parameters, string $paramName, string $keyParameter): ?Collection
     {
         $statement = $this->executeQuery($sql, $parameters);
         try {
@@ -107,6 +108,7 @@ SQL;
             if ($exception instanceof  CollectionNotFound) {
                 throw $exception;
             }
+
             throw ExecutionFailed::create($exception->getMessage());
         }
     }

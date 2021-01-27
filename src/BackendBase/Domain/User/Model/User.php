@@ -11,6 +11,7 @@ use Carbon\CarbonImmutable;
 use DateTimeImmutable;
 use Throwable;
 use Webmozart\Assert\Assert;
+
 use function password_verify;
 
 class User
@@ -51,6 +52,7 @@ class User
         } catch (Throwable $exception) {
             throw InvalidFirstName::create($exception->getMessage());
         }
+
         try {
             Assert::minLength($lastName, 2, 'Last name must be at least 2 characters long');
         } catch (Throwable $exception) {
@@ -68,42 +70,42 @@ class User
         );
     }
 
-    public function id() : UserIdInterface
+    public function id(): UserIdInterface
     {
         return $this->id;
     }
 
-    public function email() : Email
+    public function email(): Email
     {
         return $this->email;
     }
 
-    public function firstName() : string
+    public function firstName(): string
     {
         return $this->firstName;
     }
 
-    public function lastName() : string
+    public function lastName(): string
     {
         return $this->lastName;
     }
 
-    public function passwordHash() : string
+    public function passwordHash(): string
     {
         return $this->passwordHash;
     }
 
-    public function role() : string
+    public function role(): string
     {
         return $this->role;
     }
 
-    public function createdAt() : DateTimeImmutable
+    public function createdAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function verifyPassword(string $password) : bool
+    public function verifyPassword(string $password): bool
     {
         return password_verify($password, $this->passwordHash);
     }

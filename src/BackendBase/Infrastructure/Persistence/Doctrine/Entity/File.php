@@ -31,27 +31,19 @@ class File
      */
     protected string $id;
 
-    /**
-     * @Column(type="string", name="file_path")
-     */
+    /** @Column(type="string", name="file_path") */
     protected string $filePath;
 
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected string $type;
 
-    /**
-     * @Column(type="json",nullable=true,options={"jsonb":true})
-     */
+    /** @Column(type="json",nullable=true,options={"jsonb":true}) */
     protected array $metadata;
 
-    /**
-     * @Column(type="datetimetz_immutable", name="uploaded_at")
-     */
+    /** @Column(type="datetimetz_immutable", name="uploaded_at") */
     protected DateTimeImmutable $uploadedAt;
 
-    public function setUploadedAt(DateTimeImmutable $datetime) : void
+    public function setUploadedAt(DateTimeImmutable $datetime): void
     {
         $this->uploadedAt = $datetime;
     }

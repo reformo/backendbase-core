@@ -17,7 +17,7 @@ class GetCollectionItems
         $this->limit    = $limit;
     }
 
-    public function payload() : array
+    public function payload(): array
     {
         return [
             'parentId' => $this->parentId,
@@ -26,17 +26,17 @@ class GetCollectionItems
         ];
     }
 
-    public function parentId() : ?string
+    public function parentId(): ?string
     {
         return $this->parentId;
     }
 
-    public function offset() : int
+    public function offset(): int
     {
         return $this->offset;
     }
 
-    public function limit() : int
+    public function limit(): int
     {
         return $this->limit;
     }

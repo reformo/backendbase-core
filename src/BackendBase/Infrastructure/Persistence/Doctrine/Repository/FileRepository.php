@@ -25,7 +25,7 @@ class FileRepository
         $this->reJSON        = $reJSON;
     }
 
-    public function changeVersionStatus(string $version, int $isActive) : void
+    public function changeVersionStatus(string $version, int $isActive): void
     {
         $this->connection->executeQuery(
             "
@@ -37,9 +37,9 @@ class FileRepository
         );
     }
 
-    public function findOrderFiles(string $orderId) : array
+    public function findOrderFiles(string $orderId): array
     {
-        $sql ="
+        $sql = "
         SELECT *
         FROM files f
         WHERE f.type = 'ORDER'
@@ -53,7 +53,7 @@ class FileRepository
         return $statement->fetchAll() ?? [];
     }
 
-    private function convertArrayDataToDoctrineEntity(array $fileData) : File
+    private function convertArrayDataToDoctrineEntity(array $fileData): File
     {
         $doctrineFileEntity = new File();
         $doctrineFileEntity->setId($fileData['id']);
@@ -65,19 +65,19 @@ class FileRepository
         return $doctrineFileEntity;
     }
 
-    public function addNewFile(array $fileData) : void
+    public function addNewFile(array $fileData): void
     {
         $doctrinefileEntity = $this->convertArrayDataToDoctrineEntity($fileData);
         $this->entityManager->persist($doctrinefileEntity);
         $this->entityManager->flush();
     }
 
-    public function getFileById(string $fileId) : File
+    public function getFileById(string $fileId): File
     {
         return $this->entityManager->find(File::class, $fileId);
     }
 
-    public function update(File $file) : void
+    public function update(File $file): void
     {
         $this->entityManager->persist($file);
         $this->entityManager->flush();

@@ -23,7 +23,7 @@ class AcceptHeaderPriority
     {
     }
 
-    public static function createFromString(string $priority) : self
+    public static function createFromString(string $priority): self
     {
         $acceptHeaderPriority = new self();
         $acceptHeaderPriority->parsePriorityString($priority);
@@ -31,7 +31,7 @@ class AcceptHeaderPriority
         return $acceptHeaderPriority;
     }
 
-    private function parsePriorityString(string $priority) : void
+    private function parsePriorityString(string $priority): void
     {
         $parts = explode(';', $priority);
         foreach ($parts as $part) {
@@ -40,67 +40,73 @@ class AcceptHeaderPriority
         }
     }
 
-    private function checkAcceptType(string $acceptType) : void
+    private function checkAcceptType(string $acceptType): void
     {
         if (strpos($acceptType, '/') === false) {
             return;
         }
+
         $this->type = $acceptType === '*/*' ? 'application/json' : $acceptType;
         $this->checkVersionInAcceptType($acceptType);
     }
 
-    private function checkVersionInAcceptType(string $acceptType) : void
+    private function checkVersionInAcceptType(string $acceptType): void
     {
         $subParts = explode('/', $acceptType);
         if (strpos($subParts[1], '.') === false) {
             return;
         }
+
         $subPartDetails = explode('.', $subParts[1]);
         $versionPart    = array_pop($subPartDetails);
         if (stripos($versionPart, 'v') === false) {
             return;
         }
+
         if (stripos($versionPart, '+') !== false) {
             [$versionPart] = explode('+', $versionPart);
         }
+
         $this->version = str_ireplace('v', '', $versionPart);
     }
 
-    private function setParameters(string $acceptParameter) : void
+    private function setParameters(string $acceptParameter): void
     {
         if (strpos($acceptParameter, '=') === false) {
             return;
         }
+
         [$parameter, $value] = explode('=', $acceptParameter);
         if (! property_exists($this, $parameter)) {
             $this->parameters[$parameter] = $value;
 
             return;
         }
+
         $this->{$parameter} = $parameter === 'q' ? (float) $value : $value;
     }
 
-    public function type() : string
+    public function type(): string
     {
         return $this->type;
     }
 
-    public function charset() : string
+    public function charset(): string
     {
         return $this->charset;
     }
 
-    public function version() : ?string
+    public function version(): ?string
     {
         return $this->version;
     }
 
-    public function quality() : float
+    public function quality(): float
     {
         return $this->q;
     }
 
-    public function parameters() : array
+    public function parameters(): array
     {
         return $this->parameters;
     }

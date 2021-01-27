@@ -9,8 +9,7 @@ use DOMDocument;
 use DOMElement;
 use DOMNamedNodeMap;
 use DOMNodeList;
-use const LIBXML_HTML_NODEFDTD;
-use const LIBXML_HTML_NOIMPLIED;
+
 use function array_keys;
 use function explode;
 use function html_entity_decode;
@@ -18,6 +17,9 @@ use function in_array;
 use function strip_tags;
 use function strpos;
 use function trim;
+
+use const LIBXML_HTML_NODEFDTD;
+use const LIBXML_HTML_NOIMPLIED;
 
 class TagAndAttributeRemover
 {
@@ -35,7 +37,7 @@ class TagAndAttributeRemover
         $this->allowedUrlPrefixes = $allowedUrlPrefixes;
     }
 
-    public static function cleanHtml(string $html, string $allowedTagsAndAttributesList, ?string $allowedUrlPrefixes = '') : string
+    public static function cleanHtml(string $html, string $allowedTagsAndAttributesList, ?string $allowedUrlPrefixes = ''): string
     {
         $allowedTagsAndAttributes    = self::extractAllowedTags($allowedTagsAndAttributesList);
         $domHtml                     = new DOMDocument();
@@ -57,11 +59,12 @@ class TagAndAttributeRemover
         return $remover->removeTags();
     }
 
-    private static function safeExplodeString(string $delimiter, string $string, ?bool $allowEmptyArrayElement = true) : array
+    private static function safeExplodeString(string $delimiter, string $string, ?bool $allowEmptyArrayElement = true): array
     {
         if (strpos($string, $delimiter) !== false) {
             return explode($delimiter, $string);
         }
+
         if ($string === '') {
             return [];
         }
@@ -69,7 +72,7 @@ class TagAndAttributeRemover
         return $allowEmptyArrayElement ? [$string, ''] : [$string];
     }
 
-    private static function extractAllowedTags(string $allowedTagsAndAttributes) : array
+    private static function extractAllowedTags(string $allowedTagsAndAttributes): array
     {
         $allowedTagList = explode(';', $allowedTagsAndAttributes);
 
@@ -82,7 +85,7 @@ class TagAndAttributeRemover
         return $allowedTags;
     }
 
-    private static function extractCurrentTags(DOMDocument $domHtml) : array
+    private static function extractCurrentTags(DOMDocument $domHtml): array
     {
         $currentTags = [];
         foreach ($domHtml->getElementsByTagName('*') as $node) {
@@ -92,28 +95,28 @@ class TagAndAttributeRemover
         return array_keys($currentTags);
     }
 
-    private function removeAttributes() : void
+    private function removeAttributes(): void
     {
         foreach ($this->currentTags as $tag) {
             $this->scanNodes($this->domHtml->getElementsByTagName($tag));
         }
     }
 
-    private function scanNodes(DOMNodeList $nodes) : void
+    private function scanNodes(DOMNodeList $nodes): void
     {
         foreach ($nodes as $node) {
             $this->scanNode($node);
         }
     }
 
-    private function scanNode(DOMElement $node) : void
+    private function scanNode(DOMElement $node): void
     {
         foreach ($this->getAttributesNames($node->attributes) as $attribute) {
             $this->removeNotAllowedAttributes($node, $attribute, $this->allowedTags[$node->tagName]);
         }
     }
 
-    private function getAttributesNames(DOMNamedNodeMap $attributes) : array
+    private function getAttributesNames(DOMNamedNodeMap $attributes): array
     {
         $attributeNames = [];
         foreach ($attributes as $attribute) {
@@ -123,12 +126,13 @@ class TagAndAttributeRemover
         return $attributeNames;
     }
 
-    private function removeNotAllowedAttributes(DOMElement $node, string $attributeName, $allowedAttributes) : bool
+    private function removeNotAllowedAttributes(DOMElement $node, string $attributeName, $allowedAttributes): bool
     {
         $attribute = $node->getAttributeNode($attributeName);
         if (! in_array($attribute->name, $allowedAttributes, true)) {
             return $node->removeAttribute($attributeName);
         }
+
         if (in_array($attributeName, self::$urlAttributes, true)) {
             return $this->removeAttributesWithNotAllowedUrlPrefixes($node, $attribute);
         }
@@ -136,7 +140,7 @@ class TagAndAttributeRemover
         return false;
     }
 
-    private function removeAttributesWithNotAllowedUrlPrefixes(DOMElement $node, DOMAttr $attribute) : ?bool
+    private function removeAttributesWithNotAllowedUrlPrefixes(DOMElement $node, DOMAttr $attribute): ?bool
     {
         $isAllowed = 0;
         foreach ($this->allowedUrlPrefixes as $allowedUrlPrefix) {
@@ -145,6 +149,7 @@ class TagAndAttributeRemover
                 break;
             }
         }
+
         if ($isAllowed === 0) {
             return $node->removeAttribute($attribute->nodeName);
         }
@@ -152,7 +157,7 @@ class TagAndAttributeRemover
         return false;
     }
 
-    private function removeTags() : string
+    private function removeTags(): string
     {
         return trim(strip_tags(html_entity_decode($this->domHtml->saveHTML()), array_keys($this->allowedTags)));
     }

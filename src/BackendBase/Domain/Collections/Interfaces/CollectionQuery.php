@@ -9,11 +9,11 @@ use BackendBase\Domain\Collections\Persistence\Doctrine\ResultObject\Collection;
 
 interface CollectionQuery
 {
-    public function findById(string $id) : Collection;
+    public function findById(string $id): Collection;
 
-    public function findByKey(string $key) : Collection;
+    public function findByKey(string $key): Collection;
 
-    public function findBySlug(string $parentId, string $slug) : Collection;
+    public function findBySlug(string $parentId, string $slug): Collection;
 
-    public function findSubItems(?string $parentId, int $offset, int $limit) : Collections;
+    public function findSubItems(?string $parentId, int $offset, int $limit): Collections;
 }

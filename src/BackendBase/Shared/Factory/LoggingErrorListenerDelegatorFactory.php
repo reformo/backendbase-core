@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 
 class LoggingErrorListenerDelegatorFactory
 {
-    public function __invoke(ContainerInterface $container, string $name, callable $callback) : ProblemDetailsMiddleware
+    public function __invoke(ContainerInterface $container, string $name, callable $callback): ProblemDetailsMiddleware
     {
         $listener     = new LoggingErrorListener($container->get(LoggerInterface::class));
         $errorHandler = $callback();

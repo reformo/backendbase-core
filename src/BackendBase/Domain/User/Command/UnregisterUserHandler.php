@@ -24,7 +24,7 @@ class UnregisterUserHandler
      *
      * @var UnregisterUser
      */
-    public function __invoke(UnregisterUser $command) : void
+    public function __invoke(UnregisterUser $command): void
     {
         $this->repository->unregisterUser(UserId::createFromString($command->id()));
     }

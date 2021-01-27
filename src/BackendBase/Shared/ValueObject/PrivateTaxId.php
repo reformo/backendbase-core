@@ -6,6 +6,7 @@ namespace BackendBase\Shared\ValueObject;
 
 use BackendBase\Shared\ValueObject\Exception\InvalidPrivateTaxIdNumber;
 use BackendBase\Shared\ValueObject\Interfaces\TaxId;
+
 use function array_map;
 use function str_split;
 use function strlen;
@@ -21,12 +22,12 @@ final class PrivateTaxId implements TaxId
         $this->taxId = $taxId;
     }
 
-    public function taxId() : string
+    public function taxId(): string
     {
         return $this->taxId;
     }
 
-    private static function validateTaxId(string $taxId) : bool
+    private static function validateTaxId(string $taxId): bool
     {
         if (strpos($taxId, '0') === 0) {
             throw InvalidPrivateTaxIdNumber::create('Private tax id cannot be started with zero(0): ' . $taxId);
@@ -57,7 +58,7 @@ final class PrivateTaxId implements TaxId
         return true;
     }
 
-    private static function parseInt(string $item) : int
+    private static function parseInt(string $item): int
     {
         return (int) $item;
     }

@@ -9,6 +9,7 @@ use BackendBase\Domain\Collections\Exception\CollectionNotFound;
 use BackendBase\Domain\Collections\Interfaces\CollectionRepository;
 use BackendBase\Domain\Collections\Model\Collection;
 use Ramsey\Uuid\Uuid;
+
 use function sprintf;
 
 class AddNewCollectionItemHandler
@@ -20,7 +21,7 @@ class AddNewCollectionItemHandler
         $this->repository = $repository;
     }
 
-    public function __invoke(AddNewCollectionItem $command) : void
+    public function __invoke(AddNewCollectionItem $command): void
     {
         $payload            = $command->payload();
         $collectionRootItem = $this->repository->findByKey('lt:root');
@@ -34,18 +35,22 @@ class AddNewCollectionItemHandler
         );
         try {
             $this->repository->findByKey($collection->key());
+
             throw CollectionExists::create(
                 sprintf('Collection exists with the provided key %s ', $collection->key())
             );
         } catch (CollectionNotFound $e) {
         }
+
         try {
             $this->repository->findBySlug($collection->parentId(), $collection->slug());
+
             throw CollectionExists::create(
                 sprintf('Collection exists with the provided parentId %s and slug %s ', $collection->parentId(), $collection->slug())
             );
         } catch (CollectionNotFound $e) {
         }
+
         $this->repository->addNewCollection($collection);
     }
 }

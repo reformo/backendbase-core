@@ -11,11 +11,11 @@ use BackendBase\Shared\ValueObject\Email;
 
 interface UserRepository
 {
-    public function getUserById(UserId $id) : ?User;
+    public function getUserById(UserId $id): ?User;
 
-    public function getUserByEmail(Email $email) : ?User;
+    public function getUserByEmail(Email $email): ?User;
 
-    public function registerUser(User $user) : void;
+    public function registerUser(User $user): void;
 
     /**
      * @throws UserNotFound
@@ -23,7 +23,7 @@ interface UserRepository
      *
      * @var UserId
      */
-    public function unregisterUser(UserId $id) : void;
+    public function unregisterUser(UserId $id): void;
 
-    public function updateUserInfo(UserId $userId, array $payload) : void;
+    public function updateUserInfo(UserId $userId, array $payload): void;
 }

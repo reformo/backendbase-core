@@ -6,6 +6,7 @@ namespace BackendBase\Shared\Services\Persistence;
 
 use BackendBase\Domain\Shared\Exception\InvalidArgument;
 use Selami\Stdlib\CaseConverter;
+
 use function get_object_vars;
 use function method_exists;
 use function property_exists;
@@ -14,7 +15,7 @@ use function ucfirst;
 
 trait ResultObject
 {
-    public function __set(string $name, $value) : void
+    public function __set(string $name, $value): void
     {
         $propertyName          = CaseConverter::toCamelCase($name);
         $transformFunctionName = 'transform' . ucfirst($propertyName);
@@ -27,9 +28,11 @@ trait ResultObject
                 )
             );
         }
+
         if (method_exists(static::class, $transformFunctionName)) {
             $value = $this->{$transformFunctionName}($value);
         }
+
         $this->{$propertyName} = $value;
     }
 
@@ -66,7 +69,7 @@ trait ResultObject
         return $this->{$name};
     }
 
-    public function toArray() : array
+    public function toArray(): array
     {
         $objectVars =  get_object_vars($this);
 
@@ -78,7 +81,7 @@ trait ResultObject
         return $propertiesAsAnArray;
     }
 
-    public function jsonSerialize() : array
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

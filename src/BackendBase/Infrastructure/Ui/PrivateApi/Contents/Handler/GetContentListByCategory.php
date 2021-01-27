@@ -13,6 +13,7 @@ use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+
 use function array_key_exists;
 
 class GetContentListByCategory implements RequestHandlerInterface
@@ -28,7 +29,7 @@ class GetContentListByCategory implements RequestHandlerInterface
         $this->genericRepository  = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -37,6 +38,7 @@ class GetContentListByCategory implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Contents::CMS_MENU) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to add new content');
         }
+
         $category                      = $request->getAttribute('category');
         $categoryData                  = $this->contentsRepository->getCategory($category);
         $contentsData                  = [];
@@ -44,6 +46,7 @@ class GetContentListByCategory implements RequestHandlerInterface
         if (array_key_exists('useSubItems', $categoryData['metadata']) && $categoryData['metadata']['useSubItems'] === true) {
             $categoryData['subCategories'] = $this->contentsRepository->getCategoriesByParentId($categoryData['id']);
         }
+
         if ($categoryData['subCategories'] === null) {
             $contentsData = $this->contentsRepository->getContentsByCategory($category);
         }

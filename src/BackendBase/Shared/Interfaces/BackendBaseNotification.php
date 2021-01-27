@@ -6,5 +6,5 @@ namespace BackendBase\Shared\Interfaces;
 
 interface BackendBaseNotification
 {
-    public function send(string $sender, array $recipients, string $subject, string $body, ?array $additionalData = []) : bool;
+    public function send(string $sender, array $recipients, string $subject, string $body, ?array $additionalData = []): bool;
 }

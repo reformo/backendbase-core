@@ -12,6 +12,7 @@ use BackendBase\Shared\Services\Persistence\SqlQuery;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\FetchMode;
 use Throwable;
+
 use function array_key_exists;
 use function count;
 use function sprintf;
@@ -28,11 +29,12 @@ final class GetUserByEmail
          LIMIT 1
 SQL;
 
-    public static function execute(Connection $connection, array $parameters) : User
+    public static function execute(Connection $connection, array $parameters): User
     {
         if (! array_key_exists('email', $parameters)) {
             throw InvalidArgument::create('Query needs parameter named: email');
         }
+
         $query     = new static($connection);
         $statement = $query->executeQuery(self::$sql, $parameters);
         try {

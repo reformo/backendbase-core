@@ -28,13 +28,14 @@ class CollectionsData implements RequestHandlerInterface
         $this->collectionQuery = $collectionQuery;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $collections         = $this->collectionQuery->buildLookupData();
         $collectionsWithKeys = [];
         foreach ($collections as $collection) {
             $collectionsWithKeys[$collection['id']] = $collection;
         }
+
         $lookupData = $this->collectionQuery->buildLookupTable();
 
         $data = ['collections' => $collectionsWithKeys, 'lookupTable' => $lookupData];

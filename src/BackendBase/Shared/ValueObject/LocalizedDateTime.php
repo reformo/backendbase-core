@@ -18,7 +18,7 @@ class LocalizedDateTime
         $this->datetime = $datetime;
     }
 
-    public static function fromString(string $datetime, ?string $timezone = 'UTC') : self
+    public static function fromString(string $datetime, ?string $timezone = 'UTC'): self
     {
         $immutableDatetime =  DateTimeImmutable::createFromFormat(
             'Y-m-d H:i:s',
@@ -35,42 +35,42 @@ class LocalizedDateTime
         return new self($immutableDatetime);
     }
 
-    public static function now(?string $timezone = 'UTC') : self
+    public static function now(?string $timezone = 'UTC'): self
     {
         return new self(new DateTimeImmutable('now', new DateTimeZone($timezone)));
     }
 
-    public function getDatetime() : DateTimeImmutable
+    public function getDatetime(): DateTimeImmutable
     {
         return $this->datetime;
     }
 
-    public function getTimezone() : DateTimeZone
+    public function getTimezone(): DateTimeZone
     {
         return $this->datetime->getTimezone();
     }
 
-    public function toFormat(string $format) : string
+    public function toFormat(string $format): string
     {
         return $this->getDatetime()->format($format);
     }
 
-    public function withNewTimezone(DateTimeZone $timezone) : self
+    public function withNewTimezone(DateTimeZone $timezone): self
     {
         return new self($this->datetime->setTimezone($timezone));
     }
 
-    public function withAddedInterval(DateInterval $interval) : self
+    public function withAddedInterval(DateInterval $interval): self
     {
         return new self($this->datetime->add($interval));
     }
 
-    public function withSubtractedInterval(DateInterval $interval) : self
+    public function withSubtractedInterval(DateInterval $interval): self
     {
         return new self($this->datetime->sub($interval));
     }
 
-    public function diff(LocalizedDateTime $datetime2, ?bool $absolute = false) : DateInterval
+    public function diff(LocalizedDateTime $datetime2, ?bool $absolute = false): DateInterval
     {
         return $this->datetime->diff($datetime2->getDatetime(), $absolute);
     }

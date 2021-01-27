@@ -7,6 +7,7 @@ namespace BackendBase\Shared\Services\Persistence;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use PDO;
+
 use function gettype;
 
 trait SqlQuery
@@ -27,13 +28,14 @@ trait SqlQuery
         'null' => PDO::PARAM_NULL,
     ];
 
-    protected function executeQuery(string $sql, array $parameters) : Statement
+    protected function executeQuery(string $sql, array $parameters): Statement
     {
         $statement = $this->connection
             ->prepare($sql);
         foreach ($parameters as $key => $value) {
             $statement->bindValue($key, $value, self::$types[gettype($value)] ?? PDO::PARAM_STR);
         }
+
         $statement->execute();
 
         return $statement;

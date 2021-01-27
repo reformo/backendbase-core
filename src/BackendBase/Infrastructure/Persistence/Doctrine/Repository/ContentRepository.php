@@ -15,13 +15,15 @@ use Doctrine\ORM\EntityManager;
 use PascalDeVink\ShortUuid\ShortUuid;
 use Ramsey\Uuid\Uuid;
 use Redislabs\Module\ReJSON\ReJSON;
-use const DATE_ATOM;
-use const JSON_THROW_ON_ERROR;
+
 use function array_key_exists;
 use function count;
 use function json_decode;
 use function str_replace;
 use function strpos;
+
+use const DATE_ATOM;
+use const JSON_THROW_ON_ERROR;
 
 class ContentRepository
 {
@@ -36,7 +38,7 @@ class ContentRepository
         $this->reJSON        = $reJSON;
     }
 
-    public function getCategory(string $category) : array
+    public function getCategory(string $category): array
     {
         $sql       = '
             SELECT L.id, L.key, L.name, L.metadata, L.slug 
@@ -50,19 +52,20 @@ class ContentRepository
         if ($data === false) {
             return [];
         }
+
         $data['metadata'] = json_decode($data['metadata'], true, 512, JSON_THROW_ON_ERROR);
 
         return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
     }
 
-    public function getCategories(string $parentKey) : array
+    public function getCategories(string $parentKey): array
     {
         $parent = $this->getCategory($parentKey);
 
         return $this->getCategoriesByParentId($parent['id']);
     }
 
-    public function getCategoriesByParentId(string $parentId) : array
+    public function getCategoriesByParentId(string $parentId): array
     {
         $sql       = '
             SELECT L.key, L.name, L.metadata, L.slug 
@@ -77,6 +80,7 @@ class ContentRepository
         if ($data === false) {
             return [];
         }
+
         $returnData = [];
         foreach ($data as $datum) {
             $datum['metadata'] = json_decode($datum['metadata'], true, 512, JSON_THROW_ON_ERROR);
@@ -86,7 +90,7 @@ class ContentRepository
         return ArrayKeysCamelCaseConverter::convertArrayKeys($returnData);
     }
 
-    public function getContentById(string $contentId) : array
+    public function getContentById(string $contentId): array
     {
         $sql       = '
             SELECT *
@@ -100,6 +104,7 @@ class ContentRepository
         if ($data === false) {
             throw ContentNotFound::create('Content not found. It may be deleted.');
         }
+
         $data['metadata']  = json_decode($data['metadata'] ?? '[]', true, 512, JSON_THROW_ON_ERROR);
         $data['canonical'] = json_decode($data['canonical'] ?? '[]', true, 512, JSON_THROW_ON_ERROR);
         $data['images']    = json_decode($data['images'] ?? '[]', true, 512, JSON_THROW_ON_ERROR);
@@ -108,7 +113,7 @@ class ContentRepository
         return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
     }
 
-    public function getContentByIdForClient(string $contentId) : array
+    public function getContentByIdForClient(string $contentId): array
     {
         $slugify             = new Slugify(['rulesets' => ['default', 'turkish']]);
         $shortener           = Shortener::make(
@@ -117,7 +122,7 @@ class ContentRepository
         $now                 = new DateTimeImmutable();
         $nowLocale           = $now->setTimezone(new DateTimeZone('Europe/Istanbul'));
         $nowLocaleDateString = $nowLocale->format(DATE_ATOM);
-        $sql                 =<<<SQL
+        $sql                 = <<<SQL
             SELECT *
               FROM public.contents C 
              WHERE C.id = :id
@@ -132,6 +137,7 @@ SQL;
         if ($data === false) {
             throw ContentNotFound::create('Content not found. It may be deleted.');
         }
+
         unset($data['is_deleted']);
         $data['type']        = 'plain';
         $data['useCdn']      = 0;
@@ -145,15 +151,18 @@ SQL;
             $data['publishDate'] = new CarbonImmutable($data['metadata']['publishDate']);
             $data['publishDate'] = $data['publishDate']->format('d.m.Y');
         }
+
         $data['slug'] = $slugify->slugify($data['title']) . '-' . $shortener->reduce($data['id']);
 
         if (count($data['images']) > 0) {
             $data['heroImage'] = $data['images'][0];
         }
+
         if ($data['heroImage'] === '' && array_key_exists('headerVideo', $data['metadata']) && ! empty($data['metadata']['headerVideo'])) {
             $videoId           = str_replace('https://www.youtube.com/embed/', '', $data['metadata']['headerVideo']);
             $data['heroImage'] = str_replace('{videoId}', $videoId, 'https://i3.ytimg.com/vi/{videoId}/maxresdefault.jpg');
         }
+
         if (! empty($data['heroImage']) && strpos($data['heroImage'], 'http') !== 0) {
             $data['useCdn'] = 1;
         }
@@ -161,11 +170,11 @@ SQL;
         return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
     }
 
-    public function getContentBySlugForClient(string $slug) : array
+    public function getContentBySlugForClient(string $slug): array
     {
         $slug = '/' . $slug;
 
-        $sql       =<<<SQL
+        $sql       = <<<SQL
             SELECT C.id
               FROM public.contents C 
              WHERE C.metadata->>'slug' = :slug
@@ -180,10 +189,10 @@ SQL;
         return $this->getContentByIdForClient($data['id']);
     }
 
-    public function getContentsByCategory(string $category, ?bool $withBody = false) : array
+    public function getContentsByCategory(string $category, ?bool $withBody = false): array
     {
-        $slugify     = new Slugify(['rulesets' => ['default', 'turkish']]);
-        $shortener   = new ShortUuid();
+        $slugify   = new Slugify(['rulesets' => ['default', 'turkish']]);
+        $shortener = new ShortUuid();
 
         $returnData  = [];
         $withBodySql = '';
@@ -210,6 +219,7 @@ SQL;
         if ($withBody === true) {
             $withBodySql =  'C.body,';
         }
+
         $sql       = str_replace('{withBodySql}', $withBodySql, $sql);
         $statement = $this->connection->executeQuery($sql, ['category' => $category]);
         $data      = $statement->fetchAll();
@@ -228,21 +238,22 @@ SQL;
         return ArrayKeysCamelCaseConverter::convertArrayKeys($returnData);
     }
 
-    public function getRandomExcludingOne(string $category, $contentId, $limit, ?bool $withBody = false) : array
+    public function getRandomExcludingOne(string $category, $contentId, $limit, ?bool $withBody = false): array
     {
-        $postsData = $this->getContentsByCategoryForClient($category, 0, $limit+1, $withBody);
+        $postsData = $this->getContentsByCategoryForClient($category, 0, $limit + 1, $withBody);
         $posts     = [];
-        for ($i=0; $i < $limit; $i++) {
+        for ($i = 0; $i < $limit; $i++) {
             if ($postsData[$i]['id'] === $contentId) {
                 $i++;
             }
+
             $posts[] = $postsData[$i];
         }
 
         return $posts;
     }
 
-    public function getContentsByCategoryForClient(string $category, int $offset, int $limit, ?bool $withBody = false) : array
+    public function getContentsByCategoryForClient(string $category, int $offset, int $limit, ?bool $withBody = false): array
     {
         $slugify             = new Slugify(['rulesets' => ['default', 'turkish']]);
         $shortener           = Shortener::make(
@@ -279,10 +290,11 @@ SQL;
         if ($withBody === true) {
             $withBodySql =  'C.body,';
         }
+
         $sql       = str_replace('{withBodySql}', $withBodySql, $sql);
         $statement = $this->connection->executeQuery($sql, [
             'category' => $category,
-            'offset'=> $offset,
+            'offset' => $offset,
             'limit' => $limit,
             'nowLocaleDate' => $nowLocaleDateString,
         ]);
@@ -307,21 +319,24 @@ SQL;
             if (count($datum['images']) > 0) {
                 $datum['heroImage'] = $datum['images'][0];
             }
+
             if ($datum['heroImage'] === '' && array_key_exists('headerVideo', $datum['metadata']) && ! empty($datum['metadata']['headerVideo'])) {
                 $videoId            = str_replace('https://www.youtube.com/embed/', '', $datum['metadata']['headerVideo']);
                 $datum['heroImage'] = str_replace('{videoId}', $videoId, 'https://i3.ytimg.com/vi/{videoId}/maxresdefault.jpg');
             }
+
             $datum['slug'] = $slugify->slugify($datum['title']) . '-' . $shortener->reduce($datum['id']);
             if (! empty($datum['heroImage']) && strpos($datum['heroImage'], 'http') !== 0) {
                 $datum['useCdn'] = 1;
             }
+
             $returnData[] = $datum;
         }
 
         return ArrayKeysCamelCaseConverter::convertArrayKeys($returnData);
     }
 
-    public function getContentMenuByCategory(string $category) : array
+    public function getContentMenuByCategory(string $category): array
     {
         $returnData = [];
         $sql        = '
@@ -350,7 +365,7 @@ SQL;
         return ArrayKeysCamelCaseConverter::convertArrayKeys($returnData);
     }
 
-    public function getContentByModuleName(string $moduleName) : array
+    public function getContentByModuleName(string $moduleName): array
     {
         $returnData = [];
         $sql        = <<<SQL
@@ -363,13 +378,14 @@ SQL;
         if ($data === false) {
             return $returnData;
         }
+
         $data['images']   = json_decode($data['images'], true, 512, JSON_THROW_ON_ERROR);
         $data['metadata'] = json_decode($data['metadata'], true, 512, JSON_THROW_ON_ERROR);
 
         return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
     }
 
-    public function getMenuByCategory(string $category) : array
+    public function getMenuByCategory(string $category): array
     {
         $returnData = [];
         $sql        = '

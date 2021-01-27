@@ -15,7 +15,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class ConnectionFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : Connection
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Connection
     {
         Type::overrideType('datetime', VarDateTimeType::class);
         Type::overrideType('datetimetz', VarDateTimeType::class);

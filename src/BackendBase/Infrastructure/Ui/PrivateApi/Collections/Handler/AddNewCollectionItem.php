@@ -15,6 +15,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ulid\Ulid;
+
 use function count;
 use function trim;
 
@@ -33,7 +34,7 @@ class AddNewCollectionItem implements RequestHandlerInterface
         $this->commandBus = $commandBus;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -42,6 +43,7 @@ class AddNewCollectionItem implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Collections::COLLECTIONS_CREATE) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to create a new collection');
         }
+
         $payload = $request->getParsedBody();
 
         $requestBody = PayloadSanitizer::sanitize($payload);
@@ -50,13 +52,14 @@ class AddNewCollectionItem implements RequestHandlerInterface
         $collectionItemKey      = trim($requestBody['key']);
         $collectionItemParentId = $requestBody['parentId'];
         $collectionItemMetadata = $requestBody['metadata'];
-        if (count($collectionItemMetadata) ===0) {
+        if (count($collectionItemMetadata) === 0) {
             $collectionItemMetadata = ['v' => '1.0.0'];
         }
 
         if (empty($collectionItemKey)) {
             $collectionItemKey = Ulid::generate();
         }
+
         $command = new AddNewCollectionItemCommand(
             $collectionItemName,
             $collectionItemKey,

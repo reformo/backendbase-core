@@ -9,6 +9,7 @@ use BackendBase\Shared\ValueObject\Exception\InvalidCompanyShortName;
 use BackendBase\Shared\ValueObject\Exception\InvalidCompanyType;
 use InvalidArgumentException;
 use Webmozart\Assert\Assert;
+
 use function implode;
 use function sprintf;
 
@@ -83,5 +84,4 @@ final class CompanyInfo
     {
         return $this->companyType;
     }
-
 }

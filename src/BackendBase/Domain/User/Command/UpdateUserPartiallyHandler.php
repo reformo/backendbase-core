@@ -16,7 +16,7 @@ class UpdateUserPartiallyHandler
         $this->repository = $repository;
     }
 
-    public function __invoke(UpdateUserPartially $command) : void
+    public function __invoke(UpdateUserPartially $command): void
     {
         $payload = $command->payload();
         $this->repository->updateUserInfo(UserId::createFromString($command->id()), $payload);

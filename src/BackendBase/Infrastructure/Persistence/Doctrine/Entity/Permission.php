@@ -22,27 +22,19 @@ class Permission
      */
     protected string $id;
 
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected string $type;
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected string $name;
 
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected string $key;
 
-    /**
-     * @Column(type="datetimetz_immutable", name="created_at")
-     */
+    /** @Column(type="datetimetz_immutable", name="created_at") */
 
     protected DateTimeImmutable $createdAt;
 
-    public function setCreatedAt(DateTimeImmutable $datetime) : void
+    public function setCreatedAt(DateTimeImmutable $datetime): void
     {
         $this->createdAt = $datetime;
     }

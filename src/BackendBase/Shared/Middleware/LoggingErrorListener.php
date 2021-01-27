@@ -8,9 +8,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
 use Throwable;
-use const JSON_THROW_ON_ERROR;
+
 use function json_decode;
 use function sprintf;
+
+use const JSON_THROW_ON_ERROR;
 
 class LoggingErrorListener
 {
@@ -28,7 +30,7 @@ class LoggingErrorListener
         $this->logger = $logger;
     }
 
-    public function __invoke(Throwable $error, ServerRequestInterface $request, ResponseInterface $response) : void
+    public function __invoke(Throwable $error, ServerRequestInterface $request, ResponseInterface $response): void
     {
         if ($response->getStatusCode() < 500) {
             return;

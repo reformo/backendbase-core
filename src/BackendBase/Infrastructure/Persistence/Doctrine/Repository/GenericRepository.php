@@ -9,11 +9,13 @@ use BackendBase\Shared\Services\ArrayKeysCamelCaseConverter;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Redislabs\Module\ReJSON\ReJSON;
-use const JSON_THROW_ON_ERROR;
+
 use function array_key_exists;
 use function count;
 use function json_decode;
 use function ucfirst;
+
+use const JSON_THROW_ON_ERROR;
 
 class GenericRepository
 {
@@ -29,7 +31,7 @@ class GenericRepository
         $this->reJSON        = $reJSON;
     }
 
-    public function persistNewsLetter(Newsletter $newsletter) : void
+    public function persistNewsLetter(Newsletter $newsletter): void
     {
         $this->entityManager->persist($newsletter);
         $this->entityManager->flush();
@@ -40,13 +42,13 @@ class GenericRepository
         return $this->entityManager->find($className, $entityId);
     }
 
-    public function persistGeneric($entity) : void
+    public function persistGeneric($entity): void
     {
         $this->entityManager->persist($entity);
         $this->entityManager->flush();
     }
 
-    public function updateGeneric(string $className, string $entityId, array $entityData) : void
+    public function updateGeneric(string $className, string $entityId, array $entityData): void
     {
         $genericEntityMeta     = $this->entityManager->getClassMetadata($className);
         $doctrineGenericEntity = $this->entityManager->find($className, $entityId);
@@ -54,14 +56,16 @@ class GenericRepository
             if (! $genericEntityMeta->hasField($key)) {
                 continue;
             }
+
             $method = 'set' . ucfirst($key);
             $doctrineGenericEntity->{$method}($value);
         }
+
         $this->entityManager->persist($doctrineGenericEntity);
         $this->entityManager->flush();
     }
 
-    public function getList(string $className, array $criteria, ?string $orderByString = '', ?array $pagination = []) : array
+    public function getList(string $className, array $criteria, ?string $orderByString = '', ?array $pagination = []): array
     {
         $genericEntityMeta = $this->entityManager->getClassMetadata($className);
         $tableName         = $genericEntityMeta->getTableName();
@@ -79,21 +83,26 @@ class GenericRepository
                 if ($useAnd === 1) {
                     $whereSQL .= ' AND ';
                 }
+
                 $whereSQL .= $key . '= :' . $key;
                 $useAnd    = 1;
             }
         }
+
         if (array_key_exists('offset', $pagination)) {
             $offset             = 'OFFSET :offset';
             $criteria['offset'] = $pagination['offset'];
         }
+
         if (array_key_exists('limit', $pagination)) {
             $offset            = 'LIMIT :limit';
             $criteria['limit'] = $pagination['limit'];
         }
+
         if (! empty($orderByString)) {
-            $orderBy =' ORDER BY ' . $orderByString;
+            $orderBy = ' ORDER BY ' . $orderByString;
         }
+
         $sql       = <<<SQL
             SELECT {$select}
               FROM {$tableName}
@@ -115,13 +124,14 @@ SQL;
 
                 $datum[$mappingData['columnName']] = json_decode($datum[$mappingData['columnName']], true, 512, JSON_THROW_ON_ERROR);
             }
+
             $returnData[] = $datum;
         }
 
         return ArrayKeysCamelCaseConverter::convertArrayKeys($returnData);
     }
 
-    public function getListTotal(string $className, array $criteria) : int
+    public function getListTotal(string $className, array $criteria): int
     {
         $genericEntityMeta = $this->entityManager->getClassMetadata($className);
         $tableName         = $genericEntityMeta->getTableName();
@@ -134,10 +144,12 @@ SQL;
                 if ($useAnd === 1) {
                     $whereSQL .= ' AND ';
                 }
+
                 $whereSQL .= $key . '= :' . $key;
                 $useAnd    = 1;
             }
         }
+
         $sql = <<<SQL
             SELECT count(*) as count
               FROM {$tableName}

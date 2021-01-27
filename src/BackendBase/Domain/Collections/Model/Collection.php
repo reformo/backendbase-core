@@ -32,39 +32,39 @@ class Collection
         $this->metadata = $metadata;
     }
 
-    public function id() : Uuid
+    public function id(): Uuid
     {
         return $this->id;
     }
 
-    public function name() : string
+    public function name(): string
     {
         return $this->name;
     }
 
-    public function key() : string
+    public function key(): string
     {
         return $this->key;
     }
 
-    public function slug() : string
+    public function slug(): string
     {
         $slugifier = new Slugify(['rulesets' => ['default', 'turkish']]);
 
         return $slugifier->slugify($this->name);
     }
 
-    public function metadata() : ?array
+    public function metadata(): ?array
     {
         return $this->metadata;
     }
 
-    public function isActive() : int
+    public function isActive(): int
     {
         return $this->isActive;
     }
 
-    public function parentId() : Uuid
+    public function parentId(): Uuid
     {
         return $this->parentId;
     }

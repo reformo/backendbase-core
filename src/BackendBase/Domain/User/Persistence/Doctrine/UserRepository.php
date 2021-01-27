@@ -17,6 +17,7 @@ use BackendBase\Shared\Exception\InvalidArgument;
 use BackendBase\Shared\ValueObject\Email;
 use Doctrine\DBAL\Driver\Connection;
 use Throwable;
+
 use function sprintf;
 
 class UserRepository implements UserRepositoryInterface
@@ -29,24 +30,25 @@ class UserRepository implements UserRepositoryInterface
         $this->connection = $connection;
     }
 
-    public function getUserById(UserId $userId) : ?User
+    public function getUserById(UserId $userId): ?User
     {
         $user = GetUserById::execute($this->connection, ['userId' => $userId->toString()]);
 
         return User::create($user->id(), $user->email(), $user->firstName(), $user->lastName(), $user->passwordHash(), $user->role(), $user->createdAt());
     }
 
-    public function getUserByEmail(Email $email) : ?User
+    public function getUserByEmail(Email $email): ?User
     {
         $user =  GetUserByEmail::execute($this->connection, ['email' => $email->toString()]);
 
         return User::create($user->id(), $user->email(), $user->firstName(), $user->lastName(), $user->passwordHash(), $user->role(), $user->createdAt());
     }
 
-    public function registerUser(User $user) : void
+    public function registerUser(User $user): void
     {
         try {
             $this->getUserByEmail($user->email());
+
             throw UserAlreadyExists::create(
                 sprintf('User already exists with the email provided: %s', $user->email()->toString()),
                 ['provided_email' => $user->email()->toString()]
@@ -55,21 +57,20 @@ class UserRepository implements UserRepositoryInterface
             if (! $user instanceof User) {
                 throw InvalidArgument::create('Provided data is not a User object!');
             }
+
             $mapper = new UserMapper($user);
             $this->connection->insert('users', $mapper->toDatabasePayload());
         }
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function unregisterUser(UserId $userId) : void
+    public function unregisterUser(UserId $userId): void
     {
         try {
             $this->getUserById($userId);
         } catch (Throwable $exception) {
             throw CantUnregisterUserDoesNotExists::create($exception->getMessage());
         }
+
         try {
             $this->connection->delete(
                 self::TABLE_NAME,
@@ -80,7 +81,7 @@ class UserRepository implements UserRepositoryInterface
         }
     }
 
-    public function updateUserInfo(UserId $userId, array $payload) : void
+    public function updateUserInfo(UserId $userId, array $payload): void
     {
         $this->getUserById($userId);
         $this->connection->update(self::TABLE_NAME, $payload, ['id' => $userId->toString()]);

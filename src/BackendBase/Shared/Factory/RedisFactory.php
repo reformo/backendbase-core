@@ -10,7 +10,7 @@ use Redis;
 
 final class RedisFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : Redis
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Redis
     {
         $config      = $container->get('config');
         $redisClient = new Redis();

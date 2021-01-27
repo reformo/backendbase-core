@@ -20,7 +20,7 @@ class AddNewCollectionItem
         $this->metadata = $metadata;
     }
 
-    public function payload() : array
+    public function payload(): array
     {
         return [
             'parentId' => $this->parentId,

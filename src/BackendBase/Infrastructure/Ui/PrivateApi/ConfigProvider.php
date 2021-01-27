@@ -11,12 +11,13 @@ use BackendBase\PrivateApi\IdentityAndAccess\ConfigProvider as IdentityAndAccess
 use BackendBase\Shared\Interfaces\MezzioHandlerConfigProvider;
 use Mezzio\Application;
 use Mezzio\MiddlewareFactory;
+
 use function array_merge_recursive;
 
 class ConfigProvider
 {
     /** @var MezzioHandlerConfigProvider[] */
-    private $modules = [];
+    private array $modules = [];
 
     public function __construct()
     {
@@ -26,12 +27,12 @@ class ConfigProvider
         $this->addConfigProviders(new FormsConfigProvider());
     }
 
-    private function addConfigProviders(MezzioHandlerConfigProvider $configProvider) : void
+    private function addConfigProviders(MezzioHandlerConfigProvider $configProvider): void
     {
         $this->modules[] = $configProvider;
     }
 
-    public function __invoke() : array
+    public function __invoke(): array
     {
         return [
             'dependencies' => $this->getDependencies(),
@@ -39,7 +40,7 @@ class ConfigProvider
         ];
     }
 
-    public function registerRoutes(Application $app, MiddlewareFactory $factory) : void
+    public function registerRoutes(Application $app, MiddlewareFactory $factory): void
     {
         foreach ($this->modules as $module) {
             $module->registerRoutes($app, $factory);
@@ -49,7 +50,7 @@ class ConfigProvider
     /**
      * Returns the container dependencies
      */
-    public function getDependencies() : array
+    public function getDependencies(): array
     {
         $dependencies = [];
         foreach ($this->modules as $module) {

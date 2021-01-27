@@ -30,7 +30,7 @@ class ChangeContentDetails implements RequestHandlerInterface
         $this->genericRepository  = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -39,12 +39,13 @@ class ChangeContentDetails implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Contents::CMS_EDIT) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to add new content');
         }
+
         $loggedUserId = $request->getAttribute('loggedUserId');
         $contentId    = $request->getAttribute('contentId');
 
         $allowHtml = [
             '$.body' => [
-                'allowedTags'=>'a|href,class,style;img|src,class,style;ul;ol;li;p;h1;h2;h3;h4;h5;quote;b;strong;br;div|class',
+                'allowedTags' => 'a|href,class,style;img|src,class,style;ul;ol;li;p;h1;h2;h3;h4;h5;quote;b;strong;br;div|class',
                 'urlPrefixes' => 'http;https',
             ],
             '$.serpDescription' => ['allowedTags' => 'b;strong;'],

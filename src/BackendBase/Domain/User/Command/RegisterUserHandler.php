@@ -16,7 +16,7 @@ class RegisterUserHandler
         $this->repository = $repository;
     }
 
-    public function __invoke(RegisterUser $command) : void
+    public function __invoke(RegisterUser $command): void
     {
         $user = User::create(
             $command->id(),

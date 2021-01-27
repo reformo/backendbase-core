@@ -29,7 +29,7 @@ class RemoveContent implements RequestHandlerInterface
         $this->genericRepository  = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -38,6 +38,7 @@ class RemoveContent implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Contents::CMS_EDIT) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to add new content');
         }
+
         $loggedUserId = $request->getAttribute('loggedUserId');
         $contentId    = $request->getAttribute('contentId');
         $content      = $this->genericRepository->findGeneric(Content::class, $contentId);

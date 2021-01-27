@@ -14,6 +14,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
+
 use function http_build_query;
 use function urlencode;
 
@@ -30,7 +31,7 @@ class SaveFormData implements RequestHandlerInterface
         $this->genericRepository = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $guard             = $request->getAttribute(CsrfMiddleware::GUARD_ATTRIBUTE);
         $requestParameters = $request->getParsedBody();

@@ -16,7 +16,7 @@ class GetCollectionItemBySlugHandler
         $this->collectionQuery = $collectionQuery;
     }
 
-    public function __invoke(GetCollectionItemBySlug $query) : Collection
+    public function __invoke(GetCollectionItemBySlug $query): Collection
     {
         return $this->collectionQuery->findBySlug($query->parentId(), $query->slug());
     }

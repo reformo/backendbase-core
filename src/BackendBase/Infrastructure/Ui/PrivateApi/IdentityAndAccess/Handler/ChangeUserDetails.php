@@ -29,7 +29,7 @@ class ChangeUserDetails implements RequestHandlerInterface
         $this->genericRepository = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $userId = $request->getAttribute('userId');
         /**
@@ -39,6 +39,7 @@ class ChangeUserDetails implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Users::USERS_EDIT) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to change a user details');
         }
+
         $payload = PayloadSanitizer::sanitize($request->getParsedBody());
         $this->genericRepository->updateGeneric(User::class, $userId, $payload);
 

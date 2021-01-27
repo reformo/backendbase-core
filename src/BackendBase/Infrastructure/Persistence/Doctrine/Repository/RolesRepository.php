@@ -7,8 +7,10 @@ namespace BackendBase\Infrastructure\Persistence\Doctrine\Repository;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\EntityManager;
 use Redislabs\Module\ReJSON\ReJSON;
-use const JSON_THROW_ON_ERROR;
+
 use function json_decode;
+
+use const JSON_THROW_ON_ERROR;
 
 class RolesRepository
 {
@@ -23,7 +25,7 @@ class RolesRepository
         $this->reJSON        = $reJSON;
     }
 
-    public function getPermissionsTypesList() : array
+    public function getPermissionsTypesList(): array
     {
         $sql       = '
             SELECT name, slug
@@ -39,7 +41,7 @@ class RolesRepository
         return $data;
     }
 
-    public function getPermissionsList() : array
+    public function getPermissionsList(): array
     {
         $sql       = '
             SELECT *
@@ -55,7 +57,7 @@ class RolesRepository
         return $data;
     }
 
-    public function getUserRoles() : array
+    public function getUserRoles(): array
     {
         $sql       = '
             SELECT *
@@ -72,7 +74,7 @@ class RolesRepository
         return $data;
     }
 
-    public function getUserRoleNames() : array
+    public function getUserRoleNames(): array
     {
         $sql       = '
             SELECT key, title
@@ -89,7 +91,7 @@ class RolesRepository
         return $data;
     }
 
-    public function getRolePermissionsByRoleName(string $roleType) : array
+    public function getRolePermissionsByRoleName(string $roleType): array
     {
         $sql       = '
             SELECT permissions
@@ -106,7 +108,7 @@ class RolesRepository
         return json_decode($data['permissions'], true, 512, JSON_THROW_ON_ERROR);
     }
 
-    public function getRolePermissionsByRoleNameForUser(string $userId) : array
+    public function getRolePermissionsByRoleNameForUser(string $userId): array
     {
         $sql       = '
             SELECT R.permissions                

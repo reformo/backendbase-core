@@ -16,7 +16,7 @@ class GetCollectionItemByKeyHandler
         $this->collectionQuery = $collectionQuery;
     }
 
-    public function __invoke(GetCollectionItemByKey $query) : Collection
+    public function __invoke(GetCollectionItemByKey $query): Collection
     {
         return $this->collectionQuery->findByKey($query->key());
     }

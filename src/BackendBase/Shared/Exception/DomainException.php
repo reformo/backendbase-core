@@ -25,7 +25,7 @@ trait DomainException
         parent::__construct($detail, $status);
     }
 
-    public static function create(string $details, ?array $additional = []) : self
+    public static function create(string $details, ?array $additional = []): self
     {
         return new static(
             self::STATUS,

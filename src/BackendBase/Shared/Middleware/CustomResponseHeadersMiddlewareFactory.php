@@ -10,10 +10,10 @@ use Psr\Http\Server\MiddlewareInterface;
 
 final class CustomResponseHeadersMiddlewareFactory implements FactoryInterface
 {
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : MiddlewareInterface
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): MiddlewareInterface
     {
         $config        = $container->get('config');
-        $customHeaders = $config['http']['response'] ?? [ 'custom-headers' => [], 'allow-origins' => []];
+        $customHeaders = $config['http']['response'] ?? ['custom-headers' => [], 'allow-origins' => []];
 
         return new CustomResponseHeadersMiddleware($customHeaders['custom-headers'], $customHeaders['allow-origins']);
     }

@@ -10,18 +10,21 @@ use BackendBase\Domain\User\Exception\UserNotFound;
 use BackendBase\Domain\User\Interfaces\UserRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
 use BackendBase\Shared\ValueObject\Email;
+use DateTimeImmutable;
 use Laminas\Diactoros\Response\JsonResponse;
+use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
+use Lcobucci\JWT\Signer\Key\InMemory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RateLimit\Exception\LimitExceeded;
 use RateLimit\Rate;
 use RateLimit\RedisRateLimiter;
+
 use function hash;
-use Lcobucci\JWT\Signer\Key\InMemory;
-use Lcobucci\JWT\Configuration;
-use DateTimeImmutable;
+
+use const DATE_ATOM;
 
 class StartSession implements RequestHandlerInterface
 {
@@ -39,10 +42,10 @@ class StartSession implements RequestHandlerInterface
         $this->userRepository   = $userRepository;
         $this->redisRateLimiter = $redisRateLimiter;
         $this->rolesRepository  = $rolesRepository;
-        $this->config = $config;
+        $this->config           = $config;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $payload = $request->getParsedBody();
         try {
@@ -54,6 +57,7 @@ class StartSession implements RequestHandlerInterface
                 . Login::LOGIN_ATTEMPT_LIMIT . ' ' . Login::RATE_LIMIT_WINDOW_DESC . '.'
             );
         }
+
         $user = $this->userRepository
             ->getUserByEmail(Email::createFromString($payload['email']));
 
@@ -61,7 +65,7 @@ class StartSession implements RequestHandlerInterface
             throw UserNotFound::create('Invalid username and/or password');
         }
 
-        $key = InMemory::base64Encoded($this->config['jwt']['key']);
+        $key           = InMemory::base64Encoded($this->config['jwt']['key']);
         $configuration = Configuration::forSymmetricSigner(
             new Sha256(),
             $key

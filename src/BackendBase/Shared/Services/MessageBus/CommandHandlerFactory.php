@@ -21,6 +21,7 @@ class CommandHandlerFactory implements FactoryInterface
         foreach ($handlerConstructorArguments as $argumentName => $argumentType) {
             $arguments[] = $this->getArgument($argumentName, $argumentType);
         }
+
         $handlerClass = new ReflectionClass($requestedName);
 
         return $handlerClass->newInstanceArgs($arguments);

@@ -6,6 +6,7 @@ namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
 use BackendBase\Infrastructure\Persistence\Doctrine\AbstractDoctrineEntity;
 use DateTimeImmutable;
+
 use function base_convert;
 use function hrtime;
 
@@ -39,125 +40,85 @@ class Content
      */
     protected string $id;
 
-    /**
-     * @Column(type="string", name="title")
-     */
+    /** @Column(type="string", name="title") */
     protected string $title;
 
 
-    /**
-     * @Column(type="string", name="serp_title")
-     */
+    /** @Column(type="string", name="serp_title") */
     protected ?string $serpTitle;
 
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected string $type;
 
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected string $category;
 
 
-    /**
-     * @Column(type="string", name="meta_description")
-     */
+    /** @Column(type="string", name="meta_description") */
     protected ?string $metaDescription;
 
 
 
-    /**
-     * @Column(type="string", name="serp_meta_description")
-     */
+    /** @Column(type="string", name="serp_meta_description") */
     protected ?string $serpMetaDescription;
 
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected ?string $keywords;
 
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected ?string $robots;
 
-    /**
-     * @Column(type="json",nullable=true,options={"jsonb":true})
-     */
+    /** @Column(type="json",nullable=true,options={"jsonb":true}) */
     protected ?array $canonical;
 
-    /**
-     * @Column(type="json",nullable=true,options={"jsonb":true})
-     */
+    /** @Column(type="json",nullable=true,options={"jsonb":true}) */
     protected ?array $metadata = [];
-    /**
-     * @Column(type="string")
-     */
+    /** @Column(type="string") */
     protected ?string $redirect;
 
 
-    /**
-     * @Column(type="string")
-     */
-    protected ? string $body = '';
+    /** @Column(type="string") */
+    protected ?string $body = '';
 
 
-    /**
-     * @Column(type="json",nullable=true,options={"jsonb":true})
-     */
+    /** @Column(type="json",nullable=true,options={"jsonb":true}) */
     protected ?array $images = [];
 
 
-    /**
-     * @Column(type="string", name="sort_order")
-     */
+    /** @Column(type="string", name="sort_order") */
     protected string $sortOrder;
 
 
-    /**
-     * @Column(type="integer", name="is_active")
-     */
+    /** @Column(type="integer", name="is_active") */
     protected int $isActive;
 
 
-    /**
-     * @Column(type="integer", name="is_deleted")
-     */
+    /** @Column(type="integer", name="is_deleted") */
     protected int $isDeleted;
 
 
-    /**
-     * @Column(type="datetimetz_immutable", name="created_at")
-     */
+    /** @Column(type="datetimetz_immutable", name="created_at") */
     protected DateTimeImmutable $createdAt;
 
-    public function setCreatedAt(DateTimeImmutable $datetime) : void
+    public function setCreatedAt(DateTimeImmutable $datetime): void
     {
         $this->createdAt = $datetime;
     }
 
-    /**
-     * @Column(type="uuid", name="created_by")
-     */
+    /** @Column(type="uuid", name="created_by") */
     protected string $createdBy;
-    /**
-     * @Column(type="datetimetz_immutable", name="updated_at")
-     */
+    /** @Column(type="datetimetz_immutable", name="updated_at") */
     protected DateTimeImmutable $updatedAt;
 
-    public function setUpdatedAt(DateTimeImmutable $datetime) : void
+    public function setUpdatedAt(DateTimeImmutable $datetime): void
     {
         $this->updatedAt = $datetime;
     }
 
-    /**
-     * @Column(type="uuid", name="updated_by")
-     */
+    /** @Column(type="uuid", name="updated_by") */
     protected string $updatedBy;
 
-    public static function generateSortValue() : string
+    public static function generateSortValue(): string
     {
         return base_convert(hrtime(true), 10, 16);
     }

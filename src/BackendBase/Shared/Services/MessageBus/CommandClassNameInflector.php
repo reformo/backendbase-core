@@ -8,7 +8,7 @@ use League\Tactician\Handler\Mapping\ClassName\ClassNameInflector;
 
 class CommandClassNameInflector implements ClassNameInflector
 {
-    public function getClassName(string $commandClassName) : string
+    public function getClassName(string $commandClassName): string
     {
         return $commandClassName . 'Handler';
     }

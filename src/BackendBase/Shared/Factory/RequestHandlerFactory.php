@@ -14,7 +14,7 @@ class RequestHandlerFactory implements FactoryInterface
 {
     private ContainerInterface $container;
 
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null) : RequestHandler
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RequestHandler
     {
         $this->container             = $container;
         $handlerConstructorArguments = Resolver::getParameterHints($requestedName, '__construct');
@@ -22,6 +22,7 @@ class RequestHandlerFactory implements FactoryInterface
         foreach ($handlerConstructorArguments as $argumentName => $argumentType) {
             $arguments[] = $this->getArgument($argumentName, $argumentType);
         }
+
         $handlerClass = new ReflectionClass($requestedName);
 
         /**

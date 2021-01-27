@@ -7,18 +7,16 @@ namespace BackendBase\PublicWeb\Contents;
 use BackendBase\Domain\Contents\Exception\ContentNotFound;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
-use PascalDeVink\ShortUuid\ShortUuid;
 use Laminas\Diactoros\Response\HtmlResponse;
-use Mezzio\Csrf\CsrfMiddleware;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Throwable;
 
 class PageHandler implements RequestHandlerInterface
 {
-    /** @var TemplateRendererInterface|null */
-    private $template;
+    private ?TemplateRendererInterface $template = null;
     private $config;
     private $queryBus;
     private ContentRepository $contentRepository;
@@ -35,22 +33,21 @@ class PageHandler implements RequestHandlerInterface
         $this->contentRepository = $contentRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $pageSlug = $request->getAttribute('pageSlug');
         $template = 'app::default-page';
         try {
-            $page      = $this->contentRepository->getContentBySlugForClient($pageSlug);
+            $page = $this->contentRepository->getContentBySlugForClient($pageSlug);
 
             $data = ['page' => $page];
         } catch (ContentNotFound $exception) {
             $template = 'error::404';
-            $data = ['error' => 404];
-        } catch (\Throwable $throwable) {
+            $data     = ['error' => 404];
+        } catch (Throwable $throwable) {
             $template = 'error::500';
-            $data = ['error' => $throwable->getMessage()];
+            $data     = ['error' => $throwable->getMessage()];
         }
-
 
         return new HtmlResponse($this->template->render($template, $data));
     }

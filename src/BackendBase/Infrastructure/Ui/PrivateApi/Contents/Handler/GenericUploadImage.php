@@ -16,6 +16,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
+
 use function array_key_exists;
 use function basename;
 use function str_replace;
@@ -47,7 +48,7 @@ class GenericUploadImage implements RequestHandlerInterface
         $this->slugifier         = new Slugify(['rulesets' => ['default', 'turkish']]);
     }
 
-    private static function findExtension(string $mimetype) : string
+    private static function findExtension(string $mimetype): string
     {
         return [
             'image/jpeg' => 'jpg',
@@ -58,7 +59,7 @@ class GenericUploadImage implements RequestHandlerInterface
         ][$mimetype];
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -82,12 +83,12 @@ class GenericUploadImage implements RequestHandlerInterface
 
         $this->fileSystem->rename($uploadedFile, $filePath);
         $img = Image::make('data/storage/' . $filePath);
-        $img->resize($aspectRatioWidth, $aspectRatioHeight, static function ($constraint) : void {
+        $img->resize($aspectRatioWidth, $aspectRatioHeight, static function ($constraint): void {
             $constraint->aspectRatio();
         });
         $img->save('data/storage/' . $filePath);
         $fileData = [
-            'id' =>$fileId ,
+            'id' => $fileId ,
             'filePath' => $filePath,
             'type' => $type,
             'metadata' => [
@@ -98,6 +99,6 @@ class GenericUploadImage implements RequestHandlerInterface
         ];
         $this->fileRepository->addNewFile($fileData);
 
-        return new JsonResponse(['image' => str_replace('app/', '/', $filePath) ], 201);
+        return new JsonResponse(['image' => str_replace('app/', '/', $filePath)], 201);
     }
 }

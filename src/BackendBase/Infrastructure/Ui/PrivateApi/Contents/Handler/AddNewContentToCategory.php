@@ -32,7 +32,7 @@ class AddNewContentToCategory implements RequestHandlerInterface
         $this->genericRepository  = $genericRepository;
     }
 
-    public function handle(ServerRequestInterface $request) : ResponseInterface
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
          * @var Role
@@ -41,20 +41,21 @@ class AddNewContentToCategory implements RequestHandlerInterface
         if ($role->hasPermission(Permissions\Contents::CMS_CREATE) === false) {
             throw InsufficientPrivileges::create('You dont have privilege to add new content');
         }
+
         $slugify      = new Slugify(['rulesets' => ['default', 'turkish']]);
         $loggedUserId = $request->getAttribute('loggedUserId');
         $allowHtml    = [
             '$.body' => [
-                'allowedTags'=>'a|href,class,style;img|src,class,style;ul;ol;li;p;h1;h2;h3;h4;h5;quote;b;strong;br',
+                'allowedTags' => 'a|href,class,style;img|src,class,style;ul;ol;li;p;h1;h2;h3;h4;h5;quote;b;strong;br',
                 'urlPrefixes' => 'http;https',
             ],
             '$.serpDescription' => ['allowedTags' => 'b;strong;'],
         ];
 
-        $payload          = PayloadSanitizer::sanitize($request->getParsedBody(), $allowHtml);
-        $metadata         = $payload['metadata'] ?? [];
-        $categoryData     = $this->contentsRepository->getCategory($request->getAttribute('category'));
-        $metadata['slug'] = $metadata['slug'] ?? ('/' . $categoryData['slug'] . '/' . $slugify->slugify($payload['title']));
+        $payload            = PayloadSanitizer::sanitize($request->getParsedBody(), $allowHtml);
+        $metadata           = $payload['metadata'] ?? [];
+        $categoryData       = $this->contentsRepository->getCategory($request->getAttribute('category'));
+        $metadata['slug'] ??= ('/' . $categoryData['slug'] . '/' . $slugify->slugify($payload['title']));
 
         $content = new Content();
         $content->setId($payload['tenantId'] ?? Uuid::uuid4()->toString());

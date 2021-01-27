@@ -12,6 +12,7 @@ use BackendBase\Shared\Services\Persistence\SqlQuery;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\FetchMode;
 use Throwable;
+
 use function array_key_exists;
 use function count;
 use function sprintf;
@@ -27,11 +28,12 @@ final class GetUserById
            AND is_deleted = 0 
 SQL;
 
-    public static function execute(Connection $connection, array $parameters) : ?User
+    public static function execute(Connection $connection, array $parameters): ?User
     {
         if (! array_key_exists('userId', $parameters)) {
             throw InvalidArgument::create('Query needs parameter named: userId');
         }
+
         $query     = new static($connection);
         $statement = $query->executeQuery(self::$sql, $parameters);
         try {
@@ -45,6 +47,7 @@ SQL;
             if ($exception instanceof  UserNotFound) {
                 throw $exception;
             }
+
             throw ExecutionFailed::create($exception->getMessage());
         }
     }
