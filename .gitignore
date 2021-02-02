@@ -1,3 +1,11 @@
 vendor/
 composer.lock
 storage/
+bin/
+config/
+data/
+public/
+webroots/
+.env
+src/DemoApp/
+src/templates/

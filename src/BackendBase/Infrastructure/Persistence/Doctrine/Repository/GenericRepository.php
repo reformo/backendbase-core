@@ -48,6 +48,16 @@ class GenericRepository
         $this->entityManager->flush();
     }
 
+    public function addQueueToPersist($entity): void
+    {
+        $this->entityManager->persist($entity);
+    }
+
+    public function flush(): void
+    {
+        $this->entityManager->flush();
+    }
+
     public function updateGeneric(string $className, string $entityId, array $entityData): void
     {
         $genericEntityMeta     = $this->entityManager->getClassMetadata($className);

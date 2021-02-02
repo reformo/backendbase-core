@@ -7,6 +7,7 @@ namespace BackendBase\PrivateApi\Contents\Handler;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Content;
+use BackendBase\Infrastructure\Persistence\Doctrine\Entity\ContentDetail;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
 use BackendBase\Shared\Services\PayloadSanitizer;
@@ -23,13 +24,16 @@ class AddNewContentToCategory implements RequestHandlerInterface
 {
     private ContentRepository $contentsRepository;
     private GenericRepository $genericRepository;
+    private array $config;
 
     public function __construct(
         ContentRepository $contentsRepository,
-        GenericRepository $genericRepository
+        GenericRepository $genericRepository,
+        array $config
     ) {
         $this->contentsRepository = $contentsRepository;
         $this->genericRepository  = $genericRepository;
+        $this->config             = $config;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -44,42 +48,46 @@ class AddNewContentToCategory implements RequestHandlerInterface
 
         $slugify      = new Slugify(['rulesets' => ['default', 'turkish']]);
         $loggedUserId = $request->getAttribute('loggedUserId');
-        $allowHtml    = [
-            '$.body' => [
-                'allowedTags' => 'a|href,class,style;img|src,class,style;ul;ol;li;p;h1;h2;h3;h4;h5;quote;b;strong;br',
-                'urlPrefixes' => 'http;https',
-            ],
-            '$.serpDescription' => ['allowedTags' => 'b;strong;'],
-        ];
-
-        $payload            = PayloadSanitizer::sanitize($request->getParsedBody(), $allowHtml);
-        $metadata           = $payload['metadata'] ?? [];
-        $categoryData       = $this->contentsRepository->getCategory($request->getAttribute('category'));
-        $metadata['slug'] ??= ('/' . $categoryData['slug'] . '/' . $slugify->slugify($payload['title']));
+        $payload      = PayloadSanitizer::sanitize($request->getParsedBody());
+        $categoryData = $this->contentsRepository->getCategoryById($request->getAttribute('category'));
+        $slug         = '/' . $categoryData['slug'] . '/' . $slugify->slugify($payload['title']);
 
         $content = new Content();
-        $content->setId($payload['tenantId'] ?? Uuid::uuid4()->toString());
-        $content->setType('full');
+        $content->setId(Uuid::uuid4()->toString());
         $content->setCategory($request->getAttribute('category'));
-        $content->setTitle($payload['title']);
-        $content->setSerpTitle($payload['serpTitle'] ?? $payload['title']);
-        $content->setMetaDescription($payload['metaDescription'] ?? null);
-        $content->setSerpMetaDescription($payload['serpMetaDescription'] ?? null);
-        $content->setKeywords($payload['keywords'] ?? null);
-        $content->setRobots($payload['robots'] ?? null);
-        $content->setCanonical($payload['canonical'] ?? null);
-        $content->setMetadata($metadata);
-        $content->setRedirect($payload['redirect'] ?? null);
-        $content->setBody($payload['body'] ?? '');
-        $content->setIsActive(Content::CONTENT_IS_ACTIVE);
+        $content->setTags([]);
+        $content->setTemplate($payload['template']);
+        $content->setIsActive(Content::CONTENT_IS_PASSIVE);
         $content->setIsDeleted(Content::CONTENT_IS_ACCESSIBLE);
+        $content->setRobots('');
+        $content->setPublishAt(new DateTimeImmutable());
         $content->setSortOrder(Content::generateSortValue());
         $content->setCreatedAt(new DateTimeImmutable());
         $content->setUpdatedAt(new DateTimeImmutable());
         $content->setCreatedBy($loggedUserId);
         $content->setUpdatedBy($loggedUserId);
-        $this->genericRepository->persistGeneric($content);
 
-        return new EmptyResponse(204, ['storage-Insert-Id' => $content->id()]);
+        $this->genericRepository->addQueueToPersist($content);
+
+        foreach ($this->config['i18n']['valid-languages'] as $language) {
+            $contentDetail = new ContentDetail();
+            $contentDetail->setId(Uuid::uuid4()->toString());
+            $contentDetail->setContentId($content->id());
+            $contentDetail->setLanguage($language);
+            $contentDetail->setRegion($language);
+            $contentDetail->setTitle($payload['title']);
+            $contentDetail->setSlug($slug);
+            $contentDetail->setBody([]);
+            $contentDetail->setBodyFulltext('');
+            $contentDetail->setSerpTitle($payload['title']);
+            $contentDetail->setDescription('');
+            $contentDetail->setKeywords('');
+            $contentDetail->setIsActive(Content::CONTENT_IS_ACTIVE);
+            $this->genericRepository->addQueueToPersist($contentDetail);
+        }
+
+        $this->genericRepository->flush();
+
+        return new EmptyResponse(204, ['Backendbase-Insert-Id' => $content->id()]);
     }
 }

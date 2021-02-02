@@ -20,13 +20,16 @@ class GetContentListByCategory implements RequestHandlerInterface
 {
     private ContentRepository $contentsRepository;
     private GenericRepository $genericRepository;
+    private array $config;
 
     public function __construct(
         ContentRepository $contentsRepository,
-        GenericRepository $genericRepository
+        GenericRepository $genericRepository,
+        array $config
     ) {
         $this->contentsRepository = $contentsRepository;
         $this->genericRepository  = $genericRepository;
+        $this->config             = $config;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -39,6 +42,8 @@ class GetContentListByCategory implements RequestHandlerInterface
             throw InsufficientPrivileges::create('You dont have privilege to add new content');
         }
 
+        $language                      = $this->config['i18n']['default-language'];
+        $region                        = $this->config['i18n']['default-region'];
         $category                      = $request->getAttribute('category');
         $categoryData                  = $this->contentsRepository->getCategory($category);
         $contentsData                  = [];
@@ -48,7 +53,7 @@ class GetContentListByCategory implements RequestHandlerInterface
         }
 
         if ($categoryData['subCategories'] === null) {
-            $contentsData = $this->contentsRepository->getContentsByCategory($category);
+            $contentsData = $this->contentsRepository->getContentsByCategory($categoryData['id'], $language, $region);
         }
 
         return new JsonResponse([

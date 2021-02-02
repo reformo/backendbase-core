@@ -66,6 +66,7 @@ class CollectionRepository implements CollectionRepositoryInterface
         $doctrineCollectionEntity->setSlug($payload['slug'] ?? $collection->slug());
         $doctrineCollectionEntity->setMetadata($payload['metadata'] ?? $collection->metadata());
         $doctrineCollectionEntity->setIsActive($payload['isActive'] ?? $collection->isActive());
+        $doctrineCollectionEntity->setIsDeleted($payload['isDeleted'] ?? 0);
         $doctrineCollectionEntity->setParentId($payload['parentId'] ?? $collection->parentId()->toString());
 
         return $doctrineCollectionEntity;

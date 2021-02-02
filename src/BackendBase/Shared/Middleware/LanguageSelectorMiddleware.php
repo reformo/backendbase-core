@@ -41,19 +41,26 @@ final class LanguageSelectorMiddleware implements MiddlewareInterface
     {
         $uri              = $request->getUri();
         $url              = $uri->getPath();
-        $selectedLanguage = $this->config['multilingual']['default-language'];
+        $selectedLanguage = $this->config['i18n']['default-language'];
+        $selectedRegion   = $this->config['i18n']['default-region'];
         if ($url !== '/') {
             $urlParts = explode('/', trim($url, '/'));
             $lang     = array_shift($urlParts);
-            if (in_array($lang, $this->config['multilingual']['valid-languages'])) {
+            if (in_array($lang, $this->config['i18n']['valid-languages'])) {
                 $selectedLanguage = $lang;
                 $request          = $request->withUri($uri->withPath('/' . implode('/', $urlParts)));
+            }
+
+            if (in_array($lang, $this->config['i18n']['valid-regions'])) {
+                $selectedRegion = $lang;
             }
         }
 
         $this->setLocale($selectedLanguage, $request->getAttribute('moduleName'));
+        $request = $request->withAttribute('selectedLanguage', $selectedLanguage)
+            ->withAttribute('selectedRegion', $selectedRegion);
 
-        return $handler->handle($request->withAttribute('selectedLanguage', $selectedLanguage));
+        return $handler->handle($request);
     }
 
     private function setLocale(string $locale, string $domain): void

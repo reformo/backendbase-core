@@ -11,9 +11,12 @@ use DOMNamedNodeMap;
 use DOMNodeList;
 
 use function array_keys;
+use function count;
 use function explode;
 use function html_entity_decode;
 use function in_array;
+use function libxml_clear_errors;
+use function libxml_use_internal_errors;
 use function strip_tags;
 use function strpos;
 use function trim;
@@ -44,7 +47,9 @@ class TagAndAttributeRemover
         $domHtml->substituteEntities = true;
         $domHtml->formatOutput       = true;
         $html                        = '<?xml encoding="utf-8" ?>' . $html;
+        libxml_use_internal_errors(true);
         $domHtml->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
         $domHtml->encoding = 'utf-8';
 
         $domHtml->normalizeDocument();
@@ -78,7 +83,12 @@ class TagAndAttributeRemover
 
         $allowedTags = [];
         foreach ($allowedTagList as $tagConfig) {
-            [$tagName, $attributes] = self::safeExplodeString('|', $tagConfig);
+            $parts = self::safeExplodeString('|', $tagConfig);
+            if (count($parts) <= 0) {
+                continue;
+            }
+
+            [$tagName, $attributes] = $parts;
             $allowedTags[$tagName]  = self::safeExplodeString(',', $attributes);
         }
 

@@ -69,7 +69,7 @@
         "laminas/laminas-permissions-rbac": "^3.0.2",
         "laminas/laminas-servicemanager": "^3.6.3",
         "laminas/laminas-stdlib": "^3.3.1",
-        "lcobucci/jwt": "^4.0.0",
+        "lcobucci/jwt": "^4.1.0",
         "league/flysystem": "^1.1.3",
         "league/tactician": "^2.0-rc1",
         "mezzio/mezzio": "^3.3.0",
@@ -82,7 +82,7 @@
         "mkorkmaz/redislabs-rejson": "^1.0",
         "moneyphp/money": "^v3.3.1",
         "monolog/monolog": "^2.2.0",
-        "nesbot/carbon": "^2.43.0",
+        "nesbot/carbon": "^2.44.0",
         "nikolaposa/rate-limit": "^2.2.0",
         "ocramius/proxy-manager": "^2.11.1",
         "phpoffice/phpspreadsheet": "^1.16.0",
@@ -127,7 +127,12 @@
         "psr-4": {
             "IntegrationTest\\": "test/IntegrationTest/",
             "UnitTest\\": "test/UnitTest/",
-            "Fixtures\\": "test/Fixtures/"
+            "Fixtures\\": "test/Fixtures/",
+            "DemoApp\\Common\\": "src/DemoApp/Common/",
+            "DemoApp\\Domain\\": "src/DemoApp/Domain/",
+            "DemoApp\\Infrastructure\\": "src/DemoApp/Infrastructure/",
+            "DemoApp\\PrivateApi\\": "src/DemoApp/Infrastructure/Ui/PrivateApi/",
+            "DemoApp\\PublicWeb\\": "src/DemoApp/Infrastructure/Ui/PublicWeb/"
         }
     },
     "scripts": {
@@ -151,8 +156,26 @@
         ],
         "cs-check": "vendor/bin/phpcs --standard=Doctrine",
         "cs-fix": "vendor/bin/phpcbf --standard=Doctrine",
-
         "test": "phpunit --colors=always",
-        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml"
+        "test-coverage": "phpunit --colors=always --coverage-clover clover.xml",
+        "serve-private-api": "php -S 0.0.0.0:10081 -t webroots/PrivateApi/public",
+        "serve-public-web": "php -S 0.0.0.0:10080 -t webroots/PublicWeb/public",
+        "start-private-api": [
+            "@clear-cache-files",
+            "@serve-private-api"
+        ],
+        "start-public-web": [
+            "@clear-cache-files",
+            "@serve-public-web"
+        ],
+        "clear-config-cache": "php bin/clear-config-cache.php",
+        "clear-route-cache": "php bin/clear-route-cache.php",
+        "clear-twig-cache": "php bin/clear-twig-cache.php",
+        "clear-cache-files": [
+            "@clear-config-cache",
+            "@clear-route-cache",
+            "@clear-twig-cache",
+            "@generate-mo-files"
+        ]
     }
 }

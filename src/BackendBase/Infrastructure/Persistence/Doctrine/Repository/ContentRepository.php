@@ -13,7 +13,6 @@ use DateTimeZone;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\EntityManager;
 use PascalDeVink\ShortUuid\ShortUuid;
-use Ramsey\Uuid\Uuid;
 use Redislabs\Module\ReJSON\ReJSON;
 
 use function array_key_exists;
@@ -58,6 +57,26 @@ class ContentRepository
         return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
     }
 
+    public function getCategoryById(string $categoryId): array
+    {
+        $sql       = '
+            SELECT L.id, L.key, L.name, L.metadata, L.slug 
+              FROM public.lookup_table L 
+             WHERE L.id = :categoryId 
+               AND L.is_deleted = 0
+             LIMIT 1
+        ';
+        $statement = $this->connection->executeQuery($sql, ['categoryId' => $categoryId]);
+        $data      = $statement->fetch();
+        if ($data === false) {
+            return [];
+        }
+
+        $data['metadata'] = json_decode($data['metadata'], true, 512, JSON_THROW_ON_ERROR);
+
+        return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
+    }
+
     public function getCategories(string $parentKey): array
     {
         $parent = $this->getCategory($parentKey);
@@ -92,23 +111,46 @@ class ContentRepository
 
     public function getContentById(string $contentId): array
     {
-        $sql       = '
+        $sql         = '
             SELECT *
-              FROM public.contents C 
+              FROM public.contents C
              WHERE C.id = :id
                AND C.is_deleted = 0
-             LIMIT 1
         ';
-        $statement = $this->connection->executeQuery($sql, ['id' => $contentId]);
-        $data      = $statement->fetch();
-        if ($data === false) {
+        $statement   = $this->connection->executeQuery($sql, ['id' => $contentId]);
+        $contentData = $statement->fetch();
+        if ($contentData === false) {
             throw ContentNotFound::create('Content not found. It may be deleted.');
         }
 
-        $data['metadata']  = json_decode($data['metadata'] ?? '[]', true, 512, JSON_THROW_ON_ERROR);
-        $data['canonical'] = json_decode($data['canonical'] ?? '[]', true, 512, JSON_THROW_ON_ERROR);
-        $data['images']    = json_decode($data['images'] ?? '[]', true, 512, JSON_THROW_ON_ERROR);
-        unset($data['is_deleted']);
+        $contentData['tags'] = json_decode($contentData['tags'], true, 512, JSON_THROW_ON_ERROR);
+        unset($contentData['is_deleted']);
+
+        return ArrayKeysCamelCaseConverter::convertArrayKeys($contentData);
+    }
+
+    public function getContentDetailsById(string $contentId): array
+    {
+        $sql         = '
+            SELECT *
+              FROM public.content_details CD
+             WHERE CD.content_id = :id
+        ';
+        $statement   = $this->connection->executeQuery($sql, ['id' => $contentId]);
+        $contentData = $statement->fetchAll();
+        if ($contentData === false) {
+            throw ContentNotFound::create('Content not found. It may be deleted.');
+        }
+
+        $data = [];
+        foreach ($contentData as $contentDatum) {
+            $contentDatum['body'] = json_decode($contentDatum['body'], true, 512, JSON_THROW_ON_ERROR);
+            if (empty($contentDatum['body'])) {
+                $contentDatum['body'] = ['contentBody' => '<p>deneme</p>'];
+            }
+
+            $data[$contentDatum['language']] = $contentDatum;
+        }
 
         return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
     }
@@ -189,7 +231,7 @@ SQL;
         return $this->getContentByIdForClient($data['id']);
     }
 
-    public function getContentsByCategory(string $category, ?bool $withBody = false): array
+    public function getContentsByCategory(string $categoryId, string $language, string $region, ?bool $withBody = false): array
     {
         $slugify   = new Slugify(['rulesets' => ['default', 'turkish']]);
         $shortener = new ShortUuid();
@@ -198,39 +240,39 @@ SQL;
         $withBodySql = '';
         $sql         = '
             SELECT C.id, 
-                   C.title, 
-                   C.type, 
+                   CD.title, 
+                   CD.slug, 
+                   C.cover_image_landscape,
                    L.name as category_str, 
                    L.slug as category_slug,
                    C.category, 
                    C.created_at, 
                    C.updated_at, 
                    C.sort_order, 
-                   C.images, 
-                   C.metadata,
-                   C.redirect,
+                   C.redirect_url,
                    {withBodySql}
                    C.is_active
               FROM public.contents C
-              LEFT JOIN lookup_table L ON L.key=C.category
-             WHERE C.category = :category AND C.is_deleted = 0
+              LEFT JOIN content_details CD ON CD.content_id=C.id AND CD.language=:language AND CD.region=:region
+              LEFT JOIN lookup_table L ON L.id=C.category
+             WHERE C.category = :categoryId AND C.is_deleted = 0
              ORDER BY C.sort_order DESC
         ';
         if ($withBody === true) {
-            $withBodySql =  'C.body,';
+            $withBodySql =  'CD.body,';
         }
 
         $sql       = str_replace('{withBodySql}', $withBodySql, $sql);
-        $statement = $this->connection->executeQuery($sql, ['category' => $category]);
+        $statement = $this->connection->executeQuery($sql, ['categoryId' => $categoryId, 'language' => $language, 'region' => $region]);
         $data      = $statement->fetchAll();
         if ($data === false) {
             return $returnData;
         }
 
         foreach ($data as $datum) {
-            $datum['images']   = json_decode($datum['images'], true, 512, JSON_THROW_ON_ERROR);
-            $datum['metadata'] = json_decode($datum['metadata'], true, 512, JSON_THROW_ON_ERROR);
-            $datum['slug']     = $datum['category_slug'] . '/' . $slugify->slugify($datum['title']) . '-' . $shortener->encode(Uuid::fromString($datum['id']));
+          //  $datum['images']   = json_decode($datum['images'], true, 512, JSON_THROW_ON_ERROR);
+          //  $datum['metadata'] = json_decode($datum['metadata'], true, 512, JSON_THROW_ON_ERROR);
+          //  $datum['slug']     = $datum['category_slug'] . '/' . $slugify->slugify($datum['title']) . '-' . $shortener->encode(Uuid::fromString($datum['id']));
 
             $returnData[] = $datum;
         }

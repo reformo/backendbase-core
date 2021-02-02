@@ -7,7 +7,7 @@ namespace BackendBase\Domain\Collections\Command;
 use BackendBase\Domain\Collections\Interfaces\CollectionRepository;
 use Ramsey\Uuid\Uuid;
 
-class UpdateCollectionItemHandler
+class DeleteCollectionItemHandler
 {
     private CollectionRepository $repository;
 
@@ -16,11 +16,10 @@ class UpdateCollectionItemHandler
         $this->repository = $repository;
     }
 
-    public function __invoke(UpdateCollectionItem $command): void
+    public function __invoke(DeleteCollectionItem $command): void
     {
-        $payload = $command->payload();
-        unset($payload['isDeleted']);
-        $id = Uuid::fromString($command->id());
+        $id      = Uuid::fromString($command->id());
+        $payload = ['isDeleted' => 1];
         $this->repository->updateCollection($id, $payload);
     }
 }

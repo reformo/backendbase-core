@@ -53,7 +53,7 @@ class AddNewCollectionItem implements RequestHandlerInterface
         $collectionItemParentId = $requestBody['parentId'];
         $collectionItemMetadata = $requestBody['metadata'];
         if (count($collectionItemMetadata) === 0) {
-            $collectionItemMetadata = ['v' => '1.0.0'];
+            $collectionItemMetadata = ['isProtected' => true, 'isExposable' => false];
         }
 
         if (empty($collectionItemKey)) {

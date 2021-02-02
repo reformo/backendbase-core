@@ -29,7 +29,8 @@ class ConfigProvider implements MezzioHandlerConfigProvider
         $app->get('/cms/{category}/contents', Handler\GetContentListByCategory::class, 'contents.by_category');
         $app->post('/cms/{category}/contents', Handler\AddNewContentToCategory::class, 'contents.by_category.create');
         $app->get('/cms/contents/{contentId}', Handler\GetContentDetails::class, 'contents.details');
-        $app->patch('/cms/contents/{contentId}', Handler\ChangeContentDetails::class, 'contents.update');
+        $app->patch('/cms/contents/{contentId}', Handler\ChangeContentMetadata::class, 'contents.update');
+        $app->patch('/cms/contents/{contentId}/details/{contentDetailId}', Handler\ChangeContentDetails::class, 'content_details.update');
         $app->put('/cms/contents/{contentId}/images', Handler\UploadImages::class, 'contents.upload_image');
         $app->delete('/cms/contents/{contentId}/images/{index}', Handler\RemoveImage::class, 'contents.delete_image.');
 
@@ -51,6 +52,7 @@ class ConfigProvider implements MezzioHandlerConfigProvider
                 Handler\AddNewContentToCategory::class => RequestHandlerFactory::class,
                 Handler\GetContentDetails::class => RequestHandlerFactory::class,
                 Handler\ChangeContentDetails::class => RequestHandlerFactory::class,
+                Handler\ChangeContentMetadata::class => RequestHandlerFactory::class,
                 Handler\UploadImages::class => RequestHandlerFactory::class,
                 Handler\RemoveImage::class => RequestHandlerFactory::class,
                 Handler\RemoveContent::class => RequestHandlerFactory::class,

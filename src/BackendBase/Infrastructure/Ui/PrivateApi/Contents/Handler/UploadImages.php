@@ -22,7 +22,11 @@ use Ramsey\Uuid\Uuid;
 
 use function array_key_exists;
 use function basename;
+use function hrtime;
+use function pathinfo;
 use function str_replace;
+
+use const PATHINFO_FILENAME;
 
 class UploadImages implements RequestHandlerInterface
 {
@@ -85,7 +89,11 @@ class UploadImages implements RequestHandlerInterface
         $uploadedFile = $request->getAttribute('uploadedFilePath');
         $contentId    = $request->getAttribute('contentId');
         $fileId       = Uuid::uuid4()->toString();
-        $filePath     =  'app/images/content/' . $contentId . '/' . $fileId . '.' . self::findExtension($this->fileSystem->getMimetype($uploadedFile));
+        $filePath     =  'app/images/content/'
+            . $contentId . '/'
+            . $this->slugifier->slugify(pathinfo($queryParams['fileName'], PATHINFO_FILENAME))
+            . '-' . hrtime(true)
+            . '.' . self::findExtension($this->fileSystem->getMimetype($uploadedFile));
 
         $this->fileSystem->rename($uploadedFile, $filePath);
         $img = Image::make('data/storage/' . $filePath);

@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\Collections\Handler;
 
-use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
-use Laminas\Diactoros\Response\JsonResponse;
+use BackendBase\Domain\Collections\Command\DeleteCollectionItem as DeleteCollectionItemCommand;
+use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
+use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
+use BackendBase\Shared\Services\MessageBus\Interfaces\CommandBus;
+use Laminas\Diactoros\Response\EmptyResponse;
+use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -13,26 +17,30 @@ use Psr\Http\Server\RequestHandlerInterface;
 class RemoveCollectionItem implements RequestHandlerInterface
 {
     private $config;
-    private $queryBus;
+    private $commandBus;
 
     public function __construct(
-        QueryBus $queryBus,
+        CommandBus $commandBus,
         array $config
     ) {
-        $this->config   = $config;
-        $this->queryBus = $queryBus;
+        $this->config     = $config;
+        $this->commandBus = $commandBus;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-       /* $query = new GetAllUsers(0, 25);
-        $users = $this->queryBus->handle($query);
-        */
-        $session = [
-            'access_token' => '',
-            'will_expire' => '',
-        ];
+        /**
+         * @var Role
+         */
+        $role = $request->getAttribute('role');
+        if ($role->hasPermission(Permissions\Collections::COLLECTIONS_EDIT) === false) {
+            throw InsufficientPrivileges::create('You dont have privilege to edit collections');
+        }
 
-        return new JsonResponse(['session' => $session], 201);
+        $id    = $request->getAttribute('collectionId');
+        $query = new DeleteCollectionItemCommand($id);
+        $this->commandBus->handle($query);
+
+        return new EmptyResponse(204);
     }
 }
