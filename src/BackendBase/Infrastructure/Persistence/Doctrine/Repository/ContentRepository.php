@@ -109,6 +109,42 @@ class ContentRepository
         return ArrayKeysCamelCaseConverter::convertArrayKeys($returnData);
     }
 
+    public function getContentBySlug(string $slug, string $language, string $region): array
+    {
+        $sql         = <<<SQL
+            SELECT CD.title, CD.slug, CD.keywords, CD.serp_title, CD.content_id, C.id, 
+                   CD.description, CD.body, C.tags, C.robots, 
+                   C.redirect_url, C.cover_image_landscape,
+                   C.template, LT.metadata->'itemData'->>'templateFile' as template_file
+                   
+              FROM public.content_details CD
+              LEFT JOIN contents C ON C.id=CD.content_id
+              LEFT JOIN lookup_table LT ON LT.key=C.template
+             WHERE CD.slug = :slug
+               AND CD.language = :language
+               AND CD.region = :region
+               AND C.is_active = 1
+               AND C.is_deleted = 0
+               AND C.publish_at <= :now
+               AND (C.expire_at >= :now OR C.expire_at IS NULL)
+SQL;
+        $statement   = $this->connection->executeQuery($sql, [
+            'slug' => $slug,
+            'language' => $language,
+            'region' => $region,
+            'now' => (new DateTimeImmutable())->format(DATE_ATOM)
+        ]);
+        $contentData = $statement->fetch();
+        if ($contentData === false) {
+            throw ContentNotFound::create('Content not found. It may be deleted.');
+        }
+        $contentData['body'] = json_decode($contentData['body'], true, 512, JSON_THROW_ON_ERROR);
+        $contentData['tags'] = json_decode($contentData['tags'], true, 512, JSON_THROW_ON_ERROR);
+        unset($contentData['is_deleted']);
+
+        return ArrayKeysCamelCaseConverter::convertArrayKeys($contentData);
+    }
+
     public function getContentById(string $contentId): array
     {
         $sql         = '
