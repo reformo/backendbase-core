@@ -132,12 +132,13 @@ SQL;
             'slug' => $slug,
             'language' => $language,
             'region' => $region,
-            'now' => (new DateTimeImmutable())->format(DATE_ATOM)
+            'now' => (new DateTimeImmutable())->format(DATE_ATOM),
         ]);
         $contentData = $statement->fetch();
         if ($contentData === false) {
             throw ContentNotFound::create('Content not found. It may be deleted.');
         }
+
         $contentData['body'] = json_decode($contentData['body'], true, 512, JSON_THROW_ON_ERROR);
         $contentData['tags'] = json_decode($contentData['tags'], true, 512, JSON_THROW_ON_ERROR);
         unset($contentData['is_deleted']);

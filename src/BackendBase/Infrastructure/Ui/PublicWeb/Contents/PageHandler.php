@@ -37,9 +37,9 @@ class PageHandler implements RequestHandlerInterface
     {
         $pageSlug = '/' . $request->getAttribute('pageSlug');
         try {
-            $page = $this->contentRepository->getContentBySlug($pageSlug, $request->getAttribute('selectedLanguage'), $request->getAttribute('selectedRegion'));
+            $page     = $this->contentRepository->getContentBySlug($pageSlug, $request->getAttribute('selectedLanguage'), $request->getAttribute('selectedRegion'));
             $template = $page['templateFile'];
-            $data = ['page' => $page];
+            $data     = ['page' => $page];
         } catch (ContentNotFound $exception) {
             $template = 'error::404';
             $data     = ['error' => 404];

@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace BackendBase\Shared\Services;
 
 use Twig\Extension\AbstractExtension;
+use Twig\Extension\ExtensionInterface;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
-use Twig\Extension\ExtensionInterface;
+
 use function ngettext;
 use function var_dump;
 
-class TwigExtension extends AbstractExtension implements GlobalsInterface,ExtensionInterface
+class TwigExtension extends AbstractExtension implements GlobalsInterface, ExtensionInterface
 {
     private array $globals;
 
