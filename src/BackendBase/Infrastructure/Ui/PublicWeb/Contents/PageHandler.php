@@ -35,11 +35,10 @@ class PageHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $pageSlug = $request->getAttribute('pageSlug');
-        $template = 'app::default-page';
+        $pageSlug = '/' . $request->getAttribute('pageSlug');
         try {
-            $page = $this->contentRepository->getContentBySlugForClient($pageSlug);
-
+            $page = $this->contentRepository->getContentBySlug($pageSlug, $request->getAttribute('selectedLanguage'), $request->getAttribute('selectedRegion'));
+            $template = $page['templateFile'];
             $data = ['page' => $page];
         } catch (ContentNotFound $exception) {
             $template = 'error::404';
