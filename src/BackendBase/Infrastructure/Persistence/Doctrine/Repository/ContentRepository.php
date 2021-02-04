@@ -181,7 +181,7 @@ SQL;
 
         $data = [];
         foreach ($contentData as $contentDatum) {
-            $contentDatum['body'] = json_decode($contentDatum['body'], true, 512, JSON_THROW_ON_ERROR);
+            $contentDatum['body']            = json_decode($contentDatum['body'], true, 512, JSON_THROW_ON_ERROR);
             $data[$contentDatum['language']] = $contentDatum;
         }
 
@@ -264,16 +264,16 @@ SQL;
         return $this->getContentByIdForClient($data['id']);
     }
 
-    public function getContentsByCategory(string $categoryId, string $language, string $region, ?bool $withBody = false, ?int $offset = 0, ?int $limit=null): array
+    public function getContentsByCategory(string $categoryId, string $language, string $region, ?bool $withBody = false, ?int $offset = 0, ?int $limit = null): array
     {
         $slugify   = new Slugify(['rulesets' => ['default', 'turkish']]);
         $shortener = new ShortUuid();
 
-        $criteria = ['categoryId' => $categoryId, 'language' => $language, 'region' => $region];
-        $returnData  = [];
-        $withBodySql = '';
+        $criteria      = ['categoryId' => $categoryId, 'language' => $language, 'region' => $region];
+        $returnData    = [];
+        $withBodySql   = '';
         $additionalSql = '';
-        $sql         = '
+        $sql           = '
             SELECT C.id, 
                    CD.title, 
                    CD.slug, 
@@ -296,10 +296,10 @@ SQL;
              ORDER BY C.sort_order DESC
         ';
         if ($withBody === true) {
-            $withBodySql =  ' CD.body, ';
+            $withBodySql   =  ' CD.body, ';
             $additionalSql = ' AND C.is_active=1 AND CD.is_active=1';
             if ($limit !== null) {
-                $sql .= ' OFFSET ' . $offset. ' LIMIT '. $limit;
+                $sql .= ' OFFSET ' . $offset . ' LIMIT ' . $limit;
             }
         }
 
@@ -314,6 +314,7 @@ SQL;
             if (array_key_exists('body', $datum)) {
                 $datum['body'] = json_decode($datum['body'], true, 512, JSON_THROW_ON_ERROR);
             }
+
             $returnData[] = $datum;
         }
 

@@ -11,7 +11,8 @@ use BackendBase\Infrastructure\Persistence\Doctrine\Repository\FileRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
 use BackendBase\Shared\Services\MessageBus\Interfaces\CommandBus;
 use Cocur\Slugify\Slugify;
-use Intervention\Image\ImageManagerStatic as Image;
+use Gumlet\ImageResize;
+use ImageOptimizer\OptimizerFactory;
 use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Permissions\Rbac\Role;
 use League\Flysystem\Filesystem;
@@ -19,11 +20,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
+use WebPConvert\WebPConvert;
 
-use function array_key_exists;
 use function basename;
 use function hrtime;
 use function pathinfo;
+use function str_ireplace;
 use function str_replace;
 
 use const PATHINFO_FILENAME;
@@ -79,28 +81,64 @@ class UploadImages implements RequestHandlerInterface
             throw InsufficientPrivileges::create('You dont have privilege to upload an image for contents');
         }
 
-        $loggedUserId      = $request->getAttribute('loggedUserId');
-        $queryParams       = $request->getQueryParams();
-        $aspectRatioWidth  =  array_key_exists('arWidth', $queryParams) ? (int) $queryParams['arWidth'] : null;
-        $aspectRatioHeight = array_key_exists('arHeight', $queryParams)  ? (int) $queryParams['arHeight'] : 500;
-        $key               = 'images';
-        $type              = $queryParams['type'] ?? 'CONTENTS';
+        $loggedUserId = $request->getAttribute('loggedUserId');
+        $queryParams  = $request->getQueryParams();
+        $type         = $queryParams['type'] ?? 'CONTENTS';
 
         $uploadedFile = $request->getAttribute('uploadedFilePath');
         $contentId    = $request->getAttribute('contentId');
+        $extension    = self::findExtension($this->fileSystem->getMimetype($uploadedFile));
         $fileId       = Uuid::uuid4()->toString();
-        $filePath     =  'app/images/content/'
-            . $contentId . '/'
-            . $this->slugifier->slugify(pathinfo($queryParams['fileName'], PATHINFO_FILENAME))
-            . '-' . hrtime(true)
-            . '.' . self::findExtension($this->fileSystem->getMimetype($uploadedFile));
+
+        $fileName = empty($queryParams['fileName']) ? $fileId . '.' . $extension : $queryParams['fileName'];
+        $fileName = pathinfo($fileName, PATHINFO_FILENAME);
+
+        $filePath =  'app/images/content/' . $contentId . '/' . $this->slugifier->slugify($fileName) . '-' . hrtime(true) . '.' . $extension;
 
         $this->fileSystem->rename($uploadedFile, $filePath);
-        $img = Image::make('data/storage/' . $filePath);
-        $img->resize($aspectRatioWidth, $aspectRatioHeight, static function ($constraint): void {
-            $constraint->aspectRatio();
-        });
-        $img->save('data/storage/' . $filePath);
+        $mobileFile = str_ireplace('.' . $extension, '-mobile.' . $extension, 'data/storage/' . $filePath);
+        $image      = new ImageResize('data/storage/' . $filePath);
+        if ($image->getSourceWidth() > 992) {
+            $image->resizeToWidth(992, false);
+        }
+
+        $image->save($mobileFile);
+
+        WebPConvert::convert('data/storage/' . $filePath, 'data/storage/' . $filePath . '.webp', [
+            'png' => [
+                'encoding' => 'auto',    /* Try both lossy and lossless and pick smallest */
+                'near-lossless' => 60,   /* The level of near-lossless image preprocessing (when trying lossless) */
+                'quality' => 90,         /* Quality when trying lossy. It is set high because pngs is often selected to ensure high quality */
+            ],
+            'jpeg' => [
+                'encoding' => 'auto',     /* If you are worried about the longer conversion time, you could set it to "lossy" instead (lossy will often be smaller than lossless for jpegs) */
+                'quality' => 'auto',      /* Set to same as jpeg (requires imagick or gmagick extension, not necessarily compiled with webp) */
+                'max-quality' => 85,      /* Only relevant if quality is set to "auto" */
+                'default-quality' => 75,  /* Fallback quality if quality detection isnt working */
+            ],
+        ]);
+
+        WebPConvert::convert($mobileFile, $mobileFile . '.webp', [
+            'png' => [
+                'encoding' => 'auto',    /* Try both lossy and lossless and pick smallest */
+                'near-lossless' => 60,   /* The level of near-lossless image preprocessing (when trying lossless) */
+                'quality' => 90,         /* Quality when trying lossy. It is set high because pngs is often selected to ensure high quality */
+            ],
+            'jpeg' => [
+                'encoding' => 'auto',     /* If you are worried about the longer conversion time, you could set it to "lossy" instead (lossy will often be smaller than lossless for jpegs) */
+                'quality' => 'auto',      /* Set to same as jpeg (requires imagick or gmagick extension, not necessarily compiled with webp) */
+                'max-quality' => 85,      /* Only relevant if quality is set to "auto" */
+                'default-quality' => 75,  /* Fallback quality if quality detection isnt working */
+            ],
+        ]);
+
+        $factory   = new OptimizerFactory(['ignore_errors' => false]);
+        $optimizer = $factory->get();
+
+        $optimizer->optimize('data/storage/' . $filePath);
+
+        $optimizer->optimize($mobileFile);
+
         $fileData = [
             'id' => $fileId ,
             'filePath' => $filePath,
