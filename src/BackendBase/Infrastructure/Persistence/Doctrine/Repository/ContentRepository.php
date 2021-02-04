@@ -182,10 +182,6 @@ SQL;
         $data = [];
         foreach ($contentData as $contentDatum) {
             $contentDatum['body'] = json_decode($contentDatum['body'], true, 512, JSON_THROW_ON_ERROR);
-            if (empty($contentDatum['body'])) {
-                $contentDatum['body'] = ['contentBody' => '<p>deneme</p>'];
-            }
-
             $data[$contentDatum['language']] = $contentDatum;
         }
 
