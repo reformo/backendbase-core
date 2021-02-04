@@ -264,13 +264,15 @@ SQL;
         return $this->getContentByIdForClient($data['id']);
     }
 
-    public function getContentsByCategory(string $categoryId, string $language, string $region, ?bool $withBody = false): array
+    public function getContentsByCategory(string $categoryId, string $language, string $region, ?bool $withBody = false, ?int $offset = 0, ?int $limit=null): array
     {
         $slugify   = new Slugify(['rulesets' => ['default', 'turkish']]);
         $shortener = new ShortUuid();
 
+        $criteria = ['categoryId' => $categoryId, 'language' => $language, 'region' => $region];
         $returnData  = [];
         $withBodySql = '';
+        $additionalSql = '';
         $sql         = '
             SELECT C.id, 
                    CD.title, 
@@ -288,25 +290,30 @@ SQL;
               FROM public.contents C
               LEFT JOIN content_details CD ON CD.content_id=C.id AND CD.language=:language AND CD.region=:region
               LEFT JOIN lookup_table L ON L.id=C.category
-             WHERE C.category = :categoryId AND C.is_deleted = 0
+             WHERE C.category = :categoryId 
+               AND C.is_deleted = 0
+                   {additionalSql}
              ORDER BY C.sort_order DESC
         ';
         if ($withBody === true) {
-            $withBodySql =  'CD.body,';
+            $withBodySql =  ' CD.body, ';
+            $additionalSql = ' AND C.is_active=1 AND CD.is_active=1';
+            if ($limit !== null) {
+                $sql .= ' OFFSET ' . $offset. ' LIMIT '. $limit;
+            }
         }
 
-        $sql       = str_replace('{withBodySql}', $withBodySql, $sql);
-        $statement = $this->connection->executeQuery($sql, ['categoryId' => $categoryId, 'language' => $language, 'region' => $region]);
+        $sql       = str_replace(['{withBodySql}', '{additionalSql}'], [$withBodySql, $additionalSql], $sql);
+        $statement = $this->connection->executeQuery($sql, $criteria);
         $data      = $statement->fetchAll();
         if ($data === false) {
             return $returnData;
         }
 
         foreach ($data as $datum) {
-          //  $datum['images']   = json_decode($datum['images'], true, 512, JSON_THROW_ON_ERROR);
-          //  $datum['metadata'] = json_decode($datum['metadata'], true, 512, JSON_THROW_ON_ERROR);
-          //  $datum['slug']     = $datum['category_slug'] . '/' . $slugify->slugify($datum['title']) . '-' . $shortener->encode(Uuid::fromString($datum['id']));
-
+            if (array_key_exists('body', $datum)) {
+                $datum['body'] = json_decode($datum['body'], true, 512, JSON_THROW_ON_ERROR);
+            }
             $returnData[] = $datum;
         }
 
