@@ -273,11 +273,12 @@ SQL;
         $returnData    = [];
         $withBodySql   = '';
         $additionalSql = '';
-        $sql           = '
+        $sql           = <<<SQL
             SELECT C.id, 
                    CD.title, 
                    CD.slug, 
                    C.cover_image_landscape,
+                   REPLACE(C.cover_image_landscape, '.', '-mobile.') AS cover_image_landscape_mobile,
                    L.name as category_str, 
                    L.slug as category_slug,
                    C.category, 
@@ -294,7 +295,7 @@ SQL;
                AND C.is_deleted = 0
                    {additionalSql}
              ORDER BY C.sort_order DESC
-        ';
+SQL;
         if ($withBody === true) {
             $withBodySql   =  ' CD.body, ';
             $additionalSql = ' AND C.is_active=1 AND CD.is_active=1';
