@@ -23,6 +23,7 @@ use function array_values;
 use function implode;
 use function json_decode;
 use function str_contains;
+use function str_replace;
 use function strip_tags;
 
 use const JSON_OBJECT_AS_ARRAY;
@@ -33,15 +34,18 @@ class ChangeContentDetails implements RequestHandlerInterface
     private ContentRepository $contentsRepository;
     private GenericRepository $genericRepository;
     private CollectionQuery $collectionQuery;
+    private array $config;
 
     public function __construct(
         ContentRepository $contentsRepository,
         GenericRepository $genericRepository,
-        CollectionQuery $collectionQuery
+        CollectionQuery $collectionQuery,
+        array $config
     ) {
         $this->contentsRepository = $contentsRepository;
         $this->genericRepository  = $genericRepository;
         $this->collectionQuery    = $collectionQuery;
+        $this->config             = $config;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -85,12 +89,30 @@ class ChangeContentDetails implements RequestHandlerInterface
                 }
 
                 $allowHtmlForBody['$.' . $key] = [
-                    'allowedTags' => 'a|href,class,style;img|src,class,style;ul;ol;li;p;h1;h2;h3;h4;h5;quote;b;strong;br;div|class;table;tr;td;figure|class;oembed|url,class;figcaption',
+                    'allowedTags' => 'a|href,class,style;img|src,class,style,alt,srcset;ul;ol;li;p;h1;h2;h3;h4;h5;quote;b;strong;br;div|class;table;tr;td;figure|class;oembed|url,class;figcaption',
                     'urlPrefixes' => 'http;https',
                 ];
             }
 
             $payload['body'] = PayloadSanitizer::sanitize($parsedBody['body'], $allowHtmlForBody);
+        }
+
+        foreach ($payload['body'] as $key => $value) {
+            $payload['body'][$key] = str_replace(
+                [
+                    $this->config['app']['cdn-url'],
+                    'h2',
+                    'h3',
+                    'h4',
+                ],
+                [
+                    '{cdnUrl}',
+                    'h1',
+                    'h2',
+                    'h3',
+                ],
+                $value
+            );
         }
 
         //return new JsonResponse($payload);

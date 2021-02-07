@@ -29,12 +29,14 @@ class ContentRepository
     protected EntityManager $entityManager;
     protected Connection $connection;
     private ReJSON $reJSON;
+    private array $config;
 
-    public function __construct(EntityManager $entityManager, Connection $connection, ReJSON $reJSON)
+    public function __construct(EntityManager $entityManager, Connection $connection, ReJSON $reJSON, array $config)
     {
         $this->connection    = $connection;
         $this->entityManager = $entityManager;
         $this->reJSON        = $reJSON;
+        $this->config        = $config;
     }
 
     public function getCategory(string $category): array
@@ -314,6 +316,9 @@ SQL;
         foreach ($data as $datum) {
             if (array_key_exists('body', $datum)) {
                 $datum['body'] = json_decode($datum['body'], true, 512, JSON_THROW_ON_ERROR);
+                foreach ($datum['body'] as $key => $value) {
+                    $datum['body'][$key] = str_replace('{cdnUrl}', $this->config['app']['cdn-url'], $value);
+                }
             }
 
             $returnData[] = $datum;

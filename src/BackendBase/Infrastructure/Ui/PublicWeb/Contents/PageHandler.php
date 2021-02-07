@@ -14,6 +14,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
 
+use function str_replace;
+
 class PageHandler implements RequestHandlerInterface
 {
     private ?TemplateRendererInterface $template = null;
@@ -37,7 +39,11 @@ class PageHandler implements RequestHandlerInterface
     {
         $pageSlug = '/' . $request->getAttribute('pageSlug');
         try {
-            $page     = $this->contentRepository->getContentBySlug($pageSlug, $request->getAttribute('selectedLanguage'), $request->getAttribute('selectedRegion'));
+            $page = $this->contentRepository->getContentBySlug($pageSlug, $request->getAttribute('selectedLanguage'), $request->getAttribute('selectedRegion'));
+            foreach ($page['body'] as $key => $value) {
+                $page['body'][$key] = str_replace('{cdnUrl}', $this->config['app']['cdn-url'], $value);
+            }
+
             $template = $page['templateFile'];
             $data     = ['page' => $page];
         } catch (ContentNotFound $exception) {

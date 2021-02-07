@@ -15,7 +15,9 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function array_keys;
 use function json_decode;
+use function str_replace;
 
 use const JSON_THROW_ON_ERROR;
 
@@ -52,6 +54,14 @@ class GetContentDetails implements RequestHandlerInterface
         $contentDetailsData = $this->contentsRepository->getContentDetailsById($request->getAttribute('contentId'));
         $categoryData       = $this->contentsRepository->getCategoryById($contentData['category']);
         $templateData       = $this->collectionRepository->findByKey($contentData['template']);
+
+        $languages = array_keys($contentDetailsData);
+
+        foreach ($languages as $language) {
+            foreach ($contentDetailsData[$language]['body'] as $key => $value) {
+                $contentDetailsData[$language]['body'][$key] = str_replace('{cdnUrl}', $this->config['app']['cdn-url'], $value);
+            }
+        }
 
         return new JsonResponse([
             'content' => $contentData,

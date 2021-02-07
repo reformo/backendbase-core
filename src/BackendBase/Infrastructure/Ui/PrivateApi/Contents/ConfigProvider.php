@@ -32,6 +32,8 @@ class ConfigProvider implements MezzioHandlerConfigProvider
         $app->patch('/cms/contents/{contentId}', Handler\ChangeContentMetadata::class, 'contents.update');
         $app->patch('/cms/contents/{contentId}/details/{contentDetailId}', Handler\ChangeContentDetails::class, 'content_details.update');
         $app->put('/cms/contents/{contentId}/images', Handler\UploadImages::class, 'contents.upload_image');
+        $app->post('/cms/contents/{contentId}/file-images', Handler\UploadFileImages::class, 'contents.upload_file_image');
+
         $app->delete('/cms/contents/{contentId}/images/{index}', Handler\RemoveImage::class, 'contents.delete_image.');
 
         $app->delete('/cms/contents/{contentId}', Handler\RemoveContent::class, 'contents.delete');
@@ -54,6 +56,7 @@ class ConfigProvider implements MezzioHandlerConfigProvider
                 Handler\ChangeContentDetails::class => RequestHandlerFactory::class,
                 Handler\ChangeContentMetadata::class => RequestHandlerFactory::class,
                 Handler\UploadImages::class => RequestHandlerFactory::class,
+                Handler\UploadFileImages::class => RequestHandlerFactory::class,
                 Handler\RemoveImage::class => RequestHandlerFactory::class,
                 Handler\RemoveContent::class => RequestHandlerFactory::class,
                 Handler\GenericUploadImage::class => RequestHandlerFactory::class,

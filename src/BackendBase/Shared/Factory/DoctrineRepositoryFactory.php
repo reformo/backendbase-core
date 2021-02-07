@@ -19,8 +19,9 @@ final class DoctrineRepositoryFactory implements FactoryInterface
         $connection          = $container->get(Connection::class);
         $entityManager       = $container->get(EntityManager::class);
         $rejson              = $container->get(ReJSON::class);
+        $config              = $container->get('config');
         $repositoryClassName = str_replace('Interfaces', 'Persistence\\Doctrine', $requestedName);
 
-        return new $repositoryClassName($entityManager, $connection, $rejson);
+        return new $repositoryClassName($entityManager, $connection, $rejson, $config);
     }
 }

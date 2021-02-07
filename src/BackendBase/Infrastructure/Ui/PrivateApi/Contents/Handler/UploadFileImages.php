@@ -18,11 +18,16 @@ use Laminas\Permissions\Rbac\Role;
 use League\Flysystem\Filesystem;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
+use Ulid\Ulid;
 use WebPConvert\WebPConvert;
 
 use function basename;
+use function fclose;
+use function fopen;
+use function fwrite;
 use function hrtime;
 use function pathinfo;
 use function str_ireplace;
@@ -30,7 +35,7 @@ use function str_replace;
 
 use const PATHINFO_FILENAME;
 
-class UploadImages implements RequestHandlerInterface
+class UploadFileImages implements RequestHandlerInterface
 {
     private const RESULT_ROWS_LIMIT = 25;
     private const ULID_LOWERCASE    = true;
@@ -71,6 +76,22 @@ class UploadImages implements RequestHandlerInterface
         ][$mimetype];
     }
 
+    private function storeUploadedFile(StreamInterface $body): string
+    {
+        $fileName    = (string) Ulid::generate();
+        $filePath    = 'data/storage/temp/' . $fileName;
+        $fileContent = '';
+        while (! $body->eof()) {
+            $fileContent .= $body->read(4096);
+        }
+
+        $fileHandle = fopen($filePath, 'w');
+        fwrite($fileHandle, $fileContent);
+        fclose($fileHandle);
+
+        return 'temp/' . $fileName;
+    }
+
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /**
@@ -81,11 +102,16 @@ class UploadImages implements RequestHandlerInterface
             throw InsufficientPrivileges::create('You dont have privilege to upload an image for contents');
         }
 
+        /**
+         * @var $uploadedImage UploadedFileInterface
+         */
+        $uploadedImage = $request->getUploadedFiles()['image'];
+
+        $uploadedFile = $this->storeUploadedFile($uploadedImage->getStream());
+
         $loggedUserId = $request->getAttribute('loggedUserId');
         $queryParams  = $request->getQueryParams();
         $type         = $queryParams['type'] ?? 'CONTENTS';
-
-        $uploadedFile = $request->getAttribute('uploadedFilePath');
         $contentId    = $request->getAttribute('contentId');
         $extension    = self::findExtension($this->fileSystem->getMimetype($uploadedFile));
         $fileId       = Uuid::uuid4()->toString();
@@ -156,6 +182,8 @@ class UploadImages implements RequestHandlerInterface
             'uploaded' => 1,
             'fileName' => basename($filePath),
             'url' => $this->config['app']['cdn-url'] . str_replace('app/', '/', $filePath),
+
+            'default' => $this->config['app']['cdn-url'] . str_replace('app/', '/', $filePath),
         ], 201);
     }
 }
