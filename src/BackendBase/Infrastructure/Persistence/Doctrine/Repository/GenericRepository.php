@@ -42,6 +42,11 @@ class GenericRepository
         return $this->entityManager->find($className, $entityId);
     }
 
+    public function findGenericAsArray(string $className, string $entityId)
+    {
+        return $this->entityManager->getRepository($className)->findBy(['id' =>$entityId])[0] ?? null;
+    }
+
     public function persistGeneric($entity): void
     {
         $this->entityManager->persist($entity);

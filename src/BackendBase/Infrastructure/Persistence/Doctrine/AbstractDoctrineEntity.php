@@ -60,4 +60,12 @@ trait AbstractDoctrineEntity
 
         return $this->{$name};
     }
+    
+    public function toArray() : array
+    {
+        $values = get_object_vars($this);
+        unset($values['fields'], $values['isFieldsSet']);
+        return $values;
+    }
+
 }
