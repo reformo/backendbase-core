@@ -7,18 +7,20 @@ namespace BackendBase\Shared\Middleware;
 use BackendBase\Domain\IdentityAndAccess\Exception\AuthenticationFailed;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
 use BackendBase\Shared\Services\RoleBasedAccessControl;
+use DateInterval;
+use DateTimeZone;
+use Lcobucci\Clock\SystemClock;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Lcobucci\JWT\Validation\Constraint\IdentifiedBy;
 use Lcobucci\JWT\Validation\Constraint\IssuedBy;
+use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
-use Lcobucci\Clock\SystemClock;
-use Lcobucci\JWT\Validation\Constraint\StrictValidAt;
 
 use function str_replace;
 
@@ -54,7 +56,7 @@ final class PrivateApiAuthorizationMiddleware implements MiddlewareInterface
             $constraints   = [
                 new IssuedBy($this->config['jwt']['issuer']),
                 new IdentifiedBy($this->config['jwt']['identifier']),
-                new StrictValidAt(new SystemClock(new \DateTimeZone('UTC')), new \DateInterval('PT12H')),
+                new StrictValidAt(new SystemClock(new DateTimeZone('UTC')), new DateInterval('PT12H')),
             ];
             if (! $configuration->validator()->validate($token, ...$constraints)) {
                 throw AuthenticationFailed::create('Authentication failed. Invalid Token or token expired.');

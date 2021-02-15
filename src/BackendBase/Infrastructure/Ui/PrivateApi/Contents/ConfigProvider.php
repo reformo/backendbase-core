@@ -39,6 +39,9 @@ class ConfigProvider implements MezzioHandlerConfigProvider
         $app->delete('/cms/contents/{contentId}', Handler\RemoveContent::class, 'contents.delete');
 
         $app->put('/module/{moduleName}/images', Handler\GenericUploadImage::class, 'module.upload_image');
+
+        $app->put('/files/new-form-data-file', Handler\UploadFileImageGeneral::class, 'module.upload_form_data_image_general');
+        $app->put('/files/new-file', Handler\UploadImageGeneral::class, 'module.upload_image_general');
     }
 
     /**
@@ -60,6 +63,8 @@ class ConfigProvider implements MezzioHandlerConfigProvider
                 Handler\RemoveImage::class => RequestHandlerFactory::class,
                 Handler\RemoveContent::class => RequestHandlerFactory::class,
                 Handler\GenericUploadImage::class => RequestHandlerFactory::class,
+                Handler\UploadFileImageGeneral::class => RequestHandlerFactory::class,
+                Handler\UploadImageGeneral::class => RequestHandlerFactory::class,
 
             ],
         ];

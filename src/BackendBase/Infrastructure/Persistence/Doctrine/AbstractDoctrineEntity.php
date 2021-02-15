@@ -6,12 +6,16 @@ namespace BackendBase\Infrastructure\Persistence\Doctrine;
 
 use InvalidArgumentException;
 
+use function array_key_exists;
 use function get_class_vars;
+use function get_object_vars;
 use function in_array;
 use function lcfirst;
 use function sprintf;
 use function str_replace;
 use function strpos;
+
+use const DATE_ATOM;
 
 trait AbstractDoctrineEntity
 {
@@ -60,12 +64,20 @@ trait AbstractDoctrineEntity
 
         return $this->{$name};
     }
-    
-    public function toArray() : array
+
+    public function toArray(): array
     {
-        $values = get_object_vars($this);
+        $dateFields = ['createdAt', 'updatedAt', 'expireAt', 'publishAt'];
+        $values     = get_object_vars($this);
         unset($values['fields'], $values['isFieldsSet']);
+        foreach ($dateFields as $dateField) {
+            if (! array_key_exists($dateField, $values)) {
+                continue;
+            }
+
+            $values[$dateField] = $values[$dateField]->format(DATE_ATOM);
+        }
+
         return $values;
     }
-
 }
