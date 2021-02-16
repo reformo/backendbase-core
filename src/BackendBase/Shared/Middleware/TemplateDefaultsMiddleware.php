@@ -45,7 +45,11 @@ class TemplateDefaultsMiddleware implements MiddlewareInterface
             'isWebP',
             $isWebP
         );
-
+        $this->templateRenderer->addDefaultParam(
+            TemplateRendererInterface::TEMPLATE_ALL,
+            'config',
+            $this->config
+        );
         $userAgent    = $request->getHeaderLine('user-agent');
         $isLightHouse = 0;
         if (stripos($userAgent, 'lighthouse') !== false) {
