@@ -45,10 +45,14 @@ class TemplateDefaultsMiddleware implements MiddlewareInterface
             'isWebP',
             $isWebP
         );
+        $config = $this->config;
+        $config['selectedLanguage'] = $request->getAttribute('selectedLanguage');
+        $config['selectedRegion'] = $request->getAttribute('selectedRegion');
+
         $this->templateRenderer->addDefaultParam(
             TemplateRendererInterface::TEMPLATE_ALL,
             'config',
-            $this->config
+            $config
         );
         $userAgent    = $request->getHeaderLine('user-agent');
         $isLightHouse = 0;
