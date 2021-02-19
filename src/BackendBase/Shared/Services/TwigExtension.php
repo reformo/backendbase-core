@@ -9,6 +9,8 @@ use Twig\Extension\ExtensionInterface;
 use Twig\Extension\GlobalsInterface;
 use Twig\TwigFunction;
 
+use function count;
+use function gettext;
 use function ngettext;
 use function var_dump;
 
@@ -32,10 +34,8 @@ class TwigExtension extends AbstractExtension implements GlobalsInterface, Exten
     public function getFunctions(): array
     {
         return [
-            new TwigFunction('translate', 'gettext'),
+            new TwigFunction('translate', [$this, 'translate']),
             new TwigFunction('varDump', [$this, 'varDump']),
-            new TwigFunction('plural', [$this, 'translatePlural']),
-         //   new TwigFunction('yourFunction', [$this, 'methodName']),
         ];
     }
 
@@ -46,9 +46,13 @@ class TwigExtension extends AbstractExtension implements GlobalsInterface, Exten
         ];
     }
 
-    public function translatePlural($messageId, $number): string
+    public function translate($messageId, ...$args): string
     {
-        return ngettext($messageId, $messageId . '_PLURAL', $number);
+        if (count($args) === 0) {
+            return gettext($messageId);
+        }
+
+        return ngettext($messageId, $messageId . '-plural', ...$args);
     }
 
     public function varDump(...$arguments): void

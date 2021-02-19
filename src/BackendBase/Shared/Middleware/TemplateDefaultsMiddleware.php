@@ -45,10 +45,10 @@ class TemplateDefaultsMiddleware implements MiddlewareInterface
             'isWebP',
             $isWebP
         );
-        $config = $this->config;
+        $config                     = $this->config;
         $config['selectedLanguage'] = $request->getAttribute('selectedLanguage');
-        $config['selectedRegion'] = $request->getAttribute('selectedRegion');
-        $config['appData'] = $request->getAttribute('appData');
+        $config['selectedRegion']   = $request->getAttribute('selectedRegion');
+        $config['appData']          = $request->getAttribute('appData');
         $this->templateRenderer->addDefaultParam(
             TemplateRendererInterface::TEMPLATE_ALL,
             'config',
