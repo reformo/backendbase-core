@@ -22,6 +22,7 @@ use function implode;
 use function in_array;
 use function putenv;
 use function setlocale;
+use function strtoupper;
 use function textdomain;
 use function trim;
 use function unlink;
@@ -82,10 +83,9 @@ final class LanguageSelectorMiddleware implements MiddlewareInterface
         }
 
         $domain .= '_' . $modifiedTime;
-        $lang    = $locale.'_'.strtoupper($locale);
-        putenv("LANG={$lang}");
+        $lang    = $locale . '_' . strtoupper($locale);
         putenv("LANGUAGE={$lang}");
-        setlocale(LC_ALL, $lang);
+        setlocale(LC_ALL, $lang . '.UTF-8');
         Locale::setDefault($lang);
         bindtextdomain($domain, 'data/cache/locale');
         bind_textdomain_codeset($domain, 'UTF-8');
