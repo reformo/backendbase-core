@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\Middleware;
 
+use Mezzio\Session\SessionInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -31,6 +32,17 @@ class TemplateDefaultsMiddleware implements MiddlewareInterface
             'baseUrl',
             $request->getAttribute('base-url')
         );
+        /**
+         * @var $session SessionInterface;
+         */
+        $session = $request->getAttribute('session');
+        $sessionData = $session->toArray();
+        $this->templateRenderer->addDefaultParam(
+            TemplateRendererInterface::TEMPLATE_ALL,
+            'sessionData',
+            $sessionData
+        );
+
 
         $request = $request->withAttribute('cdn-url', $this->config['app']['cdn-url']);
 
