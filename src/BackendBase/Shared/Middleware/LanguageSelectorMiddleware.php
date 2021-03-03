@@ -82,11 +82,11 @@ final class LanguageSelectorMiddleware implements MiddlewareInterface
         }
 
         $domain .= '_' . $modifiedTime;
-        $lang    = $locale . '.UTF8';
+        $lang    = $locale.'_'.strtoupper($locale);
         putenv("LANG={$lang}");
         putenv("LANGUAGE={$lang}");
         setlocale(LC_ALL, $lang);
-        Locale::setDefault($locale . '.UTF-8');
+        Locale::setDefault($lang);
         bindtextdomain($domain, 'data/cache/locale');
         bind_textdomain_codeset($domain, 'UTF-8');
         textdomain($domain);
