@@ -40,7 +40,7 @@ class ConfigProvider implements MezzioHandlerConfigProvider
 
         $app->put('/module/{moduleName}/images', Handler\GenericUploadImage::class, 'module.upload_image');
 
-        $app->put('/files/new-form-data-file', Handler\UploadFileImageGeneral::class, 'module.upload_form_data_image_general');
+        $app->post('/files/new-form-data-file', Handler\UploadFileImageGeneral::class, 'module.upload_form_data_image_general');
         $app->put('/files/new-file', Handler\UploadImageGeneral::class, 'module.upload_image_general');
     }
 
