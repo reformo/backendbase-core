@@ -27,7 +27,7 @@ use function textdomain;
 use function trim;
 use function unlink;
 
-use const LC_ALL;
+use const LC_MESSAGES;
 
 final class LanguageSelectorMiddleware implements MiddlewareInterface
 {
