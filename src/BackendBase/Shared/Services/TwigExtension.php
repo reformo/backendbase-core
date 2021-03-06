@@ -35,6 +35,7 @@ class TwigExtension extends AbstractExtension implements GlobalsInterface, Exten
     {
         return [
             new TwigFunction('translate', [$this, 'translate']),
+            new TwigFunction('_', [$this, 'translate']),
             new TwigFunction('varDump', [$this, 'varDump']),
         ];
     }
