@@ -22,7 +22,7 @@ class GenericRepository
     protected EntityManagerInterface $entityManager;
     protected Connection $connection;
 
-    private ReJSON $reJSON;
+    protected ReJSON $reJSON;
 
     public function __construct(EntityManagerInterface $entityManager, Connection $connection, ReJSON $reJSON)
     {
