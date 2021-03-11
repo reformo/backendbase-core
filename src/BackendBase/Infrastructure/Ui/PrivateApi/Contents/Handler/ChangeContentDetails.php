@@ -101,15 +101,9 @@ class ChangeContentDetails implements RequestHandlerInterface
             $payload['body'][$key] = str_replace(
                 [
                     $this->config['app']['cdn-url'],
-                    'h2',
-                    'h3',
-                    'h4',
                 ],
                 [
                     '{cdnUrl}',
-                    'h1',
-                    'h2',
-                    'h3',
                 ],
                 $value
             );
