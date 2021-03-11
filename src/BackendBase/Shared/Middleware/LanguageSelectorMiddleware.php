@@ -57,7 +57,7 @@ final class LanguageSelectorMiddleware implements MiddlewareInterface
             }
         }
 
-        $this->setLocale($selectedLanguage, $request->getAttribute('moduleName'));
+        $this->setLocale($selectedLanguage, $selectedRegion, $request->getAttribute('moduleName'));
         $request = $request->withAttribute('selectedLanguage', $selectedLanguage)
             ->withAttribute('selectedRegion', $selectedRegion);
 
@@ -83,7 +83,7 @@ final class LanguageSelectorMiddleware implements MiddlewareInterface
         }
 
         $domain .= '_' . $modifiedTime;
-        $lang    = $locale . '_' . strtoupper($locale);
+        $lang    = $locale . '_' . strtoupper($locale === 'en' ?  'US' : $locale);
         putenv("LANGUAGE={$lang}");
         setlocale(LC_MESSAGES, $lang . '.UTF-8');
         Locale::setDefault($lang);
