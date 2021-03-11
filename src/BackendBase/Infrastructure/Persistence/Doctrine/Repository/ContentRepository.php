@@ -477,29 +477,25 @@ SQL;
     public function getMenuByCategory(string $category): array
     {
         $returnData = [];
-        $sql        = '
-            SELECT C.id,
-                   C.title,
-                   C.images,
-                   C.redirect
-              FROM public.contents C
-             WHERE C.category = :category 
-               AND C.is_deleted = 0
-               AND C.is_active = 1
-             ORDER BY C.sort_order DESC            
-        ';
+        $sql        = <<<SQL
+            SELECT CD.language, CD.region, CD.title, CD.slug, CD.body->>'redirect' as lang_redirect_url,C.cover_image_landscape, C.redirect_url, C.sort_order
+                FROM contents C
+                LEFT JOIN content_details CD ON CD.content_id=C.id
+             WHERE C.is_deleted = 0
+                 AND C.is_active = 1
+                 AND CD.is_active = 1
+                 AND C.publish_at <= NOW()
+                 AND (C.expire_at IS NULL OR C.expire_at >= NOW())
+                 AND C.category = (SELECT L.id from lookup_table L WHERE L.key=:category LIMIT 1)
+             ORDER BY C.sort_order DESC
+SQL;
 
         $statement = $this->connection->executeQuery($sql, ['category' => $category]);
         $data      = $statement->fetchAll();
-        if ($data === false) {
-            return $returnData;
+        if (empty($data)) {
+            return [];
         }
 
-        foreach ($data as $datum) {
-            $datum['images'] = json_decode($datum['images'], true, 512, JSON_THROW_ON_ERROR);
-            $returnData[]    = $datum;
-        }
-
-        return ArrayKeysCamelCaseConverter::convertArrayKeys($returnData);
+        return ArrayKeysCamelCaseConverter::convertArrayKeys($data);
     }
 }
