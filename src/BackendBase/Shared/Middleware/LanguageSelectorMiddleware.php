@@ -57,7 +57,7 @@ final class LanguageSelectorMiddleware implements MiddlewareInterface
             }
         }
 
-        $this->setLocale($selectedLanguage, $selectedRegion, $request->getAttribute('moduleName'));
+        $this->setLocale($selectedLanguage, $request->getAttribute('moduleName'));
         $request = $request->withAttribute('selectedLanguage', $selectedLanguage)
             ->withAttribute('selectedRegion', $selectedRegion);
 
