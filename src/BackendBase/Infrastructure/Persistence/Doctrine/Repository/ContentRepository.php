@@ -478,7 +478,7 @@ SQL;
     {
         $returnData = [];
         $sql        = <<<SQL
-            SELECT CD.language, CD.region, CD.title, CD.slug, 
+            SELECT C.id,CD.language, CD.region, CD.title, CD.slug, 
                    CD.body->>'redirect' as lang_redirect_url,
                    C.cover_image_landscape, C.redirect_url, C.sort_order, C.updated_at
                 FROM contents C
