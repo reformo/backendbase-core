@@ -489,7 +489,7 @@ SQL;
                  AND C.publish_at <= NOW()
                  AND (C.expire_at IS NULL OR C.expire_at >= NOW())
                  AND C.category = (SELECT L.id from lookup_table L WHERE L.key=:category LIMIT 1)
-             ORDER BY C.sort_order DESC
+             ORDER BY C.sort_order, CD.language DESC
 SQL;
 
         $statement = $this->connection->executeQuery($sql, ['category' => $category]);
