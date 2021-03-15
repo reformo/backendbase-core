@@ -478,7 +478,9 @@ SQL;
     {
         $returnData = [];
         $sql        = <<<SQL
-            SELECT CD.language, CD.region, CD.title, CD.slug, CD.body->>'redirect' as lang_redirect_url,C.cover_image_landscape, C.redirect_url, C.sort_order
+            SELECT CD.language, CD.region, CD.title, CD.slug, 
+                   CD.body->>'redirect' as lang_redirect_url,
+                   C.cover_image_landscape, C.redirect_url, C.sort_order, C.updated_at
                 FROM contents C
                 LEFT JOIN content_details CD ON CD.content_id=C.id
              WHERE C.is_deleted = 0
