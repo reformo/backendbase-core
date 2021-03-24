@@ -117,7 +117,17 @@ class ContentRepository
             SELECT CD.title, CD.slug, CD.keywords, CD.serp_title, CD.content_id, C.id, 
                    CD.description, CD.body, C.tags, C.robots, 
                    C.redirect_url, C.cover_image_landscape,
-                   C.template, LT.metadata->'itemData'->>'templateFile' as template_file, C.sort_order
+                   C.template, LT.metadata->'itemData'->>'templateFile' as template_file, C.sort_order,
+                   (SELECT C2.id FROM public.contents C2 WHERE C2.category = C.category  
+                       AND C2.is_active = 1
+                       AND C2.is_deleted = 0
+                       AND C2.publish_at <= :now
+                       AND (C2.expire_at >= :now OR C2.expire_at IS NULL) AND C2.sort_order > C.sort_order ORDER BY C2.sort_order ASC LIMIT 1 ) as next_id,
+                   (SELECT C2.id FROM public.contents C2 WHERE C2.category = C.category  
+                       AND C2.is_active = 1
+                       AND C2.is_deleted = 0
+                       AND C2.publish_at <= :now
+                       AND (C2.expire_at >= :now OR C2.expire_at IS NULL) AND C2.sort_order < C.sort_order ORDER BY C2.sort_order DESC LIMIT 1 ) as prev_id
                    
               FROM public.content_details CD
               LEFT JOIN contents C ON C.id=CD.content_id
