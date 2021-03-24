@@ -117,7 +117,7 @@ class ContentRepository
             SELECT CD.title, CD.slug, CD.keywords, CD.serp_title, CD.content_id, C.id, 
                    CD.description, CD.body, C.tags, C.robots, 
                    C.redirect_url, C.cover_image_landscape,
-                   C.template, LT.metadata->'itemData'->>'templateFile' as template_file
+                   C.template, LT.metadata->'itemData'->>'templateFile' as template_file, C.sort_order
                    
               FROM public.content_details CD
               LEFT JOIN contents C ON C.id=CD.content_id
