@@ -127,7 +127,7 @@ class ContentRepository
                        AND C3.is_active = 1
                        AND C3.is_deleted = 0
                        AND C3.publish_at <= :now
-                       AND (C3.expire_at >= :now OR C3.expire_at IS NULL) AND C3.sort_order < C.sort_order ORDER BY C3.sort_order ASC LIMIT 1 ) as next_id
+                       AND (C3.expire_at >= :now OR C3.expire_at IS NULL) AND C3.sort_order < C.sort_order ORDER BY C3.sort_order DESC LIMIT 1 ) as next_id
                    
               FROM public.content_details CD
               LEFT JOIN contents C ON C.id=CD.content_id
