@@ -6,6 +6,8 @@ namespace BackendBase\PublicWeb\Forms;
 
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\FormData;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
+use BackendBase\Shared\Services\FlashMessages;
+use BackendBase\Shared\Services\PayloadSanitizer;
 use DateTimeImmutable;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Mezzio\Csrf\CsrfMiddleware;
@@ -33,17 +35,13 @@ class SaveFormData implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $guard             = $request->getAttribute(CsrfMiddleware::GUARD_ATTRIBUTE);
-        $requestParameters = $request->getParsedBody();
+        $requestParameters = PayloadSanitizer::sanitize($request->getParsedBody());
+        if (empty($requestParameters['message'])) {
+            $flash = $request->getAttribute(FlashMessages::FLASH_MESSAGE_ATTRIBUTE);
+            $flash->flash('contactFormData', $requestParameters);
+            return new RedirectResponse($this->urlHelper->generate() . '?r=error', 302);
 
-        $token = $requestParameters['__csrf'] ?? '';
-        if (! $guard->validateToken($token)) {
-            $uri = $this->urlHelper->generate() . '?r=invalid-csrf-token' .
-                '&m=' . urlencode('CSRF Failed: CSRF token missing or incorrect') . '&' . http_build_query($requestParameters);
-
-            return new RedirectResponse($uri, 302);
         }
-
         $formData = new FormData();
         $formData->setId(Uuid::uuid4()->toString());
         $formData->setFormId($requestParameters['form_id']);
