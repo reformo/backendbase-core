@@ -102,9 +102,7 @@ class ChangeContentDetails implements RequestHandlerInterface
                 [
                     $this->config['app']['cdn-url'],
                 ],
-                [
-                    '{cdnUrl}',
-                ],
+                ['{cdnUrl}'],
                 $value
             );
         }

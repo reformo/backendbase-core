@@ -10,8 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Selami\Stdlib\Git\Version;
-use PSR7Sessions\Storageless\Http\SessionMiddleware;
-use PSR7Sessions\Storageless\Session\SessionInterface;
+
 use function stripos;
 
 class TemplateDefaultsMiddleware implements MiddlewareInterface
@@ -35,7 +34,7 @@ class TemplateDefaultsMiddleware implements MiddlewareInterface
         /**
          * @var $session SessionInterface;
          */
-        $session     = $request->getAttribute('session');
+        $session = $request->getAttribute('session');
 
         $sessionData = $session->jsonSerialize();
         $this->templateRenderer->addDefaultParam(
@@ -57,10 +56,10 @@ class TemplateDefaultsMiddleware implements MiddlewareInterface
             'isWebP',
             $isWebP
         );
-        $config                     = $this->config;
-        $config['selectedLanguage'] = $request->getAttribute('selectedLanguage');
-        $config['selectedRegion']   = $request->getAttribute('selectedRegion');
-        $config['appData']          = $request->getAttribute('appData');
+        $config                      = $this->config;
+        $config['selectedLanguage']  = $request->getAttribute('selectedLanguage');
+        $config['selectedRegion']    = $request->getAttribute('selectedRegion');
+        $config['appData']           = $request->getAttribute('appData');
         $config['requestAttributes'] = $request->getAttributes();
 
         $this->templateRenderer->addDefaultParam(

@@ -10,15 +10,11 @@ use BackendBase\Shared\Services\FlashMessages;
 use BackendBase\Shared\Services\PayloadSanitizer;
 use DateTimeImmutable;
 use Laminas\Diactoros\Response\RedirectResponse;
-use Mezzio\Csrf\CsrfMiddleware;
 use Mezzio\Helper\ServerUrlHelper;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
-
-use function http_build_query;
-use function urlencode;
 
 class SaveFormData implements RequestHandlerInterface
 {
@@ -39,9 +35,10 @@ class SaveFormData implements RequestHandlerInterface
         if (empty($requestParameters['message'])) {
             $flash = $request->getAttribute(FlashMessages::FLASH_MESSAGE_ATTRIBUTE);
             $flash->flash('contactFormData', $requestParameters);
-            return new RedirectResponse($this->urlHelper->generate() . '?r=error', 302);
 
+            return new RedirectResponse($this->urlHelper->generate() . '?r=error', 302);
         }
+
         $formData = new FormData();
         $formData->setId(Uuid::uuid4()->toString());
         $formData->setFormId($requestParameters['form_id']);
