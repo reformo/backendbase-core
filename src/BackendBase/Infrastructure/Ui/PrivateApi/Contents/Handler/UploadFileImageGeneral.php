@@ -10,6 +10,7 @@ use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\FileRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
 use BackendBase\Shared\Services\MessageBus\Interfaces\CommandBus;
+use BackendBase\Shared\Services\WebpConverter;
 use Cocur\Slugify\Slugify;
 use Gumlet\ImageResize;
 use ImageOptimizer\OptimizerFactory;
@@ -22,7 +23,6 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
 use Ulid\Ulid;
-use WebPConvert\WebPConvert;
 
 use function basename;
 use function date;
@@ -130,33 +130,8 @@ class UploadFileImageGeneral implements RequestHandlerInterface
 
         $image->save($mobileFile);
 
-        WebPConvert::convert('data/storage/' . $filePath, 'data/storage/' . $filePath . '.webp', [
-            'png' => [
-                'encoding' => 'auto',    /* Try both lossy and lossless and pick smallest */
-                'near-lossless' => 60,   /* The level of near-lossless image preprocessing (when trying lossless) */
-                'quality' => 90,         /* Quality when trying lossy. It is set high because pngs is often selected to ensure high quality */
-            ],
-            'jpeg' => [
-                'encoding' => 'auto',     /* If you are worried about the longer conversion time, you could set it to "lossy" instead (lossy will often be smaller than lossless for jpegs) */
-                'quality' => 'auto',      /* Set to same as jpeg (requires imagick or gmagick extension, not necessarily compiled with webp) */
-                'max-quality' => 85,      /* Only relevant if quality is set to "auto" */
-                'default-quality' => 75,  /* Fallback quality if quality detection isnt working */
-            ],
-        ]);
-
-        WebPConvert::convert($mobileFile, $mobileFile . '.webp', [
-            'png' => [
-                'encoding' => 'auto',    /* Try both lossy and lossless and pick smallest */
-                'near-lossless' => 60,   /* The level of near-lossless image preprocessing (when trying lossless) */
-                'quality' => 90,         /* Quality when trying lossy. It is set high because pngs is often selected to ensure high quality */
-            ],
-            'jpeg' => [
-                'encoding' => 'auto',     /* If you are worried about the longer conversion time, you could set it to "lossy" instead (lossy will often be smaller than lossless for jpegs) */
-                'quality' => 'auto',      /* Set to same as jpeg (requires imagick or gmagick extension, not necessarily compiled with webp) */
-                'max-quality' => 85,      /* Only relevant if quality is set to "auto" */
-                'default-quality' => 75,  /* Fallback quality if quality detection isnt working */
-            ],
-        ]);
+        WebpConverter::convert('data/storage/' . $filePath);
+        WebpConverter::convert($mobileFile);
 
         $factory   = new OptimizerFactory(['ignore_errors' => false]);
         $optimizer = $factory->get();

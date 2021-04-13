@@ -15,7 +15,7 @@ final class TaxIdendityTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInit() : void
+    public function shouldSuccessfullyInit(): void
     {
         $privateTaxId   = new PrivateTaxId(GeneratedValues::PRIVATE_TAX_ID_EXAMPLE);
         $corporateTaxId = new CorporateTaxId(GeneratedValues::CORPORATE_TAX_ID_VALID_EXAMPLE);

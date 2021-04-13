@@ -13,7 +13,7 @@ final class EmailTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInit() : void
+    public function shouldSuccessfullyInit(): void
     {
         $email = new Email('mehmet@mkorkmaz.com');
         $this->assertSame('mehmet@mkorkmaz.com', $email->getEmail());
@@ -22,7 +22,7 @@ final class EmailTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidEmail() : void
+    public function shouldFailForInvalidEmail(): void
     {
         $this->expectException(InvalidEmailAddress::class);
         new Email('mehmet@mkorkmaz..com');

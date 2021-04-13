@@ -15,7 +15,7 @@ final class LocalizedDatetimeTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInit() : void
+    public function shouldSuccessfullyInit(): void
     {
         $datetime      = '2017-11-06 23:47:00';
         $timezone      = 'Europe/Istanbul';
@@ -41,7 +41,7 @@ final class LocalizedDatetimeTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailInvalidDatetimeFormat() : void
+    public function shouldFailInvalidDatetimeFormat(): void
     {
         $this->expectException(InvalidDateTimeProvided::class);
         LocalizedDateTime::fromString('1991-09-24 00:00');

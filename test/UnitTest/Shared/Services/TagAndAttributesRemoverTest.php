@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace UnitTest\Shared\Services;
 
-use PHPUnit\Framework\TestCase;
 use BackendBase\Shared\Services\TagAndAttributeRemover;
+use PHPUnit\Framework\TestCase;
+
 use function trim;
 
 final class TagAndAttributesRemoverTest extends TestCase
@@ -13,7 +14,7 @@ final class TagAndAttributesRemoverTest extends TestCase
     /**
      * @test
      */
-    public function shouldRemoveTagsAndAttributesSuccessfully() : void
+    public function shouldRemoveTagsAndAttributesSuccessfully(): void
     {
         $html                     = <<<HTML
             <div><a href="https://reformo.net" target="_blank"><img src="http://url.to.file.which/not.exist" onerror=alert(document.cookie);></a></div>
@@ -26,7 +27,7 @@ HTML;
     /**
      * @test
      */
-    public function shouldRemoveTagsSuccessfully() : void
+    public function shouldRemoveTagsSuccessfully(): void
     {
         $html                     = <<<HTML
             <div><a href="https://reformo.net" target="_blank"><img src="http://url.to.file.which/not.exist" onerror=alert(document.cookie);></a></div>
@@ -39,7 +40,7 @@ HTML;
     /**
      * @test
      */
-    public function shouldRemoveAttributesWithHarmfulValuesSuccessfully() : void
+    public function shouldRemoveAttributesWithHarmfulValuesSuccessfully(): void
     {
         $html                     = <<<HTML
             <div class="div-class"><a href="https://reformo.net" target="_blank"><img src="javascript:alert('XSS');" onerror=alert(document.cookie); style="color:red"></a></div>

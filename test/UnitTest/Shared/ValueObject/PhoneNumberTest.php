@@ -13,7 +13,7 @@ final class PhoneNumberTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInit() : void
+    public function shouldSuccessfullyInit(): void
     {
         $phoneNumber = new PhoneNumber('90', '555', '555  55 55');
         $this->assertSame('90', $phoneNumber->countryCode());
@@ -25,7 +25,7 @@ final class PhoneNumberTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInitUsingNamedConstructor() : void
+    public function shouldSuccessfullyInitUsingNamedConstructor(): void
     {
         $phoneNumber = PhoneNumber::fromString('+90 555 555 5555');
         $this->assertSame('90', $phoneNumber->countryCode());
@@ -37,7 +37,7 @@ final class PhoneNumberTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidPhoneNumberWithNoPlusForTheFirstCharacter() : void
+    public function shouldFailForInvalidPhoneNumberWithNoPlusForTheFirstCharacter(): void
     {
         $this->expectException(InvalidPhoneNumber::class);
         PhoneNumber::fromString('90 555 555 5555');
@@ -46,7 +46,7 @@ final class PhoneNumberTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidPhoneNumberWithInvalidPhoneNumberLength() : void
+    public function shouldFailForInvalidPhoneNumberWithInvalidPhoneNumberLength(): void
     {
         $this->expectException(InvalidPhoneNumber::class);
         PhoneNumber::fromString('+905555');
@@ -55,7 +55,7 @@ final class PhoneNumberTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidPhoneNumberWithInvalidAreaCodeLength() : void
+    public function shouldFailForInvalidPhoneNumberWithInvalidAreaCodeLength(): void
     {
         $this->expectException(InvalidPhoneNumber::class);
         PhoneNumber::fromString('+905555555');
@@ -64,7 +64,7 @@ final class PhoneNumberTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidPhoneNumberWithInvalidCountryCodeLength() : void
+    public function shouldFailForInvalidPhoneNumberWithInvalidCountryCodeLength(): void
     {
         $this->expectException(InvalidPhoneNumber::class);
         PhoneNumber::fromString('+5555555555');
@@ -73,7 +73,7 @@ final class PhoneNumberTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidPhoneNumberWithInvalidPhoneNumberCharacter() : void
+    public function shouldFailForInvalidPhoneNumberWithInvalidPhoneNumberCharacter(): void
     {
         $this->expectException(InvalidPhoneNumber::class);
         PhoneNumber::fromString('+90555555555a');
@@ -82,7 +82,7 @@ final class PhoneNumberTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidPhoneNumberWithInvalidAreaCodeCharacter() : void
+    public function shouldFailForInvalidPhoneNumberWithInvalidAreaCodeCharacter(): void
     {
         $this->expectException(InvalidPhoneNumber::class);
         PhoneNumber::fromString('+90a555555555');
@@ -91,7 +91,7 @@ final class PhoneNumberTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidPhoneNumberWithInvalidCountryCodeCharacter() : void
+    public function shouldFailForInvalidPhoneNumberWithInvalidCountryCodeCharacter(): void
     {
         $this->expectException(InvalidPhoneNumber::class);
         PhoneNumber::fromString('+9a5555555555');

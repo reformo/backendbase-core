@@ -14,7 +14,7 @@ final class CorporateTaxIdTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInit() : void
+    public function shouldSuccessfullyInit(): void
     {
         $corporateTaxId = new CorporateTaxId(GeneratedValues::CORPORATE_TAX_ID_VALID_EXAMPLE);
         $this->assertSame(GeneratedValues::CORPORATE_TAX_ID_VALID_EXAMPLE, $corporateTaxId->taxId());
@@ -23,7 +23,7 @@ final class CorporateTaxIdTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidLengthTaxId() : void
+    public function shouldFailForInvalidLengthTaxId(): void
     {
         $this->expectException(InvalidCorporateTaxIdNumber::class);
         $this->expectExceptionMessage(
@@ -35,7 +35,7 @@ final class CorporateTaxIdTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidChecksum() : void
+    public function shouldFailForInvalidChecksum(): void
     {
         $this->expectException(InvalidCorporateTaxIdNumber::class);
         $this->expectExceptionMessage(

@@ -9,3 +9,4 @@ webroots/
 .env
 src/DemoApp/
 src/templates/
+test/Fixtures/*.webp

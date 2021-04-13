@@ -14,7 +14,7 @@ final class PersonTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInit() : void
+    public function shouldSuccessfullyInit(): void
     {
         $person = Person::fromFullName('Theodor Seuss Ted Geisel');
         $this->assertSame('Theodor Seuss Ted', $person->firstName());
@@ -25,7 +25,7 @@ final class PersonTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidFirstName() : void
+    public function shouldFailForInvalidFirstName(): void
     {
         $this->expectException(InvalidPersonFirstName::class);
         Person::fromFullName('Seuss');
@@ -34,7 +34,7 @@ final class PersonTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidLastName() : void
+    public function shouldFailForInvalidLastName(): void
     {
         $this->expectException(InvalidPersonFamilyName::class);
         Person::fromFullName('Seuss ');

@@ -12,6 +12,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Redis;
 
 use function count;
+use function explode;
+use function in_array;
 use function json_decode;
 use function json_encode;
 use function md5;
@@ -25,14 +27,20 @@ class CacheAndServePagesMiddleware implements MiddlewareInterface
 
     public function __construct(Redis $redis, array $config)
     {
-        $this->redis = $redis;
+        $this->redis  = $redis;
         $this->config = $config;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if ($request->getMethod() === 'GET' && count($request->getQueryParams()) === 0) {
-            $key   = 'backendbase-page-' . md5($request->getUri()->getPath());
+        $path      = $request->getUri()->getPath();
+        $pathParts = explode('/', $path);
+        if (
+            $request->getMethod() === 'GET'
+            && ! in_array($pathParts[1], $this->config['app']['page-cache-exclude'] ?? [])
+            && count($request->getQueryParams()) === 0
+        ) {
+            $key   = 'backendbase-page-' . md5($path);
             $cache = $this->redis->get($key);
             if (empty($cache)) {
                 $response = $handler->handle($request);

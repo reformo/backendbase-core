@@ -13,7 +13,7 @@ final class FileTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInit() : void
+    public function shouldSuccessfullyInit(): void
     {
         $filePath = 'storage/temp/clover.xml';
 

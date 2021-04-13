@@ -14,7 +14,7 @@ final class ContactInfoTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInit() : void
+    public function shouldSuccessfullyInit(): void
     {
         $contactInfo = new ContactInfo(
             new Email('mehmet@mkorkmaz.com'),

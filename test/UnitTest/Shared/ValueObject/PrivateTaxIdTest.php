@@ -14,7 +14,7 @@ final class PrivateTaxIdTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInit() : void
+    public function shouldSuccessfullyInit(): void
     {
         $privateTaxId = new PrivateTaxId(GeneratedValues::PRIVATE_TAX_ID_EXAMPLE);
         $this->assertSame(GeneratedValues::PRIVATE_TAX_ID_EXAMPLE, $privateTaxId->taxId());
@@ -23,7 +23,7 @@ final class PrivateTaxIdTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForTaxIdStartsWithZero() : void
+    public function shouldFailForTaxIdStartsWithZero(): void
     {
         $this->expectException(InvalidPrivateTaxIdNumber::class);
         $this->expectExceptionMessage('Private tax id cannot be started with zero(0): 01234567890');
@@ -33,7 +33,7 @@ final class PrivateTaxIdTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidLengthTaxId() : void
+    public function shouldFailForInvalidLengthTaxId(): void
     {
         $this->expectException(InvalidPrivateTaxIdNumber::class);
         $this->expectExceptionMessage('Private tax id length must be 11: 1234567891');
@@ -43,7 +43,7 @@ final class PrivateTaxIdTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidChecksum2() : void
+    public function shouldFailForInvalidChecksum2(): void
     {
         $this->expectException(InvalidPrivateTaxIdNumber::class);
         $this->expectExceptionMessage(
@@ -56,7 +56,7 @@ final class PrivateTaxIdTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidChecksum1() : void
+    public function shouldFailForInvalidChecksum1(): void
     {
         $this->expectException(InvalidPrivateTaxIdNumber::class);
         $this->expectExceptionMessage(

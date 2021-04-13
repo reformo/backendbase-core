@@ -18,7 +18,7 @@ final class CompanyInfoTest extends TestCase
     /**
      * @test
      */
-    public function shouldSuccessfullyInit() : void
+    public function shouldSuccessfullyInit(): void
     {
         $taxIdentity = TaxIdentity::fromCorporateCompany(
             new CorporateTaxId(GeneratedValues::CORPORATE_TAX_ID_VALID_EXAMPLE),
@@ -43,7 +43,7 @@ final class CompanyInfoTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidLegalName() : void
+    public function shouldFailForInvalidLegalName(): void
     {
         $taxIdentity = TaxIdentity::fromCorporateCompany(
             new CorporateTaxId(GeneratedValues::CORPORATE_TAX_ID_VALID_EXAMPLE),
@@ -62,7 +62,7 @@ final class CompanyInfoTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidShortName() : void
+    public function shouldFailForInvalidShortName(): void
     {
         $taxIdentity = TaxIdentity::fromCorporateCompany(
             new CorporateTaxId(GeneratedValues::CORPORATE_TAX_ID_VALID_EXAMPLE),
@@ -81,7 +81,7 @@ final class CompanyInfoTest extends TestCase
     /**
      * @test
      */
-    public function shouldFailForInvalidCompanyType() : void
+    public function shouldFailForInvalidCompanyType(): void
     {
         $taxIdentity = TaxIdentity::fromCorporateCompany(
             new CorporateTaxId(GeneratedValues::CORPORATE_TAX_ID_VALID_EXAMPLE),
