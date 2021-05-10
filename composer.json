@@ -97,7 +97,7 @@
         "robinvdvleuten/ulid": "^v5.0.0",
         "scienta/doctrine-json-functions": "^4.3.0",
         "selami/console": "^2.2",
-        "selami/stdlib": "2.2",
+        "selami/stdlib": "^2.2.1",
         "vlucas/phpdotenv": "^v3.6.8",
         "webmozart/assert": "^1.10.0",
         "xantios/mimey": "^v2.1.1"
