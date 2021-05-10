@@ -10,6 +10,7 @@ use BackendBase\Shared\Middleware\SessionMiddleware;
 use BackendBase\Shared\Services\FlashMessages;
 use BackendBase\Shared\Services\PayloadSanitizer;
 use DateTimeImmutable;
+use Laminas\Diactoros\Response\JsonResponse;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Mezzio\Helper\ServerUrlHelper;
 use Psr\Http\Message\ResponseInterface;
@@ -39,8 +40,9 @@ class SaveFormData implements RequestHandlerInterface
          */
         $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
         $captcha = $session->get('__captcha');
+        $requestCaptcha = $requestParameters['__captcha'] ?? null;
         $session->remove('__captcha');
-        if (!empty($captcha) && $captcha !== $requestParameters['__captcha']??null) {
+        if (empty($captcha) || empty($requestCaptcha) || $captcha !== $requestCaptcha) {
             $flash = $request->getAttribute(FlashMessages::FLASH_MESSAGE_ATTRIBUTE);
             $flash->flash('formData', $requestParameters);
             return new RedirectResponse($this->urlHelper->generate() . '?r=error&m=captcha', 302);
