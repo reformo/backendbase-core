@@ -58,6 +58,10 @@ class GenericRepository
         $this->entityManager->persist($entity);
     }
 
+    public function addQueueToRemove($entity): void
+    {
+        $this->entityManager->remove($entity);
+    }
     public function flush(): void
     {
         $this->entityManager->flush();
