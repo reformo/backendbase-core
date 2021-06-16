@@ -114,7 +114,7 @@ class GenericRepository
         }
 
         if (array_key_exists('limit', $pagination)) {
-            $offset            = 'LIMIT :limit';
+            $limit            = 'LIMIT :limit';
             $criteria['limit'] = $pagination['limit'];
         }
 
@@ -142,6 +142,9 @@ SQL;
                 }
 
                 $datum[$mappingData['columnName']] = json_decode($datum[$mappingData['columnName']], true, 512, JSON_THROW_ON_ERROR);
+            }
+            if (array_key_exists('passwordHash', $datum)) {
+                unset($datum['passwordHash']);
             }
 
             $returnData[] = $datum;
