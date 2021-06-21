@@ -104,6 +104,7 @@
     },
     "require-dev": {
         "behat/behat": "^v3.8.1",
+        "damianopetrungaro/php-commitizen": "^0.2.0",
         "doctrine/coding-standard": "^8.2.1",
         "filp/whoops": "^2.13.0",
         "laminas/laminas-development-mode": "^3.3.0",
