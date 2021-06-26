@@ -54,7 +54,9 @@
         "ext-sodium": "*",
         "akrabat/ip-address-middleware": "^2.0",
         "cocur/slugify": "^v4.0.0",
+        "doctrine/cache": "^1.11.3",
         "doctrine/collections": "^1.6.7",
+        "doctrine/common": "^3.1.2",
         "doctrine/dbal": "^2.13.2",
         "doctrine/orm": "^2.9.3",
         "gettext/gettext": "^v5.5.4",
@@ -146,10 +148,10 @@
         "post-install-cmd": [
             "composer dumpautoload -o"
         ],
-        "commit": "vendor/bin/php-commitizen commit config/commitizen.php",
+        "commit": "vendor/bin/php-commitizen commit commitizen.php",
         "commit-all": [
             "git add -u",
-            "vendor/bin/php-commitizen commit config/commitizen.php"
+            "vendor/bin/php-commitizen commit commitizen.php"
         ],
         "development-disable": "laminas-development-mode disable",
         "development-enable": "laminas-development-mode enable",
