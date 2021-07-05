@@ -113,8 +113,9 @@ class ContentRepository
 
     public function getContentBySlug(string $slug, string $language, string $region): array
     {
+        $otherLanguage = $language === 'tr' ?  'en' : 'tr';
         $sql         = <<<SQL
-            SELECT CD.title, CD.slug, CD.keywords, CD.serp_title, CD.content_id, C.id, 
+            SELECT CD.title, CD.slug, CD2.slug as other_lang_slug, CD.keywords, CD.serp_title, CD.content_id, C.id, 
                    CD.description, CD.body, C.tags, C.robots, 
                    C.redirect_url, C.cover_image_landscape,
                    C.template, LT.metadata->'itemData'->>'templateFile' as template_file, C.sort_order,
@@ -130,6 +131,7 @@ class ContentRepository
                        AND (C3.expire_at >= :now OR C3.expire_at IS NULL) AND C3.sort_order < C.sort_order ORDER BY C3.sort_order DESC LIMIT 1 ) as next_id
                    
               FROM public.content_details CD
+              LEFT JOIN public.content_details CD2 ON CD2.content_id = CD.content_id AND CD2.language = :otherLanguage
               LEFT JOIN contents C ON C.id=CD.content_id
               LEFT JOIN lookup_table LT ON LT.key=C.template
              WHERE CD.slug = :slug
@@ -143,6 +145,7 @@ SQL;
         $statement   = $this->connection->executeQuery($sql, [
             'slug' => $slug,
             'language' => $language,
+            'otherLanguage' => $otherLanguage,
             'region' => $region,
             'now' => (new DateTimeImmutable())->format(DATE_ATOM),
         ]);
@@ -150,7 +153,6 @@ SQL;
         if ($contentData === false) {
             throw ContentNotFound::create('Content not found. It may be deleted.');
         }
-
         $contentData['body'] = json_decode($contentData['body'], true, 512, JSON_THROW_ON_ERROR);
         $contentData['tags'] = json_decode($contentData['tags'], true, 512, JSON_THROW_ON_ERROR);
         unset($contentData['is_deleted']);
