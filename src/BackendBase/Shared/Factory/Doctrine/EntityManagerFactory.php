@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\Factory\Doctrine;
 
-use Doctrine\Common\Cache\ApcuCache;
-use Doctrine\Common\Cache\ArrayCache;
+use Symfony\Component\Cache\Adapter\ArrayAdapter as ArrayCache;
+use Symfony\Component\Cache\Adapter\ApcuAdapter as ApcuCache;
+use Doctrine\Common\Cache\Psr6\CacheAdapter;
+use Doctrine\Common\Cache\Psr6\DoctrineProvider;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
@@ -21,9 +23,9 @@ final class EntityManagerFactory implements FactoryInterface
     {
         $appConfig = $container->get('config');
         if ($appConfig['debug'] === true) {
-            $cache = new ArrayCache();
+            $cache = DoctrineProvider::wrap(new ArrayCache());
         } else {
-            $cache = new ApcuCache();
+            $cache = DoctrineProvider::wrap(new ApcuCache());
         }
 
         Type::addType('uuid', UuidType::class);
@@ -38,6 +40,7 @@ final class EntityManagerFactory implements FactoryInterface
         $config->addCustomStringFunction(DqlFunctions\JsonGetText::FUNCTION_NAME, DqlFunctions\JsonGetText::class);
         $config->addCustomStringFunction(DqlFunctions\JsonGet::FUNCTION_NAME, DqlFunctions\JsonGet::class);
         $config->setMetadataDriverImpl($driverImpl);
+        $config->setResultCacheImpl($cache);
 
         return EntityManager::create($client, $config);
     }
