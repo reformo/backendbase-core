@@ -9,7 +9,7 @@ use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Domain\User\Interfaces\UserRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\User;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
-use BackendBase\Shared\Services\PayloadSanitizer;
+use Selami\Stdlib\Arrays\PayloadSanitizer;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;

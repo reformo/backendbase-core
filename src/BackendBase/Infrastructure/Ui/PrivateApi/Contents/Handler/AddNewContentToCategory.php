@@ -10,7 +10,7 @@ use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Content;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\ContentDetail;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
-use BackendBase\Shared\Services\PayloadSanitizer;
+use Selami\Stdlib\Arrays\PayloadSanitizer;
 use Cocur\Slugify\Slugify;
 use DateTimeImmutable;
 use Laminas\Diactoros\Response\EmptyResponse;

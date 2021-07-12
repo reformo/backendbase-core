@@ -8,7 +8,7 @@ use BackendBase\Domain\Collections\Command\UpdateCollectionItem as UpdateCollect
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Shared\Services\MessageBus\Interfaces\CommandBus;
-use BackendBase\Shared\Services\PayloadSanitizer;
+use Selami\Stdlib\Arrays\PayloadSanitizer;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;

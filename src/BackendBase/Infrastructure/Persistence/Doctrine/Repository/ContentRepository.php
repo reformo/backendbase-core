@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Repository;
 
 use BackendBase\Domain\Contents\Exception\ContentNotFound;
-use BackendBase\Shared\Services\ArrayKeysCamelCaseConverter;
+use Selami\Stdlib\Arrays\ArrayKeysCamelCaseConverter;
 use Carbon\CarbonImmutable;
 use Cocur\Slugify\Slugify;
 use DateTimeImmutable;

@@ -20,7 +20,14 @@
         "commandbus",
         "doctrine"
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "config": {
+        "classmap-authoritative": true,
+        "discard-changes": true,
+        "optimize-autoloader": true,
+        "prepend-autoloader": true,
+        "process-timeout": 5000,
         "sort-packages": true
     },
     "extra": {
@@ -100,7 +107,7 @@
         "robinvdvleuten/ulid": "^v5.0.0",
         "scienta/doctrine-json-functions": "^4.3.0",
         "selami/console": "^2.2",
-        "selami/stdlib": "^2.2.2",
+        "selami/stdlib": "^2.3.1",
         "symfony/cache": "^v5.3.3",
         "vlucas/phpdotenv": "^v3.6.8",
         "webmozart/assert": "^1.10.0",

@@ -8,7 +8,7 @@ use BackendBase\Infrastructure\Persistence\Doctrine\Entity\FormData;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
 use BackendBase\Shared\Middleware\SessionMiddleware;
 use BackendBase\Shared\Services\FlashMessages;
-use BackendBase\Shared\Services\PayloadSanitizer;
+use Selami\Stdlib\Arrays\PayloadSanitizer;
 use DateTimeImmutable;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Mezzio\Helper\ServerUrlHelper;

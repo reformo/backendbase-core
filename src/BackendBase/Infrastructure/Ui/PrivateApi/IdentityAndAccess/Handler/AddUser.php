@@ -10,7 +10,7 @@ use BackendBase\Domain\User\Exception\UserAlreadyExists;
 use BackendBase\Domain\User\Interfaces\UserRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\User;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
-use BackendBase\Shared\Services\PayloadSanitizer;
+use Selami\Stdlib\Arrays\PayloadSanitizer;
 use BackendBase\Shared\ValueObject\Email;
 use DateTimeImmutable;
 use Laminas\Diactoros\Response\EmptyResponse;
