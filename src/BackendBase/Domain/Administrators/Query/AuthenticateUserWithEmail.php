@@ -14,7 +14,7 @@ class AuthenticateUserWithEmail implements Query
 
     public function __construct(string $email, string $password)
     {
-        $this->email = $email;
+        $this->email    = $email;
         $this->password = $password;
     }
 
@@ -28,8 +28,7 @@ class AuthenticateUserWithEmail implements Query
         return $this->password;
     }
 
-
-    public function getQueryName() :string
+    public function getQueryName(): string
     {
         return self::QUERY_NAME;
     }

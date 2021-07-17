@@ -18,21 +18,22 @@ class AuthenticateUserWithEmailHandler implements QueryHandler
 
     public function __construct(GetUserByEmail $getUserByEmailQuery, GetPermissionsListByRole $getPermissionsListByRoleQuery)
     {
-        $this->getUserByEmailQuery = $getUserByEmailQuery;
+        $this->getUserByEmailQuery           = $getUserByEmailQuery;
         $this->getPermissionsListByRoleQuery = $getPermissionsListByRoleQuery;
     }
 
     public function __invoke(AuthenticateUserWithEmail $query): User
     {
         $parameters = ['email' => $query->email()];
-        $user = $this->getUserByEmailQuery->query($parameters);
+        $user       = $this->getUserByEmailQuery->query($parameters);
         $this->verifyPassword($query->password(), $user->passwordHash(), self::CALLABLE_VERIFY_FUNCTION);
         $user->unset('passwordHash', 'passwordHashAlgo');
         $user->setPermissions($this->getPermissionsListByRoleQuery->query(['roleType' => $user->role()]));
+
         return $user;
     }
 
-    private function verifyPassword(string $password, string $passwordHash) : void
+    private function verifyPassword(string $password, string $passwordHash): void
     {
         $verifyPasswordFunction = self::CALLABLE_VERIFY_FUNCTION;
         if ($verifyPasswordFunction($password, $passwordHash) === false) {

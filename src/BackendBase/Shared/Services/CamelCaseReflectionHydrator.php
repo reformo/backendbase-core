@@ -1,15 +1,20 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BackendBase\Shared\Services;
 
+use Carbon\CarbonImmutable;
+use DateTimeImmutable;
 use Laminas\Hydrator\AbstractHydrator;
 use ReflectionClass;
 use ReflectionProperty;
 use Selami\Stdlib\CaseConverter;
-use Carbon\CarbonImmutable;
 
 use function get_class;
+use function in_array;
+
+use const DATE_ATOM;
 
 class CamelCaseReflectionHydrator extends AbstractHydrator
 {
@@ -27,18 +32,19 @@ class CamelCaseReflectionHydrator extends AbstractHydrator
      */
     public function extract(object $object): array
     {
-        $result = [];
+        $result              = [];
         $unsetPropertyBucket = $object->getUnsetPropertyBucket();
         foreach (self::getReflProperties($object) as $property) {
             $propertyName = $this->extractName($property->getName(), $object);
             if (in_array($propertyName, $unsetPropertyBucket, true)) {
                 continue;
             }
+
             if (! $this->getCompositeFilter()->filter($propertyName)) {
                 continue;
             }
 
-            $value                 = $property->getType()->getName() === \DateTimeImmutable::class ? $property->getValue($object)->format(DATE_ATOM): $property->getValue($object);
+            $value                 = $property->getType()->getName() === DateTimeImmutable::class ? $property->getValue($object)->format(DATE_ATOM) : $property->getValue($object);
             $result[$propertyName] = $this->extractValue($propertyName, $value, $object);
         }
 
@@ -50,24 +56,28 @@ class CamelCaseReflectionHydrator extends AbstractHydrator
      *
      * {@inheritDoc}
      */
-    public function hydrate(array $data, object $object) : object
+    public function hydrate(array $data, object $object): object
     {
         $reflProperties = self::getReflProperties($object);
         foreach ($data as $key => $value) {
-            $key          = CaseConverter::toCamelCase($key);
+            $key  = CaseConverter::toCamelCase($key);
             $name = $this->hydrateName($key, $data);
-            if (isset($reflProperties[$name])) {
-                $reflProperties[$name]->setValue($object, $this->hydrateValue($name, $this->getValueByType($reflProperties[$name], $value), $data));
+            if (! isset($reflProperties[$name])) {
+                continue;
             }
+
+            $reflProperties[$name]->setValue($object, $this->hydrateValue($name, $this->getValueByType($reflProperties[$name], $value), $data));
         }
+
         return $object;
     }
 
     public function getValueByType(ReflectionProperty $property, $value)
     {
         switch ($property->getType()) {
-            case \DateTimeImmutable::class:
+            case DateTimeImmutable::class:
                 return (new CarbonImmutable($value))->toDateTimeImmutable();
+
             default:
                 return $value;
         }

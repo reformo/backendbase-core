@@ -14,9 +14,7 @@ class QueryBusFactory implements FactoryInterface
 {
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): QueryBusInterface
     {
-        $middlewareHandlers = [
-            new HandleMessageMiddleware(new ContainerAwareHandlersLocator($container))
-        ];
+        $middlewareHandlers = [new HandleMessageMiddleware(new ContainerAwareHandlersLocator($container))];
         $messengerQueryBus  = new MessageBus(
             $middlewareHandlers
         );

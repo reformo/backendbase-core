@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\CQRS;
 
+use BackendBase\Domain\Shared\Exception\ExecutionFailed;
 use BackendBase\Shared\CQRS\Interfaces\Command;
 use BackendBase\Shared\CQRS\Interfaces\CommandBus as CommandBusInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Throwable;
 
 final class CommandBus implements CommandBusInterface
 {
@@ -19,6 +22,12 @@ final class CommandBus implements CommandBusInterface
 
     public function dispatch(Command $message): void
     {
-        $this->commandBus->dispatch($message);
+        try {
+            $this->commandBus->dispatch($message);
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        } catch (Throwable $exception) {
+            throw ExecutionFailed::create($exception->getMessage());
+        }
     }
 }

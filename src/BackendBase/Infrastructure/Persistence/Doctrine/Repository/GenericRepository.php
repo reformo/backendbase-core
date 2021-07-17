@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Repository;
 
 use BackendBase\Shared\Persistence\Doctrine\Repository;
-use BackendBase\Shared\Services\ArrayKeysCamelCaseConverter;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Redislabs\Module\RedisJson\RedisJsonInterface;
+use Selami\Stdlib\Arrays\ArrayKeysCamelCaseConverter;
 
 use function array_key_exists;
 use function count;

@@ -21,7 +21,7 @@ class GetUserById implements Query
         return $this->userId;
     }
 
-    public function getQueryName() :string
+    public function getQueryName(): string
     {
         return self::QUERY_NAME;
     }

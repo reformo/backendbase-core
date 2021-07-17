@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace BackendBase\Shared\Persistence;
+namespace BackendBase\Shared\ValueObject;
 
 use BackendBase\Shared\Services\CamelCaseReflectionHydrator;
 
-trait ResultObject
+trait ObjectSerializer
 {
     private array $unsetPropertyBucket = ['unsetPropertyBucket'];
 

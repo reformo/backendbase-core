@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace BackendBase\Shared\Persistence\Doctrine;
 
 use BackendBase\Domain\Shared\Exception\ExecutionFailed;
-use BackendBase\Shared\Services\ArrayKeysCamelCaseConverter;
+use BackendBase\Shared\Services\CamelCaseReflectionHydrator;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\Driver\Statement;
 use PDO;
-use BackendBase\Shared\Services\CamelCaseReflectionHydrator;
+use Selami\Stdlib\Arrays\ArrayKeysCamelCaseConverter;
 use Throwable;
+
 use function gettype;
+use function strtr;
 
 trait QueryObject
 {
     private Connection $connection;
+
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
@@ -31,36 +34,39 @@ trait QueryObject
 
     protected function fetch(int $type, array $parameters, ?string $fetchObjectFullyQualifiedClassName = '')
     {
-        $statement = $this->executeQuery(self::$sql, $parameters);
-        $exceptionClass = static::NOT_FOUND_CLASS;
+        $statement      = $this->executeQuery(self::$sql, $parameters);
+        $exceptionClass = self::NOT_FOUND_CLASS;
         try {
             $record = $statement->fetch();
             if (empty($record)) {
                 throw $exceptionClass::create($this->buildExceptionMessage($parameters));
             }
+
             if ($type === PDO::FETCH_OBJ) {
                 return self::hydrate($record, $fetchObjectFullyQualifiedClassName);
             }
+
             return ArrayKeysCamelCaseConverter::convertArrayKeys($record);
         } catch (Throwable $exception) {
             if ($exception instanceof $exceptionClass) {
                 throw $exception;
             }
+
             throw ExecutionFailed::create($exception->getMessage());
         }
     }
 
-    protected function fetchAssociativeArray(array $parameters) : array
+    protected function fetchAssociativeArray(array $parameters): array
     {
         return $this->fetch(PDO::FETCH_ASSOC, $parameters);
     }
 
-    protected function fetchObject(array $parameters, string $fetchObjectFullyQualifiedClassName) : object
+    protected function fetchObject(array $parameters, string $fetchObjectFullyQualifiedClassName): object
     {
         return $this->fetch(PDO::FETCH_OBJ, $parameters, $fetchObjectFullyQualifiedClassName);
     }
 
-    private function buildExceptionMessage($parameters) : string
+    private function buildExceptionMessage($parameters): string
     {
         $params = [];
         foreach ($parameters as $key => $value) {
@@ -70,7 +76,7 @@ trait QueryObject
         return strtr(self::NOT_FOUND_MESSAGE, $params);
     }
 
-    public function getExceptionMessage(?array $parameters = []) : string
+    public function getExceptionMessage(?array $parameters = []): string
     {
         return $this->buildExceptionMessage($parameters);
     }
@@ -82,12 +88,13 @@ trait QueryObject
         foreach ($parameters as $key => $value) {
             $statement->bindValue($key, $value, self::$types[gettype($value)] ?? PDO::PARAM_STR);
         }
+
         $statement->execute();
 
         return $statement;
     }
 
-    protected static function hydrate($data, string $fullyQualifiedClassName) : object
+    protected static function hydrate($data, string $fullyQualifiedClassName): object
     {
         return (new CamelCaseReflectionHydrator())
             ->hydrate($data, new $fullyQualifiedClassName());

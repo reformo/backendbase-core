@@ -16,9 +16,10 @@ use function apcu_clear_cache;
 class ResetApcuCache implements RequestHandlerInterface
 {
     private array $config;
+
     public function __construct(array $config)
     {
-        $this->config          = $config;
+        $this->config = $config;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

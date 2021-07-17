@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\IdentityAndAccess\Handler;
 
+use BackendBase\Domain\Administrators\Interfaces\UserRepository;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
-use BackendBase\Domain\Administrators\Interfaces\UserRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\User;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
 use Laminas\Diactoros\Response\EmptyResponse;

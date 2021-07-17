@@ -26,7 +26,7 @@ class User
     protected string $passwordHash;
 
     /** @Column(type="string", name="password_hash_algo") */
-    protected string $passwordHashAlgo;
+    protected string $passwordHashAlgo = 'argon2id';
 
     /** @Column(type="string", name="first_name") */
     protected string $firstName;

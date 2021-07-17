@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Administrators\Interfaces;
 
-use BackendBase\Domain\Shared\DomainRepository;
 use BackendBase\Domain\Administrators\Exception\UserNotFound;
 use BackendBase\Domain\Administrators\Model\User;
+use BackendBase\Domain\Shared\DomainRepository;
 use BackendBase\Domain\Shared\Exception\ExecutionFailed;
 use BackendBase\Shared\ValueObject\Email;
 
 interface UserRepository extends DomainRepository
 {
-    public function getUserById(UserId $id): ?User;
+    public function getUserById(UserId $userId): ?User;
 
     public function getUserByEmail(Email $email): ?User;
 

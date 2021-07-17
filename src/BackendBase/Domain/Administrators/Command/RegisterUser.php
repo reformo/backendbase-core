@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Administrators\Command;
 
-class RegisterUser
-{
-    private $id;
-    private $firstName;
-    private $lastName;
-    private $email;
+use BackendBase\Shared\CQRS\Interfaces\Command as CommandInterface;
 
-    public function __construct(string $uuid, string $firstName, string $lastName, string $email)
+class RegisterUser implements CommandInterface
+{
+    public const COMMAND_NAME = 'user.register';
+
+    private array $payload;
+    private string $id;
+
+    public function __construct(string $id, array $payload)
     {
-        $this->firstName = $firstName;
-        $this->lastName  = $lastName;
-        $this->email     = $email;
-        $this->id        = $uuid;
+        $this->id      = $id;
+        $this->payload = $payload;
     }
 
     public function id()
@@ -24,18 +24,33 @@ class RegisterUser
         return $this->id;
     }
 
-    public function firstName()
+    public function firstName(): string
     {
-        return $this->firstName;
+        return $this->payload['firstName'];
     }
 
-    public function lastName()
+    public function lastName(): string
     {
-        return $this->lastName;
+        return $this->payload['lastName'];
     }
 
-    public function email()
+    public function email(): string
     {
-        return $this->email;
+        return $this->payload['email'];
+    }
+
+    public function passwordHash(): string
+    {
+        return $this->payload['passwordHash'];
+    }
+
+    public function role(): string
+    {
+        return $this->payload['role'];
+    }
+
+    public function getCommandName(): string
+    {
+        return self::COMMAND_NAME;
     }
 }

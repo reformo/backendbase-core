@@ -5,21 +5,16 @@ declare(strict_types=1);
 namespace BackendBase\Domain\Administrators\Persistence\Doctrine;
 
 use BackendBase\Domain\Administrators\Exception\CantUnregisterUserDoesNotExists;
-use BackendBase\Domain\Administrators\Exception\UserAlreadyExists;
-use BackendBase\Domain\Administrators\Exception\UserNotFound;
 use BackendBase\Domain\Administrators\Interfaces\UserId;
 use BackendBase\Domain\Administrators\Interfaces\UserRepository as UserRepositoryInterface;
 use BackendBase\Domain\Administrators\Model\User;
 use BackendBase\Domain\Administrators\Persistence\Doctrine\QueryObject\GetUserByEmail;
 use BackendBase\Domain\Administrators\Persistence\Doctrine\QueryObject\GetUserById;
+use BackendBase\Domain\Shared\Exception\ExecutionFailed;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
-use BackendBase\Shared\Exception\ExecutionFailed;
-use BackendBase\Shared\Exception\InvalidArgument;
 use BackendBase\Shared\ValueObject\Email;
-use Doctrine\DBAL\Driver\Connection;
+use Carbon\CarbonImmutable;
 use Throwable;
-
-use function sprintf;
 
 class UserRepository extends GenericRepository implements UserRepositoryInterface
 {
@@ -29,7 +24,16 @@ class UserRepository extends GenericRepository implements UserRepositoryInterfac
     {
         $user = GetUserById::execute($this->connection, ['userId' => $userId->toString()]);
 
-        return User::create($user->id(), $user->email(), $user->firstName(), $user->lastName(), $user->passwordHash(), $user->role(), $user->createdAt());
+        return User::create(
+            $user->id(),
+            $user->email(),
+            $user->firstName(),
+            $user->lastName(),
+            $user->passwordHash(),
+            $user->role(),
+            (bool) $user->isActive(),
+            new CarbonImmutable($user->createdAt())
+        );
     }
 
     public function getUserByEmail(Email $email): ?User
@@ -41,21 +45,9 @@ class UserRepository extends GenericRepository implements UserRepositoryInterfac
 
     public function registerUser(User $user): void
     {
-        try {
-            $this->getUserByEmail($user->email());
-
-            throw UserAlreadyExists::create(
-                sprintf('User already exists with the email provided: %s', $user->email()->toString()),
-                ['provided_email' => $user->email()->toString()]
-            );
-        } catch (UserNotFound $exception) {
-            if (! $user instanceof User) {
-                throw InvalidArgument::create('Provided data is not a User object!');
-            }
-
-            $mapper = new UserMapper($user);
-            $this->connection->insert('users', $mapper->toDatabasePayload());
-        }
+        $doctrineRepository = UserMapper::toDoctrineEntity($user);
+        $this->entityManager->persist($doctrineRepository);
+        $this->entityManager->flush();
     }
 
     public function unregisterUser(UserId $userId): void

@@ -6,7 +6,7 @@ namespace BackendBase\Domain\Administrators\Query;
 
 use BackendBase\Shared\CQRS\Interfaces\Query;
 
-class GetAllUsersAsPaginated implements Query
+class GetAllUsersPaginated implements Query
 {
     public const QUERY_NAME = 'users.get_all_users_paginated';
 
@@ -29,7 +29,7 @@ class GetAllUsersAsPaginated implements Query
         return $this->limit;
     }
 
-    public function getQueryName() :string
+    public function getQueryName(): string
     {
         return self::QUERY_NAME;
     }

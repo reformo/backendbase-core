@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Administrators\Persistence\Doctrine\ResultObject;
 
-use JsonSerializable;
-use BackendBase\Shared\Persistence\ResultObject;
+use BackendBase\Shared\ValueObject\ObjectSerializer;
 use DateTimeImmutable;
+use JsonSerializable;
 
 class User implements JsonSerializable
 {
-    use ResultObject;
+    use ObjectSerializer;
 
     private string $id;
     private string $email;
@@ -68,7 +68,7 @@ class User implements JsonSerializable
         return $this->isActive;
     }
 
-    public function setPermissions(array  $permissions) : void
+    public function setPermissions(array $permissions): void
     {
         $this->permissions = $permissions;
     }
@@ -77,5 +77,4 @@ class User implements JsonSerializable
     {
         return $this->permissions;
     }
-
 }

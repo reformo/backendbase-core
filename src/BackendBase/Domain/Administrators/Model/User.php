@@ -4,70 +4,65 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Administrators\Model;
 
-use BackendBase\Domain\Administrators\Exception\InvalidFirstName;
 use BackendBase\Domain\Administrators\Interfaces\UserId as UserIdInterface;
-use BackendBase\Shared\ValueObject\Interfaces\Email as EmailInterface;
+use BackendBase\Domain\IdentityAndAccess\Model\ContactInformation;
+use BackendBase\Domain\IdentityAndAccess\Model\Person;
 use BackendBase\Shared\ValueObject\Email;
-use Carbon\CarbonImmutable;
+use BackendBase\Shared\ValueObject\ObjectSerializer;
 use DateTimeImmutable;
-use Throwable;
-use Webmozart\Assert\Assert;
+use JsonSerializable;
 
-use function password_verify;
-
-class User
+class User implements JsonSerializable
 {
-    public const CREATED_AT_FORMAT = 'Y-m-d H:i:s';
+    use ObjectSerializer;
+
+    public const CREATED_AT_FORMAT           = 'Y-m-d H:i:s';
+    public const IS_ACTIVE_DEFAULT_ON_CREATE = true;
 
     private UserIdInterface $id;
-    private EmailInterface $email;
-    private string $firstName;
-    private string $lastName;
+    private Person $person;
     private string $passwordHash;
     private string $role;
+    private bool $isActive;
     private DateTimeImmutable $createdAt;
 
     private function __construct(
         UserIdInterface $id,
-        EmailInterface $email,
-        string $firstName,
-        string $lastName,
+        Person $person,
         string $passwordHash,
         string $role,
+        bool $isActive,
         DateTimeImmutable $createdAt
     ) {
         $this->id           = $id;
-        $this->email        = $email;
-        $this->firstName    = $firstName;
-        $this->lastName     = $lastName;
+        $this->person       = $person;
         $this->passwordHash = $passwordHash;
         $this->role         =  $role;
-        $this->lastName     = $lastName;
         $this->createdAt    = $createdAt;
+        $this->isActive     = $isActive;
     }
 
-    public static function create(string $uuid, string $email, string $firstName, string $lastName, string $passwordHash, string $role, string $createdAt)
+    public static function new(string $uuid, string $email, string $firstName, string $lastName, string $passwordHash, string $role, DateTimeImmutable $createdAt)
     {
-        try {
-            Assert::minLength($firstName, 2, 'First name must be at least 2 characters long');
-        } catch (Throwable $exception) {
-            throw InvalidFirstName::create($exception->getMessage());
-        }
-
-        try {
-            Assert::minLength($lastName, 2, 'Last name must be at least 2 characters long');
-        } catch (Throwable $exception) {
-            throw InvalidFirstName::create($exception->getMessage());
-        }
-
         return new static(
             UserId::createFromString($uuid),
-            Email::createFromString($email),
-            $firstName,
-            $lastName,
+            new Person($firstName, $lastName, new ContactInformation(Email::createFromString($email))),
             $passwordHash,
             $role,
-            CarbonImmutable::parse($createdAt)->toDateTimeImmutable()
+            self::IS_ACTIVE_DEFAULT_ON_CREATE,
+            $createdAt
+        );
+    }
+
+    public static function create(string $uuid, string $email, string $firstName, string $lastName, string $passwordHash, string $role, int $isActive, DateTimeImmutable $createdAt)
+    {
+        return new static(
+            UserId::createFromString($uuid),
+            new Person($firstName, $lastName, new ContactInformation(Email::createFromString($email))),
+            $passwordHash,
+            $role,
+            (bool) $isActive,
+            $createdAt
         );
     }
 
@@ -78,17 +73,29 @@ class User
 
     public function email(): Email
     {
-        return $this->email;
+        return $this->person()
+            ->contactInformation()
+            ->email();
+    }
+
+    public function person(): Person
+    {
+        return $this->person;
     }
 
     public function firstName(): string
     {
-        return $this->firstName;
+        return $this->person->firstName();
     }
 
     public function lastName(): string
     {
-        return $this->lastName;
+        return $this->person->lastName();
+    }
+
+    public function fullName(): string
+    {
+        return $this->person->fullName();
     }
 
     public function passwordHash(): string
@@ -101,13 +108,13 @@ class User
         return $this->role;
     }
 
+    public function isActive(): bool
+    {
+        return $this->isActive;
+    }
+
     public function createdAt(): DateTimeImmutable
     {
         return $this->createdAt;
-    }
-
-    public function verifyPassword(string $password): bool
-    {
-        return password_verify($password, $this->passwordHash);
     }
 }
