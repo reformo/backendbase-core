@@ -4,27 +4,12 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Repository;
 
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\ORM\EntityManager;
-use Redislabs\Module\ReJSON\ReJSON;
-
 use function json_decode;
 
 use const JSON_THROW_ON_ERROR;
 
-class RolesRepository
+class RolesRepository extends GenericRepository
 {
-    protected EntityManager $entityManager;
-    protected Connection $connection;
-    private ReJSON $reJSON;
-
-    public function __construct(EntityManager $entityManager, Connection $connection, ReJSON $reJSON)
-    {
-        $this->connection    = $connection;
-        $this->entityManager = $entityManager;
-        $this->reJSON        = $reJSON;
-    }
-
     public function getPermissionsTypesList(): array
     {
         $sql       = '

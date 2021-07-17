@@ -6,11 +6,10 @@ namespace BackendBase\PrivateApi\IdentityAndAccess\Handler;
 
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
-use BackendBase\Domain\User\Exception\UserAlreadyExists;
-use BackendBase\Domain\User\Interfaces\UserRepository;
+use BackendBase\Domain\Administrators\Exception\UserAlreadyExists;
+use BackendBase\Domain\Administrators\Interfaces\UserRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\User;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
-use Selami\Stdlib\Arrays\PayloadSanitizer;
 use BackendBase\Shared\ValueObject\Email;
 use DateTimeImmutable;
 use Laminas\Diactoros\Response\EmptyResponse;
@@ -19,6 +18,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
+use Selami\Stdlib\Arrays\PayloadSanitizer;
 use Throwable;
 
 use function ucfirst;

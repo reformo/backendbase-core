@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Repository;
 
-use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Newsletter;
+use BackendBase\Shared\Persistence\Doctrine\Repository;
 use BackendBase\Shared\Services\ArrayKeysCamelCaseConverter;
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\ORM\EntityManagerInterface;
-use Redislabs\Module\ReJSON\ReJSON;
+use Redislabs\Module\RedisJson\RedisJsonInterface;
 
 use function array_key_exists;
 use function count;
@@ -17,32 +17,27 @@ use function ucfirst;
 
 use const JSON_THROW_ON_ERROR;
 
-class GenericRepository
+class GenericRepository implements Repository
 {
     protected EntityManagerInterface $entityManager;
     protected Connection $connection;
+    protected RedisJsonInterface $redisJson;
+    protected array $config;
 
-    protected ReJSON $reJSON;
-
-    public function __construct(EntityManagerInterface $entityManager, Connection $connection, ReJSON $reJSON)
+    public function __construct(EntityManagerInterface $entityManager, RedisJsonInterface $redisJson, array $config)
     {
-        $this->connection    = $connection;
+        $this->connection    = $entityManager->getConnection();
         $this->entityManager = $entityManager;
-        $this->reJSON        = $reJSON;
+        $this->redisJson     = $redisJson;
+        $this->config        = $config;
     }
 
-    public function persistNewsLetter(Newsletter $newsletter): void
-    {
-        $this->entityManager->persist($newsletter);
-        $this->entityManager->flush();
-    }
-
-    public function findGeneric(string $className, string $entityId)
+    public function find(string $className, string $entityId)
     {
         return $this->entityManager->find($className, $entityId);
     }
 
-    public function findGenericAsArray(string $className, string $entityId)
+    public function findGAsArray(string $className, string $entityId)
     {
         return $this->entityManager->getRepository($className)->findBy(['id' => $entityId])[0] ?? null;
     }
@@ -62,12 +57,13 @@ class GenericRepository
     {
         $this->entityManager->remove($entity);
     }
+
     public function flush(): void
     {
         $this->entityManager->flush();
     }
 
-    public function updateGeneric(string $className, string $entityId, array $entityData): void
+    public function update(string $className, string $entityId, array $entityData): void
     {
         $genericEntityMeta     = $this->entityManager->getClassMetadata($className);
         $doctrineGenericEntity = $this->entityManager->find($className, $entityId);
@@ -114,7 +110,7 @@ class GenericRepository
         }
 
         if (array_key_exists('limit', $pagination)) {
-            $limit            = 'LIMIT :limit';
+            $limit             = 'LIMIT :limit';
             $criteria['limit'] = $pagination['limit'];
         }
 
@@ -131,7 +127,7 @@ class GenericRepository
             {$limit}
 SQL;
         $statement = $this->connection->executeQuery($sql, $criteria);
-        $data      = $statement->fetchAll();
+        $data      = $statement->fetchAllAssociative();
 
         $returnData = [];
         foreach ($data as $datum) {
@@ -143,6 +139,7 @@ SQL;
 
                 $datum[$mappingData['columnName']] = json_decode($datum[$mappingData['columnName']], true, 512, JSON_THROW_ON_ERROR);
             }
+
             if (array_key_exists('passwordHash', $datum)) {
                 unset($datum['passwordHash']);
             }
@@ -180,6 +177,6 @@ SQL;
 
         $statement = $this->connection->executeQuery($sql, $criteria);
 
-        return (int) $statement->fetch()['count'];
+        return (int) $statement->fetchAssociative()['count'];
     }
 }

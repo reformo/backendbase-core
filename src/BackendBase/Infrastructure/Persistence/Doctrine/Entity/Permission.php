@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
-use BackendBase\Infrastructure\Persistence\Doctrine\AbstractDoctrineEntity;
 use DateTimeImmutable;
 
 /**
@@ -13,8 +12,6 @@ use DateTimeImmutable;
  */
 class Permission
 {
-    use AbstractDoctrineEntity;
-
     /**
      * @Id
      * @Column(type="uuid")
@@ -24,6 +21,7 @@ class Permission
 
     /** @Column(type="string") */
     protected string $type;
+
     /** @Column(type="string") */
     protected string $name;
 
@@ -31,16 +29,55 @@ class Permission
     protected string $key;
 
     /** @Column(type="datetimetz_immutable", name="created_at") */
-
     protected DateTimeImmutable $createdAt;
 
-    public function setCreatedAt(DateTimeImmutable $datetime): void
+    public function id(): string
     {
-        $this->createdAt = $datetime;
+        return $this->id;
     }
 
-    public function __construct()
+    public function setId(string $id): void
     {
-        $this->setFields();
+        $this->id = $id;
+    }
+
+    public function type(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function key(): string
+    {
+        return $this->key;
+    }
+
+    public function setKey(string $key): void
+    {
+        $this->key = $key;
+    }
+
+    public function createdAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
     }
 }

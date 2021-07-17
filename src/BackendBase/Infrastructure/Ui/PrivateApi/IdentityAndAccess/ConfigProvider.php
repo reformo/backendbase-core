@@ -4,22 +4,15 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\IdentityAndAccess;
 
-use BackendBase\Shared\Factory\RequestHandlerFactory;
 use BackendBase\Shared\Interfaces\MezzioHandlerConfigProvider;
 use Mezzio\Application;
 use Mezzio\MiddlewareFactory;
 
-/**
- * The configuration provider for the App module
- *
- * @see https://docs.zendframework.com/zend-component-installer/
- */
 class ConfigProvider implements MezzioHandlerConfigProvider
 {
     public function __invoke(): array
     {
         return [
-            'dependencies'  => $this->getDependencies(),
         ];
     }
 
@@ -38,27 +31,5 @@ class ConfigProvider implements MezzioHandlerConfigProvider
         $app->patch('/roles/{roleId}/{action}/{type}', Handler\ChangeRolePermissions::class, 'roles.permissions.update');
     }
 
-    /**
-     * Returns the container dependencies
-     */
-    public function getDependencies(): array
-    {
-        return [
-            'invokables' => [],
-            'factories'  => [
-                Handler\ResetApcuCache::class => RequestHandlerFactory::class,
-                Handler\StartSession::class => RequestHandlerFactory::class,
-                Handler\SessionDetails::class => RequestHandlerFactory::class,
 
-                Handler\AddUser::class => RequestHandlerFactory::class,
-                Handler\Users::class => RequestHandlerFactory::class,
-                Handler\ChangeUserDetails::class => RequestHandlerFactory::class,
-                Handler\ChangeMyDetails::class => RequestHandlerFactory::class,
-
-                Handler\UserRoles::class => RequestHandlerFactory::class,
-                Handler\ChangeRolePermissions::class => RequestHandlerFactory::class,
-
-            ],
-        ];
-    }
 }

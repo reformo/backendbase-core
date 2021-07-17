@@ -10,6 +10,4 @@ use Mezzio\MiddlewareFactory;
 interface MezzioHandlerConfigProvider
 {
     public function registerRoutes(Application $app, MiddlewareFactory $factory): void;
-
-    public function getDependencies(): array;
 }

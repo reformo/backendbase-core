@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
-use BackendBase\Infrastructure\Persistence\Doctrine\AbstractDoctrineEntity;
 use DateTimeImmutable;
 
 /**
@@ -13,8 +12,6 @@ use DateTimeImmutable;
  */
 class Forms
 {
-    use AbstractDoctrineEntity;
-
     /**
      * @Id
      * @Column(type="uuid")
@@ -28,17 +25,71 @@ class Forms
     /** @Column(type="uuid", name="created_by") */
     protected string $createdBy;
 
+    /** @Column(type="datetimetz_immutable", name="created_at") */
+    protected DateTimeImmutable $createdAt;
+
+    /** @Column(type="integer", name="is_active") */
+    protected int $isActive = 1;
+
     /** @Column(type="json",nullable=true,options={"jsonb":true}, name="metadata") */
     protected array $metadata;
+
+    /** @Column(type="json",nullable=true,options={"jsonb":true}, name="options") */
+    protected ?array $options;
+
+    public function id(): string
+    {
+        return $this->id;
+    }
+
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
 
     public function setName(string $name): void
     {
         $this->name = $name;
     }
 
+    public function createdBy(): string
+    {
+        return $this->createdBy;
+    }
+
     public function setCreatedBy(string $createdBy): void
     {
         $this->createdBy = $createdBy;
+    }
+
+    public function createdAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(DateTimeImmutable $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function isActive(): int
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(int $isActive): void
+    {
+        $this->isActive = $isActive;
+    }
+
+    public function metadata(): array
+    {
+        return $this->metadata;
     }
 
     /**
@@ -49,48 +100,16 @@ class Forms
         $this->metadata = $metadata;
     }
 
-    public function setIsActive(int $isActive): void
+    public function options(): ?array
     {
-        $this->isActive = $isActive;
-    }
-
-    /** @Column(type="integer", name="is_active") */
-    protected int $isActive = 1;
-
-    /** @Column(type="datetimetz_immutable", name="created_at") */
-
-    protected DateTimeImmutable $createdAt;
-
-    public function setCreatedAt(DateTimeImmutable $datetime): void
-    {
-        $this->createdAt = $datetime;
-    }
-
-    public function setId(string $id): void
-    {
-        $this->id = $id;
-    }
-
-    public function setClientIp(string $clientIp): void
-    {
-        $this->clientIp = $clientIp;
-    }
-
-    public function setFormId(string $formId): void
-    {
-        $this->formId = $formId;
+        return $this->options;
     }
 
     /**
-     * @param array $postData
+     * @param array|null $options
      */
-    public function setPostData(array $postData): void
+    public function setOptions(?array $options): void
     {
-        $this->postData = $postData;
-    }
-
-    public function setIsModerated(int $isModerated): void
-    {
-        $this->isModerated = $isModerated;
+        $this->options = $options;
     }
 }

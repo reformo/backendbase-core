@@ -4,42 +4,28 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\IdentityAndAccess\Handler;
 
-use BackendBase\Domain\User\Interfaces\UserRepository;
-use BackendBase\Domain\User\Model\UserId;
-use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
+use BackendBase\Domain\Administrators\Model\UserId;
+use BackendBase\Shared\CQRS\Interfaces\QueryBus;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-
+use BackendBase\Domain\Administrators\Query\GetUserById;
 class SessionDetails implements RequestHandlerInterface
 {
-    private UserRepository $userRepository;
-    private RolesRepository $rolesRepository;
+    private QueryBus $queryBus;
 
-    public function __construct(
-        UserRepository $userRepository,
-        RolesRepository $rolesRepository
-    ) {
-        $this->userRepository  = $userRepository;
-        $this->rolesRepository = $rolesRepository;
+    public function __construct(QueryBus $queryBus)
+    {
+        $this->queryBus  = $queryBus;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $user = $this->userRepository
-            ->getUserById(UserId::createFromString($request->getAttribute('loggedUserId')));
-
-        $permissions = $this->rolesRepository->getRolePermissionsByRoleName($user->role());
+        $message = new GetUserById($request->getAttribute('loggedUserId'));
+        $user = $this->queryBus->handle($message);
         $data        = [
-            'user' => [
-                'id' => $user->id()->toString(),
-                'firstName' => $user->firstName(),
-                'lastName' => $user->lastName(),
-                'email' => $user->email()->toString(),
-                'role' => $user->role(),
-                'permissions' => $permissions,
-            ],
+            'user' => $user,
         ];
 
         return new JsonResponse($data, 200);

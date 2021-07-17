@@ -6,7 +6,7 @@ namespace BackendBase\Shared\ValueObject\Interfaces;
 
 interface Email
 {
-    public static function createFromString(string $email): Email;
+    public static function createFromString(string $email) : self;
 
     public function getEmail(): string;
 

@@ -5,35 +5,16 @@ declare(strict_types=1);
 namespace BackendBase\Shared\Factory;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\Factory\FactoryInterface;
-use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
-use ReflectionClass;
-use Selami\Stdlib\Resolver;
+use Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
+use Psr\Http\Server\RequestHandlerInterface;
 
-class RequestHandlerFactory implements FactoryInterface
+use function class_implements;
+use function in_array;
+
+class RequestHandlerFactory extends ReflectionBasedAbstractFactory
 {
-    private ContainerInterface $container;
-
-    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RequestHandler
+    public function canCreate(ContainerInterface $container, $requestedName)
     {
-        $this->container             = $container;
-        $handlerConstructorArguments = Resolver::getParameterHints($requestedName, '__construct');
-        $arguments                   = [];
-        foreach ($handlerConstructorArguments as $argumentName => $argumentType) {
-            $arguments[] = $this->getArgument($argumentName, $argumentType);
-        }
-
-        $handlerClass = new ReflectionClass($requestedName);
-
-        /**
-         * @var RequestHandler
-         */
-        return $handlerClass->newInstanceArgs($arguments);
-    }
-
-    private function getArgument(string $argumentName, string $argumentType)
-    {
-        return $this->container->has($argumentType) ? $this->container->get($argumentType) :
-            $this->container->get($argumentName);
+        return in_array(RequestHandlerInterface::class, class_implements($requestedName), true);
     }
 }

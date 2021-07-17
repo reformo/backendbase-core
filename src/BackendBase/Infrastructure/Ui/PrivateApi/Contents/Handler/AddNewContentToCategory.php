@@ -10,7 +10,6 @@ use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Content;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\ContentDetail;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
-use Selami\Stdlib\Arrays\PayloadSanitizer;
 use Cocur\Slugify\Slugify;
 use DateTimeImmutable;
 use Laminas\Diactoros\Response\EmptyResponse;
@@ -19,6 +18,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Ramsey\Uuid\Uuid;
+use Selami\Stdlib\Arrays\PayloadSanitizer;
 
 class AddNewContentToCategory implements RequestHandlerInterface
 {

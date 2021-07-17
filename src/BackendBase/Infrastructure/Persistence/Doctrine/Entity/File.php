@@ -4,26 +4,14 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
-use BackendBase\Infrastructure\Persistence\Doctrine\AbstractDoctrineEntity;
 use DateTimeImmutable;
 
 /**
  * @Entity
  * @Table(name="public.files")
- * @method Collection getId() : string
- * @method Collection setId(string $id) : void
- * @method Collection getFilePath() : string
- * @method Collection setFilePath(string $filePath) : void
- * @method Collection getType() : string
- * @method Collection setType(string $type) : void
- * @method Collection getUploadedAt() : string
- * @method Collection getMetadata() : array
- * @method Collection setMetadata(array $metaData) : void
  */
 class File
 {
-    use AbstractDoctrineEntity;
-
     /**
      * @Id
      * @Column(type="uuid")
@@ -43,13 +31,56 @@ class File
     /** @Column(type="datetimetz_immutable", name="uploaded_at") */
     protected DateTimeImmutable $uploadedAt;
 
-    public function setUploadedAt(DateTimeImmutable $datetime): void
+    public function id(): string
     {
-        $this->uploadedAt = $datetime;
+        return $this->id;
     }
 
-    public function __construct()
+    public function setId(string $id): void
     {
-        $this->setFields();
+        $this->id = $id;
+    }
+
+    public function filePath(): string
+    {
+        return $this->filePath;
+    }
+
+    public function setFilePath(string $filePath): void
+    {
+        $this->filePath = $filePath;
+    }
+
+    public function type(): string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+
+    public function metadata(): array
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * @param array $metadata
+     */
+    public function setMetadata(array $metadata): void
+    {
+        $this->metadata = $metadata;
+    }
+
+    public function uploadedAt(): DateTimeImmutable
+    {
+        return $this->uploadedAt;
+    }
+
+    public function setUploadedAt(DateTimeImmutable $uploadedAt): void
+    {
+        $this->uploadedAt = $uploadedAt;
     }
 }

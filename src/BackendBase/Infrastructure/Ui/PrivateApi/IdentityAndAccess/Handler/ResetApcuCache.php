@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace BackendBase\PrivateApi\IdentityAndAccess\Handler;
 
-use BackendBase\Domain\User\Interfaces\UserQuery;
-use BackendBase\Infrastructure\Persistence\Doctrine\Repository\RolesRepository;
-use BackendBase\Shared\Services\MessageBus\Interfaces\QueryBus;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
@@ -18,21 +15,10 @@ use function apcu_clear_cache;
 
 class ResetApcuCache implements RequestHandlerInterface
 {
-    private $config;
-    private $queryBus;
-    private UserQuery $userQuery;
-    private RolesRepository $rolesRepository;
-
-    public function __construct(
-        QueryBus $queryBus,
-        UserQuery $userQuery,
-        RolesRepository $rolesRepository,
-        array $config
-    ) {
+    private array $config;
+    public function __construct(array $config)
+    {
         $this->config          = $config;
-        $this->queryBus        = $queryBus;
-        $this->userQuery       = $userQuery;
-        $this->rolesRepository = $rolesRepository;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

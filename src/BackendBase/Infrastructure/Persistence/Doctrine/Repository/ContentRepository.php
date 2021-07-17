@@ -5,15 +5,12 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Repository;
 
 use BackendBase\Domain\Contents\Exception\ContentNotFound;
-use Selami\Stdlib\Arrays\ArrayKeysCamelCaseConverter;
 use Carbon\CarbonImmutable;
 use Cocur\Slugify\Slugify;
 use DateTimeImmutable;
 use DateTimeZone;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\ORM\EntityManager;
 use PascalDeVink\ShortUuid\ShortUuid;
-use Redislabs\Module\ReJSON\ReJSON;
+use Selami\Stdlib\Arrays\ArrayKeysCamelCaseConverter;
 
 use function array_key_exists;
 use function count;
@@ -24,21 +21,8 @@ use function strpos;
 use const DATE_ATOM;
 use const JSON_THROW_ON_ERROR;
 
-class ContentRepository
+class ContentRepository extends GenericRepository
 {
-    protected EntityManager $entityManager;
-    protected Connection $connection;
-    private ReJSON $reJSON;
-    private array $config;
-
-    public function __construct(EntityManager $entityManager, Connection $connection, ReJSON $reJSON, array $config)
-    {
-        $this->connection    = $connection;
-        $this->entityManager = $entityManager;
-        $this->reJSON        = $reJSON;
-        $this->config        = $config;
-    }
-
     public function getCategory(string $category): array
     {
         $sql       = '
@@ -114,7 +98,7 @@ class ContentRepository
     public function getContentBySlug(string $slug, string $language, string $region): array
     {
         $otherLanguage = $language === 'tr' ?  'en' : 'tr';
-        $sql         = <<<SQL
+        $sql           = <<<SQL
             SELECT CD.title, CD.slug, CD2.slug as other_lang_slug, CD.keywords, CD.serp_title, CD.content_id, C.id, 
                    CD.description, CD.body, C.tags, C.robots, 
                    C.redirect_url, C.cover_image_landscape,
@@ -142,17 +126,18 @@ class ContentRepository
                AND C.publish_at <= :now
                AND (C.expire_at >= :now OR C.expire_at IS NULL)
 SQL;
-        $statement   = $this->connection->executeQuery($sql, [
+        $statement     = $this->connection->executeQuery($sql, [
             'slug' => $slug,
             'language' => $language,
             'otherLanguage' => $otherLanguage,
             'region' => $region,
             'now' => (new DateTimeImmutable())->format(DATE_ATOM),
         ]);
-        $contentData = $statement->fetch();
+        $contentData   = $statement->fetch();
         if ($contentData === false) {
             throw ContentNotFound::create('Content not found. It may be deleted.');
         }
+
         $contentData['body'] = json_decode($contentData['body'], true, 512, JSON_THROW_ON_ERROR);
         $contentData['tags'] = json_decode($contentData['tags'], true, 512, JSON_THROW_ON_ERROR);
         unset($contentData['is_deleted']);

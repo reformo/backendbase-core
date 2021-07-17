@@ -4,32 +4,12 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
-use BackendBase\Infrastructure\Persistence\Doctrine\AbstractDoctrineEntity;
-
 /**
  * @Entity
  * @Table(name="public.lookup_table")
- * @method Collection getId() : string
- * @method Collection setId(string $id) : void
- * @method Collection getKey() : string
- * @method Collection setKey(string $key) : void
- * @method Collection getName() : string
- * @method Collection setName(string $name) : void
- * @method Collection getSlug() : string
- * @method Collection setSlug(string $slug) : void
- * @method Collection getParentId() : string
- * @method Collection setParentId(string $parentId) : void
- * @method Collection getMetadata() : array
- * @method Collection setMetadata(array $metaData) : void
- * @method Collection getIsActive() : int
- * @method Collection setIsActive(int $isActive) : void
- * @method Collection getIsDeleted() : int
- * @method Collection setIsDeleted(int $isDeleted) : void
  */
 class Collection
 {
-    use AbstractDoctrineEntity;
-
     /**
      * @Id
      * @Column(type="uuid")
@@ -58,8 +38,86 @@ class Collection
     /** @Column(type="integer",name="is_deleted",options={"default":0}) */
     protected int $isDeleted;
 
-    public function __construct()
+    public function id(): string
     {
-        $this->setFields();
+        return $this->id;
+    }
+
+    public function setId(string $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function key(): string
+    {
+        return $this->key;
+    }
+
+    public function setKey(string $key): void
+    {
+        $this->key = $key;
+    }
+
+    public function name(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function slug(): string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): void
+    {
+        $this->slug = $slug;
+    }
+
+    public function parentId(): ?string
+    {
+        return $this->parentId;
+    }
+
+    public function setParentId(?string $parentId): void
+    {
+        $this->parentId = $parentId;
+    }
+
+    public function metadata(): array
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * @param array $metadata
+     */
+    public function setMetadata(array $metadata): void
+    {
+        $this->metadata = $metadata;
+    }
+
+    public function isActive(): int
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(int $isActive): void
+    {
+        $this->isActive = $isActive;
+    }
+
+    public function isDeleted(): int
+    {
+        return $this->isDeleted;
+    }
+
+    public function setIsDeleted(int $isDeleted): void
+    {
+        $this->isDeleted = $isDeleted;
     }
 }

@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
-use BackendBase\Infrastructure\Persistence\Doctrine\AbstractDoctrineEntity;
-
 /**
  * @Entity
  * @Table(name="public.content_details")
  */
 class ContentDetail
 {
-    use AbstractDoctrineEntity;
-
     /**
      * @Id
      * @Column(type="uuid")

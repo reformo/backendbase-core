@@ -9,7 +9,6 @@ use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\Content;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\ContentRepository;
 use BackendBase\Infrastructure\Persistence\Doctrine\Repository\GenericRepository;
-use Selami\Stdlib\Arrays\PayloadSanitizer;
 use Carbon\CarbonImmutable;
 use DateTimeImmutable;
 use Laminas\Diactoros\Response\EmptyResponse;
@@ -17,6 +16,7 @@ use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Selami\Stdlib\Arrays\PayloadSanitizer;
 
 use function array_key_exists;
 

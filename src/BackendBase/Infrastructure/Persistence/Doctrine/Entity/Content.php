@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
-use BackendBase\Infrastructure\Persistence\Doctrine\AbstractDoctrineEntity;
 use DateTimeImmutable;
 
 use function base_convert;
@@ -16,8 +15,6 @@ use function hrtime;
  */
 class Content
 {
-    use AbstractDoctrineEntity;
-
     public const CONTENT_IS_ACTIVE         = 1;
     public const CONTENT_IS_PASSIVE        = 0;
     public const CONTENT_IS_NOT_ACCESSIBLE = 1;
@@ -262,6 +259,6 @@ class Content
 
     public static function generateSortValue(): string
     {
-        return base_convert(hrtime(true), 10, 16);
+        return base_convert((string) hrtime(true), 10, 16);
     }
 }
