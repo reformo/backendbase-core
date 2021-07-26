@@ -13,11 +13,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class SessionDetails implements RequestHandlerInterface
 {
-    private QueryBus $queryBus;
-
-    public function __construct(QueryBus $queryBus)
+    public function __construct(private QueryBus $queryBus)
     {
-        $this->queryBus = $queryBus;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

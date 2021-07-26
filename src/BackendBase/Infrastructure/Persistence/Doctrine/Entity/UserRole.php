@@ -5,39 +5,37 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @Entity
- * @Table(name="admin.roles")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'roles', schema: 'admin')]
 class UserRole
 {
-    /**
-     * @Id
-     * @Column(type="uuid")
-     * @GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected string $id;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $title;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $key;
 
-    /** @Column(type="json",nullable=true,options={"jsonb":true}, name="permissions") */
+    #[ORM\Column(type: 'json', nullable: true, options: ['jsonb' => true])]
+
     protected ?array $permissions = [];
 
-    /** @Column(type="integer", name="visible") */
+    #[ORM\Column(type: 'integer')]
     protected ?int $visible = 1;
 
-    /** @Column(type="integer", name="full_permission") */
+    #[ORM\Column(name: 'full_permission', type: 'integer')]
     protected ?int $fullPermission = 0;
 
-    /** @Column(type="integer") */
+    #[ORM\Column(type: 'integer')]
     protected ?int $level = 0;
 
-    /** @Column(type="datetimetz_immutable", name="created_at") */
+    #[ORM\Column(name: 'created_at', type: 'datetimetz_immutable')]
     protected DateTimeImmutable $createdAt;
 
     public function id(): string

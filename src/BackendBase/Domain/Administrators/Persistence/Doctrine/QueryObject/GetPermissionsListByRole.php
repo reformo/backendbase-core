@@ -40,7 +40,7 @@ SQL;
         return $query->query($parameters);
     }
 
-    public function query(?array $parameters = []): array
+    public function query(array |null $parameters = []): array|null
     {
         $permissions = $this->fetchAssociativeArray($parameters);
 

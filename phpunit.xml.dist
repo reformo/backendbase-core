@@ -1,24 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         stopOnFailure="true"
-         bootstrap="vendor/autoload.php"
-         colors="true">
-    <php>
-        <ini name="memory_limit" value="-1"/>
-    </php>
-    <testsuites>
-        <testsuite name="BackendBase Unit Tests">
-            <directory>test/UnitTest</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src/BackendBase/Domain</directory>
-            <directory suffix=".php">./src/BackendBase/Shared</directory>
-        </whitelist>
-    </filter>
-    <logging>
-        <log type="coverage-clover" target="storage/temp/clover.xml"/>
-    </logging>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd" stopOnFailure="true" bootstrap="vendor/autoload.php" colors="true">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./src/BackendBase/Domain</directory>
+      <directory suffix=".php">./src/BackendBase/Shared</directory>
+    </include>
+    <report>
+      <clover outputFile="storage/temp/clover.xml"/>
+    </report>
+  </coverage>
+  <php>
+    <ini name="memory_limit" value="-1"/>
+  </php>
+  <testsuites>
+    <testsuite name="BackendBase Unit Tests">
+      <directory>test/UnitTest</directory>
+    </testsuite>
+  </testsuites>
+  <logging/>
 </phpunit>

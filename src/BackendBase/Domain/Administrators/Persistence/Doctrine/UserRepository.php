@@ -45,7 +45,7 @@ class UserRepository extends GenericRepository implements UserRepositoryInterfac
 
     public function registerUser(User $user): void
     {
-        $doctrineRepository = UserMapper::toDoctrineEntity($user);
+        $doctrineRepository = UserGenerator::toDoctrineEntity($user);
         $this->entityManager->persist($doctrineRepository);
         $this->entityManager->flush();
     }

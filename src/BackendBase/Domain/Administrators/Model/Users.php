@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Administrators\Model;
 
-use BackendBase\Shared\Services\Persistence\ResultObjectsCollection;
+use BackendBase\Domain\Collections\Persistence\Doctrine\ResultObject\Collection;
 
-class Users extends ResultObjectsCollection
+class Users extends Collection
 {
 }

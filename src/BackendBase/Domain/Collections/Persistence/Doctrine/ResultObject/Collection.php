@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Collections\Persistence\Doctrine\ResultObject;
 
-use BackendBase\Shared\Services\Persistence\ResultObject;
+use BackendBase\Shared\Persistence\ResultObject;
 use JsonSerializable;
 
 use function gettype;

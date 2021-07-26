@@ -5,34 +5,30 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @Entity
- * @Table(name="public.form_data")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'form_data', schema: 'public')]
 class FormData
 {
-    /**
-     * @Id
-     * @Column(type="uuid")
-     * @GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected string $id;
 
-    /** @Column(type="uuid", name="form_id") */
+    #[ORM\Column(name: 'form_id', type: 'uuid')]
     protected string $formId;
 
-    /** @Column(type="json",nullable=true,options={"jsonb":true}, name="post_data") */
+    #[ORM\Column(name:'post_data', type: 'json', nullable: true, options: ['jsonb' => true])]
     protected array $postData;
 
-    /** @Column(type="string", name="client_ip") */
+    #[ORM\Column(name: 'client_ip', type: 'string')]
     protected string $clientIp;
 
-    /** @Column(type="integer", name="is_moderated") */
+    #[ORM\Column(name: 'is_moderated', type: 'integer')]
     protected int $isModerated = 1;
 
-    /** @Column(type="datetimetz_immutable", name="created_at") */
-
+    #[ORM\Column(name: 'created_at', type: 'datetimetz_immutable')]
     protected DateTimeImmutable $createdAt;
 
     public function setCreatedAt(DateTimeImmutable $datetime): void

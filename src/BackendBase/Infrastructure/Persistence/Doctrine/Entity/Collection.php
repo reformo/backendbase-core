@@ -4,38 +4,37 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
-/**
- * @Entity
- * @Table(name="public.lookup_table")
- */
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'lookup_table', schema: 'public')]
 class Collection
 {
-    /**
-     * @Id
-     * @Column(type="uuid")
-     * @GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected string $id;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $key;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $name;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $slug;
 
-    /** @Column(type="uuid",nullable=true, name="parent_id") */
+    #[ORM\Column(name: 'parent_id', type: 'uuid', nullable: true)]
     protected ?string $parentId;
 
-    /** @Column(type="json_array",nullable=true,options={"jsonb"=true}) */
+    #[ORM\Column(type: 'json', nullable: true, options: ['jsonb' => true])]
     protected array $metadata;
 
-    /** @Column(type="integer",name="is_active") */
+    #[ORM\Column(name: 'is_active', type: 'integer')]
     protected int $isActive;
 
-    /** @Column(type="integer",name="is_deleted",options={"default":0}) */
+    #[ORM\Column(name: 'is_deleted', type: 'integer', options: ['default' => 0])]
+
     protected int $isDeleted;
 
     public function id(): string

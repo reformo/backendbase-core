@@ -19,27 +19,14 @@ class User implements JsonSerializable
     public const CREATED_AT_FORMAT           = 'Y-m-d H:i:s';
     public const IS_ACTIVE_DEFAULT_ON_CREATE = true;
 
-    private UserIdInterface $id;
-    private Person $person;
-    private string $passwordHash;
-    private string $role;
-    private bool $isActive;
-    private DateTimeImmutable $createdAt;
-
     private function __construct(
-        UserIdInterface $id,
-        Person $person,
-        string $passwordHash,
-        string $role,
-        bool $isActive,
-        DateTimeImmutable $createdAt
+        private UserIdInterface $id,
+        private Person $person,
+        private string $passwordHash,
+        private string $role,
+        private bool $isActive,
+        private DateTimeImmutable $createdAt
     ) {
-        $this->id           = $id;
-        $this->person       = $person;
-        $this->passwordHash = $passwordHash;
-        $this->role         =  $role;
-        $this->createdAt    = $createdAt;
-        $this->isActive     = $isActive;
     }
 
     public static function new(string $uuid, string $email, string $firstName, string $lastName, string $passwordHash, string $role, DateTimeImmutable $createdAt)

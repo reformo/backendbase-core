@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\ValueObject\Exception;
 
-use BackendBase\Shared\Exception\DomainException;
+use BackendBase\Domain\Shared\Exception\DomainException;
 use Exception;
 
 final class InvalidPersonFamilyName extends Exception

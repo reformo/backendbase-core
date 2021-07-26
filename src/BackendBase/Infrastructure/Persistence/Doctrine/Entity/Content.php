@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 
 use function base_convert;
 use function hrtime;
 
-/**
- * @Entity
- * @Table(name="public.contents")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'contents', schema: 'public')]
 class Content
 {
     public const CONTENT_IS_ACTIVE         = 1;
@@ -28,51 +27,39 @@ class Content
 
     public const WITH_CONTENT_BODY = true;
 
-
-
-    /**
-     * @Id
-     * @Column(type="uuid")
-     * @GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected string $id;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $category;
 
-
-
-    /** @Column(type="json",nullable=true,options={"jsonb":true}) */
+    #[ORM\Column(type: 'json', nullable: true, options: ['jsonb' => true])]
     protected array $tags;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $template;
 
-
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $robots;
 
-
-    /** @Column(type="string", name="redirect_url") */
+    #[ORM\Column(name: 'redirect_url', type: 'string')]
     protected ?string $redirectUrl;
 
-
-    /** @Column(type="string", name="cover_image_landscape") */
+    #[ORM\Column(name: 'cover_image_landscape', type: 'string')]
     protected ?string $coverImageLandscape;
 
-    /** @Column(type="string", name="cover_image_portrait") */
+    #[ORM\Column(name: 'cover_image_portrait', type: 'string')]
     protected ?string $coverImagePortrait;
 
-
-    /** @Column(type="string", name="sort_order") */
+    #[ORM\Column(name: 'sort_order', type: 'string')]
     protected string $sortOrder;
 
-
-    /** @Column(type="integer", name="is_active") */
+    #[ORM\Column(name: 'is_active', type: 'integer')]
     protected int $isActive;
 
-
-    /** @Column(type="integer", name="is_deleted") */
+    #[ORM\Column(name: 'is_deleted', type: 'integer')]
     protected int $isDeleted;
 
     public function id(): string

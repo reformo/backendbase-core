@@ -5,46 +5,43 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @Entity
- * @Table(name="admin.users")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'users', schema: 'admin')]
 class User
 {
-    /**
-     * @Id
-     * @Column(type="uuid")
-     * @GeneratedValue(strategy="NONE")
-     */
-    protected string $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
+    private string $id;
 
-    /** @Column(type="string", name="email") */
-    protected string $email;
+    #[ORM\Column(type: 'string')]
+    private string $email;
 
-    /** @Column(type="string", name="password_hash") */
-    protected string $passwordHash;
+    #[ORM\Column(name: 'password_hash', type: 'string')]
+    private string $passwordHash;
 
-    /** @Column(type="string", name="password_hash_algo") */
-    protected string $passwordHashAlgo = 'argon2id';
+    #[ORM\Column(name: 'password_hash_algo', type: 'string')]
+    private string $passwordHashAlgo = 'argon2id';
 
-    /** @Column(type="string", name="first_name") */
-    protected string $firstName;
+    #[ORM\Column(name: 'first_name', type: 'string')]
+    private string $firstName;
 
-    /** @Column(type="string", name="last_name") */
-    protected string $lastName;
+    #[ORM\Column(name: 'last_name', type: 'string')]
+    private string $lastName;
 
-    /** @Column(type="integer", name="is_active") */
-    protected int $isActive = 1;
+    #[ORM\Column(name: 'is_active', type: 'integer')]
+    private int $isActive = 1;
 
-    /** @Column(type="integer", name="is_deleted") */
-    protected int $isDeleted = 0;
+    #[ORM\Column(name: 'is_deleted', type: 'integer')]
+    private int $isDeleted = 0;
 
-    /** @Column(type="string", name="role") */
-    protected string $role = '';
+    #[ORM\Column(type: 'string')]
+    private string $role = '';
 
-    /** @Column(type="datetimetz_immutable", name="created_at") */
-    protected DateTimeImmutable $createdAt;
+    #[ORM\Column(name: 'created_at', type: 'datetimetz_immutable')]
+    private DateTimeImmutable $createdAt;
 
     public function id(): string
     {

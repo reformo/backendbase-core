@@ -5,37 +5,34 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @Entity
- * @Table(name="public.forms")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'forms', schema: 'public')]
 class Forms
 {
-    /**
-     * @Id
-     * @Column(type="uuid")
-     * @GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected string $id;
 
-    /** @Column(type="string",) */
+    #[ORM\Column(type: 'string')]
     protected string $name;
 
-    /** @Column(type="uuid", name="created_by") */
+    #[ORM\Column(name: 'created_by', type: 'uuid')]
     protected string $createdBy;
 
-    /** @Column(type="datetimetz_immutable", name="created_at") */
-    protected DateTimeImmutable $createdAt;
-
-    /** @Column(type="integer", name="is_active") */
+    #[ORM\Column(name: 'is_active', type: 'integer')]
     protected int $isActive = 1;
 
-    /** @Column(type="json",nullable=true,options={"jsonb":true}, name="metadata") */
+    #[ORM\Column(type: 'json', nullable: true, options: ['jsonb' => true])]
     protected array $metadata;
 
-    /** @Column(type="json",nullable=true,options={"jsonb":true}, name="options") */
+    #[ORM\Column(type: 'json', nullable: true, options: ['jsonb' => true])]
     protected ?array $options;
+
+    #[ORM\Column(name: 'created_at', type: 'datetimetz_immutable')]
+    protected DateTimeImmutable $createdAt;
 
     public function id(): string
     {

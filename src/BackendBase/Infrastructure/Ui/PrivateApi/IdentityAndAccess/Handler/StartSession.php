@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BackendBase\PrivateApi\IdentityAndAccess\Handler;
 
 use BackendBase\Domain\Administrators\Exception\UserNotFound;
+use BackendBase\Domain\Administrators\Persistence\Doctrine\ResultObject\User;
 use BackendBase\Domain\Administrators\Query\AuthenticateUserWithEmail;
 use BackendBase\Domain\IdentityAndAccess\Exception\LoginAttemptLimitExceeded;
 use BackendBase\Domain\IdentityAndAccess\Model\Login;
@@ -29,18 +30,11 @@ use const DATE_ATOM;
 
 class StartSession implements RequestHandlerInterface
 {
-    private QueryBus $queryBus;
-    private array $config;
-    private RateLimiter $redisRateLimiter;
-
     public function __construct(
-        QueryBus $queryBus,
-        RateLimiter $redisRateLimiter,
-        array $config
+        private QueryBus $queryBus,
+        private RateLimiter $redisRateLimiter,
+        private array $config
     ) {
-        $this->queryBus         = $queryBus;
-        $this->redisRateLimiter = $redisRateLimiter;
-        $this->config           = $config;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -59,19 +53,31 @@ class StartSession implements RequestHandlerInterface
 
         $message = new AuthenticateUserWithEmail($payload['email'], $parsedBody['password']);
         try {
+            /**
+             * @var $user User
+             */
             $user = $this->queryBus->handle($message);
-        } catch (UserNotFound $exception) {
-            throw UserNotFound::create(sprintf('Invalid username and/or password for %s:', $payload['email']));
+        } catch (UserNotFound) {
+            throw UserNotFound::create(sprintf('Invalid username and/or password for: %s', $payload['email']));
         }
 
-           $key        = InMemory::base64Encoded($this->config['jwt']['key']);
-        $configuration = Configuration::forSymmetricSigner(
-            new Sha256(),
-            $key
-        );
+        $now  = new DateTimeImmutable();
+        $data = [
+            'accessToken'  => $this->getJwtToken($now, $user),
+            'createdAt'    => $now->format(DATE_ATOM),
+            'willExpireAt' => $now->modify('+12 hours')->format(DATE_ATOM),
+            'userData'     => $user,
+        ];
 
-        $now   = new DateTimeImmutable();
-        $token = $configuration->builder()
+        return new JsonResponse($data, 201);
+    }
+
+    private function getJwtToken(DateTimeImmutable $now, User $user): string
+    {
+        $key           = InMemory::base64Encoded($this->config['jwt']['key']);
+        $configuration = Configuration::forSymmetricSigner(new Sha256(), $key);
+
+        return $configuration->builder()
             ->issuedBy($this->config['jwt']['issuer'])
             ->identifiedBy($this->config['jwt']['identifier'])
             ->issuedAt($now) // Configures the time that the token was issue (iat claim)
@@ -79,15 +85,7 @@ class StartSession implements RequestHandlerInterface
             ->expiresAt($now->modify('+12 hours')) // Configures the expiration time of the token (exp claim)
             ->withClaim('userId', $user->id()) // Configures a new claim, called "uid"
             ->withClaim('role', $user->role()) // Configures a new claim, called "uid"
-            ->getToken($configuration->signer(), $configuration->signingKey());
-
-        $data = [
-            'accessToken' => $token->toString(),
-            'createdAt' => $now->format(DATE_ATOM),
-            'willExpireAt' => $now->modify('+12 hours')->format(DATE_ATOM),
-            'userData' => $user,
-        ];
-
-        return new JsonResponse($data, 201);
+            ->getToken($configuration->signer(), $configuration->signingKey())
+            ->toString();
     }
 }

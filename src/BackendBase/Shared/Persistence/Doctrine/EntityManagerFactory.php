@@ -9,8 +9,9 @@ use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
-use Interop\Container\ContainerInterface;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql as DqlFunctions;
 use Symfony\Component\Cache\Adapter\ApcuAdapter as ApcuCache;
@@ -31,7 +32,7 @@ class EntityManagerFactory implements FactoryInterface
         $client      = $container->get(Connection::class);
         $doctrineDir = $appConfig['app']['data_dir'] . '/cache/Doctrine';
         $config      = new Configuration();
-        $driverImpl  = $config->newDefaultAnnotationDriver('src/Infrastructure/Persistence/Doctrine/Entity');
+        $driverImpl  = $this->newDefaultAttributeDriver(['src/Infrastructure/Persistence/Doctrine/Entity']);
         $config->setMetadataCacheImpl($cache);
         $config->setProxyDir($doctrineDir . '/Proxies');
         $config->setProxyNamespace($appConfig['doctrine']['namespace-for-generator'] . '\\Proxies');
@@ -42,5 +43,10 @@ class EntityManagerFactory implements FactoryInterface
         $config->setResultCacheImpl($cache);
 
         return EntityManager::create($client, $config);
+    }
+
+    private function newDefaultAttributeDriver($paths = []): AttributeDriver
+    {
+           return new AttributeDriver($paths);
     }
 }

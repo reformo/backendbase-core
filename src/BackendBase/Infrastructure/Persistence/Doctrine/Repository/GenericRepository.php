@@ -19,17 +19,14 @@ use const JSON_THROW_ON_ERROR;
 
 class GenericRepository implements Repository
 {
-    protected EntityManagerInterface $entityManager;
     protected Connection $connection;
-    protected RedisJsonInterface $redisJson;
-    protected array $config;
 
-    public function __construct(EntityManagerInterface $entityManager, RedisJsonInterface $redisJson, array $config)
-    {
-        $this->connection    = $entityManager->getConnection();
-        $this->entityManager = $entityManager;
-        $this->redisJson     = $redisJson;
-        $this->config        = $config;
+    public function __construct(
+        protected EntityManagerInterface $entityManager,
+        protected RedisJsonInterface $redisJson,
+        protected array $config
+    ) {
+        $this->connection = $entityManager->getConnection();
     }
 
     public function find(string $className, string $entityId)
@@ -80,7 +77,7 @@ class GenericRepository implements Repository
         $this->entityManager->flush();
     }
 
-    public function getList(string $className, array $criteria, ?string $orderByString = '', ?array $pagination = []): array
+    public function getList(string $className, array $criteria, string |null $orderByString = '', array |null $pagination = []): array
     {
         $genericEntityMeta = $this->entityManager->getClassMetadata($className);
         $tableName         = $genericEntityMeta->getTableName();

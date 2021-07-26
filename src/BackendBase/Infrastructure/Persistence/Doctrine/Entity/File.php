@@ -5,30 +5,27 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @Entity
- * @Table(name="public.files")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'files', schema: 'public')]
 class File
 {
-    /**
-     * @Id
-     * @Column(type="uuid")
-     * @GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected string $id;
 
-    /** @Column(type="string", name="file_path") */
+    #[ORM\Column(name: 'file_path', type: 'string')]
     protected string $filePath;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $type;
 
-    /** @Column(type="json",nullable=true,options={"jsonb":true}) */
+    #[ORM\Column(type: 'json', nullable: true, options: ['jsonb' => true])]
     protected array $metadata;
 
-    /** @Column(type="datetimetz_immutable", name="uploaded_at") */
+    #[ORM\Column(name: 'created_at', type: 'datetimetz_immutable')]
     protected DateTimeImmutable $uploadedAt;
 
     public function id(): string

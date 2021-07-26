@@ -4,54 +4,48 @@ declare(strict_types=1);
 
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
-/**
- * @Entity
- * @Table(name="public.content_details")
- */
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'content_details', schema: 'public')]
 class ContentDetail
 {
-    /**
-     * @Id
-     * @Column(type="uuid")
-     * @GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected string $id;
 
-    /** @Column(type="string", name="content_id") */
+    #[ORM\Column(name: 'content_id', type: 'uuid')]
     protected string $contentId;
 
-    /** @Column(type="string", name="language") */
+    #[ORM\Column(type: 'string')]
     protected string $language;
 
-
-    /** @Column(type="string", name="region") */
+    #[ORM\Column(type: 'string')]
     protected string $region;
 
-
-    /** @Column(type="string", name="title") */
+    #[ORM\Column(type: 'string')]
     protected string $title;
 
-    /** @Column(type="string", name="slug") */
+    #[ORM\Column(type: 'string')]
     protected string $slug;
 
-
-    /** @Column(type="string", name="serp_title") */
+    #[ORM\Column(name: 'serp_title', type: 'string')]
     protected string $serpTitle;
 
-    /** @Column(type="string", name="description") */
+    #[ORM\Column(type: 'string')]
     protected ?string $description;
 
-
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected ?string $keywords;
 
-    /** @Column(type="json",nullable=true,options={"jsonb":true}) */
+    #[ORM\Column(type: 'json', nullable: true, options: ['jsonb' => true])]
     protected ?array $body = [];
 
-    /** @Column(type="string", name="body_fulltext") */
+    #[ORM\Column(name: 'body_fulltext', type: 'string')]
     protected ?string $bodyFulltext = '';
 
-    /** @Column(type="integer", name="is_active") */
+    #[ORM\Column(name: 'is_active', type: 'integer')]
     protected int $isActive;
 
     public function id(): string

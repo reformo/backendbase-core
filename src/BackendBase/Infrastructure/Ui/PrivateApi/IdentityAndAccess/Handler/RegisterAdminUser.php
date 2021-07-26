@@ -8,6 +8,7 @@ use BackendBase\Domain\Administrators\Command\RegisterUser;
 use BackendBase\Domain\IdentityAndAccess\Exception\InsufficientPrivileges;
 use BackendBase\Domain\IdentityAndAccess\Model\Permissions;
 use BackendBase\Shared\CQRS\Interfaces\CommandBus;
+use Fig\Http\Message\StatusCodeInterface as StatusCode;
 use Laminas\Diactoros\Response\EmptyResponse;
 use Laminas\Permissions\Rbac\Role;
 use Psr\Http\Message\ResponseInterface;
@@ -47,6 +48,6 @@ class RegisterAdminUser implements RequestHandlerInterface
 
         $this->commandBus->dispatch($message);
 
-        return new EmptyResponse(204, ['storage-Insert-Id' => $message->id()]);
+        return new EmptyResponse(StatusCode::STATUS_CREATED, ['Backendbase-Insert-Id' => $message->id()]);
     }
 }

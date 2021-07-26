@@ -9,11 +9,10 @@ use BackendBase\Domain\Administrators\Model\User;
 use BackendBase\Infrastructure\Persistence\Doctrine\Entity\User as DoctrineUser;
 use Carbon\CarbonImmutable;
 use DateTimeImmutable;
-use Ramsey\Uuid\Uuid;
 
-class UserMapper
+class UserGenerator
 {
-    public static function fromCommandToEntity(RegisterUser $message): User
+    public static function fromCommand(RegisterUser $message): User
     {
         return User::new(
             $message->id(),
@@ -26,10 +25,10 @@ class UserMapper
         );
     }
 
-    public static function fromArrayToEntity(array $userData): User
+    public static function fromArray(array $userData): User
     {
         return User::create(
-            $userData['id'] ?? Uuid::uuid4()->toString(),
+            $userData['id'],
             $userData['email'],
             $userData['firstName'],
             $userData['lastName'],

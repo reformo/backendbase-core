@@ -13,7 +13,7 @@ trait DomainException
 {
     use CommonProblemDetailsExceptionTrait;
 
-    private function __construct(int $status, string $detail, string $title, ?string $type, array $additional)
+    private function __construct(int $status, string $detail, string $title, string $type, array $additional)
     {
         $this->status     = $status;
         $this->detail     = $detail;
@@ -29,7 +29,7 @@ trait DomainException
             self::STATUS,
             $details,
             self::TITLE,
-            defined('static::TYPE') ? self::TYPE : '',
+            defined('static::TYPE') ? self::TYPE : 'https://httpstatus.es/' . self::STATUS,
             array_merge($additional, ['code' => self::CODE])
         );
     }

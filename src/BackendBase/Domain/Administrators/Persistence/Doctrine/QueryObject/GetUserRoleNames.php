@@ -6,6 +6,7 @@ namespace BackendBase\Domain\Administrators\Persistence\Doctrine\QueryObject;
 
 use BackendBase\Domain\Shared\Exception\ExecutionFailed;
 use BackendBase\Shared\Persistence\Doctrine\QueryObject;
+use BackendBase\Shared\Persistence\Doctrine\ResultObject;
 use BackendBase\Shared\Persistence\QueryObject as QueryObjectInterface;
 use Doctrine\Common\Collections\AbstractLazyCollection;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -33,7 +34,8 @@ SQL;
         $this->collection = new ArrayCollection($records);
     }
 
-    public function query(?array $parameters = []): void
+    public function query(array |null $parameters = []): ResultObject|null
     {
+        return null;
     }
 }

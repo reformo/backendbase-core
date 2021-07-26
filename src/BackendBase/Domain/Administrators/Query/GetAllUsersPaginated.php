@@ -6,27 +6,31 @@ namespace BackendBase\Domain\Administrators\Query;
 
 use BackendBase\Shared\CQRS\Interfaces\Query;
 
+#[QueryHandler(GetAllUsersPaginatedHandler::class)]
 class GetAllUsersPaginated implements Query
 {
     public const QUERY_NAME = 'users.get_all_users_paginated';
 
-    private int $offset;
-    private int $limit;
-
-    public function __construct(int $offset, int $limit)
-    {
-        $this->offset = $offset;
-        $this->limit  = $limit;
+    public function __construct(
+        private string $queryString,
+        private int $page,
+        private int $pageSize
+    ) {
     }
 
-    public function offset(): int
+    public function queryString(): string
     {
-        return $this->offset;
+        return $this->queryString;
     }
 
-    public function limit(): int
+    public function page(): int
     {
-        return $this->limit;
+        return $this->page;
+    }
+
+    public function pageSize(): int
+    {
+        return $this->pageSize;
     }
 
     public function getQueryName(): string

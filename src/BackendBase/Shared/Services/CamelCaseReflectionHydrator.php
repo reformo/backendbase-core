@@ -44,7 +44,8 @@ class CamelCaseReflectionHydrator extends AbstractHydrator
                 continue;
             }
 
-            $value                 = $property->getType()->getName() === DateTimeImmutable::class ? $property->getValue($object)->format(DATE_ATOM) : $property->getValue($object);
+            $value                 = $property->getType()->getName() === DateTimeImmutable::class ?
+                $property->getValue($object)->format(DATE_ATOM) : $property->getValue($object);
             $result[$propertyName] = $this->extractValue($propertyName, $value, $object);
         }
 
@@ -66,21 +67,30 @@ class CamelCaseReflectionHydrator extends AbstractHydrator
                 continue;
             }
 
-            $reflProperties[$name]->setValue($object, $this->hydrateValue($name, $this->getValueByType($reflProperties[$name], $value), $data));
+            $reflProperties[$name]->setValue(
+                $object,
+                $this->hydrateValue($name, $this->getValueByType($reflProperties[$name], $value), $data)
+            );
         }
 
         return $object;
     }
 
-    public function getValueByType(ReflectionProperty $property, $value)
+    public function getValueByType(ReflectionProperty $property, $value): mixed
     {
-        switch ($property->getType()) {
-            case DateTimeImmutable::class:
-                return (new CarbonImmutable($value))->toDateTimeImmutable();
+        $propertyType                 = $property->getType()?->getName();
+        $specialTypes                 = [
+            'DateTimeImmutable' => DateTimeImmutable::class,
+        ];
+        $specialTypeDateTimeImmutable = $specialTypes['DateTimeImmutable'];
 
-            default:
-                return $value;
-        }
+        return match ($propertyType) {
+            $specialTypeDateTimeImmutable => (new CarbonImmutable($value))->toDateTimeImmutable(),
+            default => $value
+            // phpcs:disable
+        };
+        // phpcs:enable
+
     }
 
     /**

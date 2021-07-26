@@ -5,30 +5,27 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Entity;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @Entity
- * @Table(name="admin.permissions")
- */
+#[ORM\Entity]
+#[ORM\Table(name: 'permissions', schema: 'admin')]
 class Permission
 {
-    /**
-     * @Id
-     * @Column(type="uuid")
-     * @GeneratedValue(strategy="NONE")
-     */
+    #[ORM\Id]
+    #[ORM\Column(type: 'uuid')]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     protected string $id;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $type;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $name;
 
-    /** @Column(type="string") */
+    #[ORM\Column(type: 'string')]
     protected string $key;
 
-    /** @Column(type="datetimetz_immutable", name="created_at") */
+    #[ORM\Column(name: 'created_at', type: 'datetimetz_immutable')]
     protected DateTimeImmutable $createdAt;
 
     public function id(): string

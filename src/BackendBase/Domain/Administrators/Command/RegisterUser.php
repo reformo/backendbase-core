@@ -6,6 +6,7 @@ namespace BackendBase\Domain\Administrators\Command;
 
 use BackendBase\Shared\CQRS\Interfaces\Command as CommandInterface;
 
+#[QueryHandler(RegisterUserHandler::class)]
 class RegisterUser implements CommandInterface
 {
     public const COMMAND_NAME = 'user.register';

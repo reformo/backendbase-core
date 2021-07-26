@@ -32,7 +32,7 @@ trait QueryObject
         'null' => PDO::PARAM_NULL,
     ];
 
-    protected function fetch(int $type, array $parameters, ?string $fetchObjectFullyQualifiedClassName = '')
+    protected function fetch(int $type, array $parameters, ?string $fetchObjectFullyQualifiedClassName = ''): ResultObject | iterable
     {
         $statement      = $this->executeQuery(self::$sql, $parameters);
         $exceptionClass = self::NOT_FOUND_CLASS;
@@ -56,12 +56,12 @@ trait QueryObject
         }
     }
 
-    protected function fetchAssociativeArray(array $parameters): array
+    protected function fetchAssociativeArray(array $parameters): iterable
     {
         return $this->fetch(PDO::FETCH_ASSOC, $parameters);
     }
 
-    protected function fetchObject(array $parameters, string $fetchObjectFullyQualifiedClassName): object
+    protected function fetchObject(array $parameters, string $fetchObjectFullyQualifiedClassName): ResultObject
     {
         return $this->fetch(PDO::FETCH_OBJ, $parameters, $fetchObjectFullyQualifiedClassName);
     }
@@ -94,7 +94,7 @@ trait QueryObject
         return $statement;
     }
 
-    protected static function hydrate($data, string $fullyQualifiedClassName): object
+    protected static function hydrate($data, string $fullyQualifiedClassName): ResultObject
     {
         return (new CamelCaseReflectionHydrator())
             ->hydrate($data, new $fullyQualifiedClassName());

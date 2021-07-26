@@ -6,6 +6,7 @@ namespace BackendBase\Domain\Administrators\Query;
 
 use BackendBase\Shared\CQRS\Interfaces\Query;
 
+#[QueryHandler(AuthenticateUserWithEmailHandler::class)]
 class AuthenticateUserWithEmail implements Query
 {
     public const QUERY_NAME = 'users.authenticate';

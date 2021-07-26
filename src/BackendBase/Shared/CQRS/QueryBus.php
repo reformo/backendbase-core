@@ -23,7 +23,7 @@ final class QueryBus implements QueryBusInterface
         $this->messageBus = $queryBus;
     }
 
-    public function handle(Query $message)
+    public function handle(Query $message): mixed
     {
         try {
             return $this->handleQuery($message);

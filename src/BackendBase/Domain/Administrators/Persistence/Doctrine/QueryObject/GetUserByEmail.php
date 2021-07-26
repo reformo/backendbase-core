@@ -47,7 +47,7 @@ SQL;
         return $query->query($parameters);
     }
 
-    public function query(?array $parameters = []): ?User
+    public function query(array |null $parameters = []): User|null
     {
         return $this->fetchObject($parameters, User::class);
     }
