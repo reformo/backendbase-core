@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Administrators\Command;
 
-#[QueryHandler(UnregisterUserHandler::class)]
+#[HandlerAttribute(UnregisterUserHandler::class)]
 class UnregisterUser
 {
     private $id;

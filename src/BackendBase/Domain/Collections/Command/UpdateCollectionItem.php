@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Collections\Command;
 
+#[HandlerAttribute(UpdateCollectionItemHandler::class)]
 class UpdateCollectionItem
 {
     public const COMMAND_NAME = 'collection.update_item';

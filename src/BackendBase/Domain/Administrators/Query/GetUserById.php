@@ -6,7 +6,7 @@ namespace BackendBase\Domain\Administrators\Query;
 
 use BackendBase\Shared\CQRS\Interfaces\Query;
 
-#[QueryHandler(GetUserByIdHandler::class)]
+#[HandlerAttribute(GetUserByIdHandler::class)]
 class GetUserById implements Query
 {
     public const QUERY_NAME = 'users.get_user_by_id';

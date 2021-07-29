@@ -8,7 +8,7 @@ use BackendBase\Domain\Collections\Exception\CollectionNotFound;
 use BackendBase\Domain\Collections\Model\Collections;
 use BackendBase\Domain\Collections\Persistence\Doctrine\ResultObject\Collection;
 use BackendBase\Domain\Shared\Exception\ExecutionFailed;
-use \BackendBase\Shared\Persistence\Doctrine\QueryObject;
+use BackendBase\Shared\Persistence\Doctrine\QueryObject;
 use Doctrine\DBAL\FetchMode;
 use Throwable;
 

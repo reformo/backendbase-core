@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Collections\Command;
 
+#[HandlerAttribute(AddNewCollectionItemHandler::class)]
 class AddNewCollectionItem
 {
     public const COMMAND_NAME = 'collection.create_item';

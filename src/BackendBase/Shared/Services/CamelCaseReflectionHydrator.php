@@ -90,7 +90,6 @@ class CamelCaseReflectionHydrator extends AbstractHydrator
             // phpcs:disable
         };
         // phpcs:enable
-
     }
 
     /**

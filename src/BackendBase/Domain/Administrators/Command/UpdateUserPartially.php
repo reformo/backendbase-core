@@ -10,7 +10,7 @@ use function array_keys;
 use function in_array;
 use function sprintf;
 
-#[QueryHandler(UpdateUserPartiallyHandler::class)]
+#[HandlerAttribute(UpdateUserPartiallyHandler::class)]
 class UpdateUserPartially
 {
     private array $payload            = [];

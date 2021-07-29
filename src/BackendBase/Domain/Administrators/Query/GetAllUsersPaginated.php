@@ -6,7 +6,7 @@ namespace BackendBase\Domain\Administrators\Query;
 
 use BackendBase\Shared\CQRS\Interfaces\Query;
 
-#[QueryHandler(GetAllUsersPaginatedHandler::class)]
+#[HandlerAttribute(GetAllUsersPaginatedHandler::class)]
 class GetAllUsersPaginated implements Query
 {
     public const QUERY_NAME = 'users.get_all_users_paginated';

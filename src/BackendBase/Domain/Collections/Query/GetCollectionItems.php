@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Domain\Collections\Query;
 
+#[HandlerAttribute(GetCollectionItemsHandler::class)]
 class GetCollectionItems
 {
     private ?string $parentId;
