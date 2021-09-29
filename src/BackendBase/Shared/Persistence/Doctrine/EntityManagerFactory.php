@@ -14,8 +14,8 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 use Ramsey\Uuid\Doctrine\UuidType;
 use Scienta\DoctrineJsonFunctions\Query\AST\Functions\Postgresql as DqlFunctions;
-use Symfony\Component\Cache\Adapter\ApcuAdapter as ApcuCache;
 use Symfony\Component\Cache\Adapter\ArrayAdapter as ArrayCache;
+use Symfony\Component\Cache\Adapter\PhpFilesAdapter as PhpFileCache;
 
 class EntityManagerFactory implements FactoryInterface
 {
@@ -25,7 +25,7 @@ class EntityManagerFactory implements FactoryInterface
         if ($appConfig['debug'] === true) {
             $cache = DoctrineProvider::wrap(new ArrayCache());
         } else {
-            $cache = DoctrineProvider::wrap(new ApcuCache());
+            $cache = DoctrineProvider::wrap(new PhpFileCache());
         }
 
         Type::addType('uuid', UuidType::class);
