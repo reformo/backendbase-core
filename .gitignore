@@ -10,3 +10,4 @@ webroots/
 src/DemoApp/
 src/templates/
 test/Fixtures/*.webp
+.phpunit*
