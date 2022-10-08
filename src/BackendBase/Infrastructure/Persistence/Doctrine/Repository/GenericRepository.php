@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BackendBase\Infrastructure\Persistence\Doctrine\Repository;
 
 use BackendBase\Shared\Persistence\Doctrine\Repository;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Redislabs\Module\RedisJson\RedisJsonInterface;
 use Selami\Stdlib\Arrays\ArrayKeysCamelCaseConverter;

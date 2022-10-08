@@ -6,7 +6,7 @@ namespace BackendBase\Shared\Middleware;
 
 use DateTimeImmutable;
 use DateTimeZone;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

@@ -18,7 +18,7 @@ class CommandHandlerFactory extends ReflectionBasedAbstractFactory
 {
     public function canCreate(ContainerInterface $container, $requestedName): bool
     {
-        return in_array(Command::class, class_implements($requestedName), true);
+        return class_exists($requestedName) && in_array(Command::class, class_implements($requestedName), true);
     }
 
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): mixed

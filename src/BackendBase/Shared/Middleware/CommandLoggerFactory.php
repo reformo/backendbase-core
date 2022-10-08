@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace BackendBase\Shared\Middleware;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;

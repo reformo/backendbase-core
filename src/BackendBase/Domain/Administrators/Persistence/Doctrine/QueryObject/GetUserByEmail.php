@@ -9,7 +9,7 @@ use BackendBase\Domain\Administrators\Persistence\Doctrine\ResultObject\User;
 use BackendBase\Domain\Shared\Exception\InvalidArgument;
 use BackendBase\Shared\Persistence\Doctrine\QueryObject;
 use BackendBase\Shared\Persistence\QueryObject as QueryObjectInterface;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 
 use function array_key_exists;
 

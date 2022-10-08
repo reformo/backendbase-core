@@ -14,6 +14,6 @@ class QueryHandlerFactory extends CommandHandlerFactory
 {
     public function canCreate(ContainerInterface $container, $requestedName): bool
     {
-        return in_array(Query::class, class_implements($requestedName), true);
+        return class_exists($requestedName) && in_array(Query::class, class_implements($requestedName), true);
     }
 }

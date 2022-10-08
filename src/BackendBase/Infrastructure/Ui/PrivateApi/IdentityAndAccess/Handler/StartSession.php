@@ -19,20 +19,19 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use RateLimit\Exception\LimitExceeded;
-use RateLimit\Rate;
-use RateLimit\RateLimiter;
 use Selami\Stdlib\Arrays\PayloadSanitizer;
-
+use BackendBase\Shared\Services\RateLimits\Session as SessionRateLimiter;
 use function hash;
 use function sprintf;
 
 use const DATE_ATOM;
 
+
 class StartSession implements RequestHandlerInterface
 {
     public function __construct(
         private QueryBus $queryBus,
-        private RateLimiter $redisRateLimiter,
+        private SessionRateLimiter $redisRateLimiter,
         private array $config
     ) {
     }
@@ -42,12 +41,12 @@ class StartSession implements RequestHandlerInterface
         $parsedBody = $request->getParsedBody();
         $payload    = PayloadSanitizer::sanitize($parsedBody);
         try {
-            $this->redisRateLimiter->limit(hash('sha256', $payload['email']), Rate::{Login::RATE_LIMIT_WINDOW}(Login::LOGIN_ATTEMPT_LIMIT));
+            $this->redisRateLimiter->limit(hash('sha256', $payload['email']));
         } catch (LimitExceeded $e) {
             throw LoginAttemptLimitExceeded::create(
                 $e->getMessage() . '. '
                 . 'You are allowed to attempt login '
-                . Login::LOGIN_ATTEMPT_LIMIT . ' ' . Login::RATE_LIMIT_WINDOW_DESC . '.'
+                . SessionRateLimiter::RATE_LIMIT_COUNT . ' ' . SessionRateLimiter::RATE_LIMIT_WINDOW_DESC . '.'
             );
         }
 

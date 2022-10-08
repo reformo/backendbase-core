@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BackendBase\Shared\Persistence\Doctrine;
 
 use Doctrine\Common\Cache\Psr6\DoctrineProvider;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;

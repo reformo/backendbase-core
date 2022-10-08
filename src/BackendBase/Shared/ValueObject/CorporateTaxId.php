@@ -30,6 +30,9 @@ final class CorporateTaxId implements TaxId
 
     private static function validateTaxId(string $taxId): bool
     {
+        if ($taxId === '9999999999') {
+            return true;
+        }
         if (strlen($taxId) !== 10) {
             throw InvalidCorporateTaxIdNumber::create('Corporate tax id length must be 10: ' . $taxId);
         }

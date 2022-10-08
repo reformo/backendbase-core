@@ -13,8 +13,8 @@ use function in_array;
 
 class RequestHandlerFactory extends ReflectionBasedAbstractFactory
 {
-    public function canCreate(ContainerInterface $container, $requestedName)
+    public function canCreate(ContainerInterface $container, $requestedName) : bool
     {
-        return in_array(RequestHandlerInterface::class, class_implements($requestedName), true);
+        return class_exists($requestedName) && in_array(RequestHandlerInterface::class, class_implements($requestedName), true);
     }
 }

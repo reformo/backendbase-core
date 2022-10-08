@@ -6,8 +6,9 @@ namespace BackendBase\Shared\Persistence\Doctrine;
 
 use BackendBase\Domain\Shared\Exception\ExecutionFailed;
 use BackendBase\Shared\Services\CamelCaseReflectionHydrator;
-use Doctrine\DBAL\Driver\Connection;
-use Doctrine\DBAL\Driver\Statement;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Result;
+use Doctrine\DBAL\Statement;
 use PDO;
 use Selami\Stdlib\Arrays\ArrayKeysCamelCaseConverter;
 use Throwable;
@@ -34,10 +35,10 @@ trait QueryObject
 
     protected function fetch(int $type, array $parameters, ?string $fetchObjectFullyQualifiedClassName = ''): ResultObject | iterable
     {
-        $statement      = $this->executeQuery(self::$sql, $parameters);
+        $result      = $this->executeQuery(self::$sql, $parameters);
         $exceptionClass = self::NOT_FOUND_CLASS;
         try {
-            $record = $statement->fetch();
+            $record = $result->fetchAssociative();
             if (empty($record)) {
                 throw $exceptionClass::create($this->buildExceptionMessage($parameters));
             }
@@ -81,17 +82,15 @@ trait QueryObject
         return $this->buildExceptionMessage($parameters);
     }
 
-    protected function executeQuery(string $sql, array $parameters): Statement
+    protected function executeQuery(string $sql, array $parameters): Result
     {
         $statement = $this->connection
             ->prepare($sql);
         foreach ($parameters as $key => $value) {
             $statement->bindValue($key, $value, self::$types[gettype($value)] ?? PDO::PARAM_STR);
         }
-
-        $statement->execute();
-
-        return $statement;
+        $result = $statement->executeQuery();
+        return $result;
     }
 
     protected static function hydrate($data, string $fullyQualifiedClassName): ResultObject

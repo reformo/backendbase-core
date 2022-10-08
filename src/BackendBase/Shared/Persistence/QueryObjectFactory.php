@@ -14,6 +14,6 @@ class QueryObjectFactory extends ReflectionBasedAbstractFactory
 {
     public function canCreate(ContainerInterface $container, $requestedName): bool
     {
-        return in_array(QueryObject::class, class_implements($requestedName), true);
+        return class_exists($requestedName) && in_array(QueryObject::class, class_implements($requestedName), true);
     }
 }

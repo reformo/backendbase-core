@@ -15,7 +15,7 @@ class DoctrineRepositoryFactory extends ReflectionBasedAbstractFactory
 {
     public function canCreate(ContainerInterface $container, $requestedName): bool
     {
-        return in_array(Repository::class, class_implements($requestedName), true);
+        return class_exists($requestedName) && in_array(Repository::class, class_implements($requestedName), true);
     }
 
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace BackendBase\Shared\Persistence\Doctrine;
 
 use Doctrine\DBAL\Configuration;
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\VarDateTimeImmutableType;
