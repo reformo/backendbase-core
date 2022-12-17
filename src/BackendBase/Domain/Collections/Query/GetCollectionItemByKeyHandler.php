@@ -9,11 +9,8 @@ use BackendBase\Domain\Collections\Persistence\Doctrine\ResultObject\Collection;
 
 class GetCollectionItemByKeyHandler
 {
-    private CollectionQuery $collectionQuery;
-
-    public function __construct(CollectionQuery $collectionQuery)
+    public function __construct(private CollectionQuery $collectionQuery)
     {
-        $this->collectionQuery = $collectionQuery;
     }
 
     public function __invoke(GetCollectionItemByKey $query): Collection

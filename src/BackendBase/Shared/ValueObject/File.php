@@ -11,12 +11,10 @@ use const DIRECTORY_SEPARATOR;
 class File
 {
     private array $pathInfo;
-    private LocalizedDateTime $createdAt;
 
-    public function __construct(string $filePath, LocalizedDateTime $createdAt)
+    public function __construct(string $filePath, private LocalizedDateTime $createdAt)
     {
         $this->pathInfo  = pathinfo($filePath);
-        $this->createdAt = $createdAt;
     }
 
     public function filePath(): string

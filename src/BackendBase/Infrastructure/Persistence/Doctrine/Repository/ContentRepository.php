@@ -228,7 +228,7 @@ SQL;
 
         $data['slug'] = $slugify->slugify($data['title']) . '-' . $shortener->reduce($data['id']);
 
-        if (count($data['images']) > 0) {
+        if ((is_countable($data['images']) ? count($data['images']) : 0) > 0) {
             $data['heroImage'] = $data['images'][0];
         }
 
@@ -237,7 +237,7 @@ SQL;
             $data['heroImage'] = str_replace('{videoId}', $videoId, 'https://i3.ytimg.com/vi/{videoId}/maxresdefault.jpg');
         }
 
-        if (! empty($data['heroImage']) && strpos($data['heroImage'], 'http') !== 0) {
+        if (! empty($data['heroImage']) && !str_starts_with($data['heroImage'], 'http')) {
             $data['useCdn'] = 1;
         }
 
@@ -402,7 +402,7 @@ SQL;
                 $datum['publishDate'] = $datum['publishDate']->format('d.m.Y');
             }
 
-            if (count($datum['images']) > 0) {
+            if ((is_countable($datum['images']) ? count($datum['images']) : 0) > 0) {
                 $datum['heroImage'] = $datum['images'][0];
             }
 
@@ -412,7 +412,7 @@ SQL;
             }
 
             $datum['slug'] = $slugify->slugify($datum['title']) . '-' . $shortener->reduce($datum['id']);
-            if (! empty($datum['heroImage']) && strpos($datum['heroImage'], 'http') !== 0) {
+            if (! empty($datum['heroImage']) && !str_starts_with($datum['heroImage'], 'http')) {
                 $datum['useCdn'] = 1;
             }
 

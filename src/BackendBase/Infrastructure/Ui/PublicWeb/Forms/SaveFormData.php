@@ -19,15 +19,8 @@ use Selami\Stdlib\Arrays\PayloadSanitizer;
 
 class SaveFormData implements RequestHandlerInterface
 {
-    private ServerUrlHelper $urlHelper;
-    private GenericRepository $genericRepository;
-
-    public function __construct(
-        ServerUrlHelper $urlHelper,
-        GenericRepository $genericRepository
-    ) {
-        $this->urlHelper         = $urlHelper;
-        $this->genericRepository = $genericRepository;
+    public function __construct(private ServerUrlHelper $urlHelper, private GenericRepository $genericRepository)
+    {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

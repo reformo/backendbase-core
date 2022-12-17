@@ -25,7 +25,7 @@ class Collection
     protected string $slug;
 
     #[ORM\Column(name: 'parent_id', type: 'uuid', nullable: true)]
-    protected ?string $parentId;
+    protected ?string $parentId = null;
 
     #[ORM\Column(type: 'json', nullable: true, options: ['jsonb' => true])]
     protected array $metadata;
@@ -92,9 +92,6 @@ class Collection
         return $this->metadata;
     }
 
-    /**
-     * @param array $metadata
-     */
     public function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;

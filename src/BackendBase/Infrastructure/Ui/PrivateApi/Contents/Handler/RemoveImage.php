@@ -21,22 +21,18 @@ use function array_values;
 
 class RemoveImage implements RequestHandlerInterface
 {
-    private array $config;
     private QueryBus $queryBus;
     private VehicleRepository $vehicleRepository;
     private QuotationRepository $quotationRepository;
-    private GenericRepository $genericRepository;
 
     public function __construct(
         QueryBus $queryBus,
         VehicleRepository $vehicleRepository,
         QuotationRepository $quotationRepository,
-        GenericRepository $genericRepository,
-        array $config
+        private GenericRepository $genericRepository,
+        private array $config
     ) {
-        $this->config            = $config;
         $this->queryBus          = $queryBus;
-        $this->genericRepository = $genericRepository;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

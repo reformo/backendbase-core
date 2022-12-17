@@ -21,16 +21,14 @@ use function trim;
 
 class AddNewCollectionItem implements RequestHandlerInterface
 {
-    private array $config;
     private CommandBus $commandBus;
 
     private static array $requiredInputs = ['name', 'key', 'metadata', 'parentId', ''];
 
     public function __construct(
         CommandBus $commandBus,
-        array $config
+        private array $config
     ) {
-        $this->config     = $config;
         $this->commandBus = $commandBus;
     }
 
@@ -52,7 +50,7 @@ class AddNewCollectionItem implements RequestHandlerInterface
         $collectionItemKey      = trim($requestBody['key']);
         $collectionItemParentId = $requestBody['parentId'];
         $collectionItemMetadata = $requestBody['metadata'];
-        if (count($collectionItemMetadata) === 0) {
+        if ((is_countable($collectionItemMetadata) ? count($collectionItemMetadata) : 0) === 0) {
             $collectionItemMetadata = ['isProtected' => true, 'isExposable' => false];
         }
 

@@ -100,7 +100,7 @@ class CamelCaseReflectionHydrator extends AbstractHydrator
      */
     protected static function getReflProperties(object $input): array
     {
-        $class = get_class($input);
+        $class = $input::class;
 
         if (isset(static::$reflProperties[$class])) {
             return static::$reflProperties[$class];

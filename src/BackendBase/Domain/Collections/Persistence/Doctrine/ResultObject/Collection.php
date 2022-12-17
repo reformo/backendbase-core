@@ -37,7 +37,7 @@ class Collection implements JsonSerializable
     public function metadata(): ?array
     {
         if (gettype($this->metadata) === 'string') {
-            return json_decode($this->metadata, (bool) JSON_OBJECT_AS_ARRAY);
+            return json_decode($this->metadata, (bool) JSON_OBJECT_AS_ARRAY, 512, JSON_THROW_ON_ERROR);
         }
 
         return $this->metadata;

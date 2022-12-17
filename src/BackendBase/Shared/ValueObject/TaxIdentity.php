@@ -11,21 +11,9 @@ final class TaxIdentity
 {
     public const TAXPAYER_PRIVATE   = 'private';
     public const TAXPAYER_CORPORATE = 'corporate';
-    private string $taxIdNumber;
-    private string $taxAdministrationOfficeName;
-    private string $taxAdministrationOfficeCode;
-    private string $taxPayerType;
 
-    private function __construct(
-        string $taxIdNumber,
-        string $taxAdministrationOfficeName,
-        string $taxAdministrationOfficeCode,
-        string $taxPayerType
-    ) {
-        $this->taxIdNumber                 = $taxIdNumber;
-        $this->taxAdministrationOfficeName = $taxAdministrationOfficeName;
-        $this->taxAdministrationOfficeCode = $taxAdministrationOfficeCode;
-        $this->taxPayerType                = $taxPayerType;
+    private function __construct(private string $taxIdNumber, private string $taxAdministrationOfficeName, private string $taxAdministrationOfficeCode, private string $taxPayerType)
+    {
     }
 
     public static function fromTaxId(

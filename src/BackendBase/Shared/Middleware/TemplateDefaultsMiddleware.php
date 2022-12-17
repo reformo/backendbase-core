@@ -15,13 +15,8 @@ use function stripos;
 
 class TemplateDefaultsMiddleware implements MiddlewareInterface
 {
-    private TemplateRendererInterface $templateRenderer;
-    private array $config;
-
-    public function __construct(TemplateRendererInterface $templateRenderer, array $config)
+    public function __construct(private TemplateRendererInterface $templateRenderer, private array $config)
     {
-        $this->templateRenderer = $templateRenderer;
-        $this->config           = $config;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

@@ -16,11 +16,9 @@ class SessionMiddleware implements MiddlewareInterface
 {
     public const SESSION_ID_KEY    =  'sessionId';
     public const SESSION_ATTRIBUTE = 'session';
-    private Redis $redis;
 
-    public function __construct(Redis $redis)
+    public function __construct(private Redis $redis)
     {
-        $this->redis = $redis;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

@@ -40,7 +40,7 @@
         "rss": "https://github.com/reformo/backendbase-core/releases.atom"
     },
     "require": {
-        "php": "~8.0",
+        "php": "^8.0",
         "ext-apcu": "*",
         "ext-dom": "*",
         "ext-gd": "*",

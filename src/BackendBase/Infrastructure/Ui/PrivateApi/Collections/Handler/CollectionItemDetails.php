@@ -16,14 +16,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class CollectionItemDetails implements RequestHandlerInterface
 {
-    private array $config;
     private QueryBus $queryBus;
 
     public function __construct(
         QueryBus $queryBus,
-        array $config
+        private array $config
     ) {
-        $this->config   = $config;
         $this->queryBus = $queryBus;
     }
 

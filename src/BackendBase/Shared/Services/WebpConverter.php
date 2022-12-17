@@ -19,15 +19,8 @@ use const PATHINFO_EXTENSION;
 
 class WebpConverter
 {
-    private string $filename;
-    private string $extensionType;
-    private int $quality;
-
-    private function __construct(string $filename, int $quality, string $extensionType)
+    private function __construct(private string $filename, private int $quality, private string $extensionType)
     {
-        $this->filename      = $filename;
-        $this->extensionType = $extensionType;
-        $this->quality       = $quality;
     }
 
     public static function convert(string $filename, int $quality = 85, string $extensionType = 'append'): string

@@ -24,37 +24,33 @@ final class CompanyInfo
         self::COMPANY_TYPE_LIMITED,
         self::COMPANY_TYPE_PRIVATE,
     ];
-
-    private TaxIdentity $taxIdentity;
     private string $legalName;
     private string $shortName;
     private string $companyType;
 
-    public function __construct(TaxIdentity $taxIdentity, string $legalName, string $shortName, string $companyType)
+    public function __construct(private TaxIdentity $taxIdentity, string $legalName, string $shortName, string $companyType)
     {
         try {
             Assert::minLength($legalName, 4);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             throw InvalidCompanyLegalName::create('Company legal name must be at least 4 characters long');
         }
 
         try {
             Assert::minLength($shortName, 1);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             throw InvalidCompanyShortName::create('Company legal name must be at least 1 characters long');
         }
 
         try {
             Assert::inArray($companyType, self::$companyTypes);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             throw InvalidCompanyType::create(sprintf(
                 'Invalid company type provided: "%s". Possible values are: %s',
                 $companyType,
                 implode(', ', self::$companyTypes)
             ));
         }
-
-        $this->taxIdentity = $taxIdentity;
         $this->legalName   = $legalName;
         $this->shortName   = $shortName;
         $this->companyType = $companyType;

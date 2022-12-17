@@ -14,13 +14,9 @@ use const JSON_THROW_ON_ERROR;
 class FlashMessages
 {
     public const FLASH_MESSAGE_ATTRIBUTE = 'flash';
-    private Redis $redis;
-    private string $key;
 
-    public function __construct(Redis $redis, string $key)
+    public function __construct(private Redis $redis, private string $key)
     {
-        $this->redis = $redis;
-        $this->key   = $key;
     }
 
     public function flash(string $key, $value): void

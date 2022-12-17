@@ -7,13 +7,8 @@ namespace BackendBase\Domain\Collections\Query;
 #[HandlerAttribute(GetCollectionItemBySlugHandler::class)]
 class GetCollectionItemBySlug
 {
-    private ?string $parentId;
-    private string $slug;
-
-    public function __construct(?string $parentId, string $slug)
+    public function __construct(private ?string $parentId, private string $slug)
     {
-        $this->parentId = $parentId;
-        $this->slug     = $slug;
     }
 
     public function payload(): array

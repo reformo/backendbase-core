@@ -89,9 +89,6 @@ class Forms
         return $this->metadata;
     }
 
-    /**
-     * @param array $metadata
-     */
     public function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;
@@ -102,9 +99,6 @@ class Forms
         return $this->options;
     }
 
-    /**
-     * @param array|null $options
-     */
     public function setOptions(?array $options): void
     {
         $this->options = $options;

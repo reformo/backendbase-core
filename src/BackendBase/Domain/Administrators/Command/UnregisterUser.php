@@ -7,11 +7,8 @@ namespace BackendBase\Domain\Administrators\Command;
 #[HandlerAttribute(UnregisterUserHandler::class)]
 class UnregisterUser
 {
-    private $id;
-
-    public function __construct(string $uuid)
+    public function __construct(private string $id)
     {
-        $this->id = $uuid;
     }
 
     public function id()

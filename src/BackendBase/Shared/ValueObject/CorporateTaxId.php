@@ -42,7 +42,7 @@ final class CorporateTaxId implements TaxId
         $sum    = 0;
         for ($i = 0; $i < count($digits) - 1; $i++) {
             $temp = ($digits[$i] + 10 - ($i + 1)) % 10;
-            $incr = ($temp === 9 ? 9 : ($temp * pow(2, 10 - ($i + 1))) % 9);
+            $incr = ($temp === 9 ? 9 : ($temp * 2 ** (10 - ($i + 1))) % 9);
             $sum += $incr;
         }
 

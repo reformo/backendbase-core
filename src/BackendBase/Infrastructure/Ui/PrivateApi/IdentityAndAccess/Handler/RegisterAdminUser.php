@@ -19,11 +19,8 @@ use Selami\Stdlib\Arrays\PayloadSanitizer;
 
 class RegisterAdminUser implements RequestHandlerInterface
 {
-    private CommandBus $commandBus;
-
-    public function __construct(CommandBus $commandBus)
+    public function __construct(private CommandBus $commandBus)
     {
-        $this->commandBus = $commandBus;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

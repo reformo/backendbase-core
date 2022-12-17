@@ -27,7 +27,7 @@ final class PhoneNumber
         try {
             Assert::minLength($countryCode, 1);
             Assert::numeric($countryCode);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             throw InvalidPhoneNumber::create(
                 'Invalid country code provided.',
                 ['error' => 'phone-number/invalid-country-code']
@@ -37,7 +37,7 @@ final class PhoneNumber
         try {
             Assert::minLength($areaCode, 3);
             Assert::numeric($areaCode);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             throw InvalidPhoneNumber::create(
                 'Area code length must be 3 characters long using numbers',
                 ['error' => 'phone-number/invalid-area-code']
@@ -47,7 +47,7 @@ final class PhoneNumber
         try {
             Assert::minLength($phoneNumber, 7);
             Assert::numeric($phoneNumber);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             throw InvalidPhoneNumber::create(
                 'Phone number length must be 7 characters long using numbers',
                 ['error' => 'phone-number/invalid-phone-number']
@@ -62,7 +62,7 @@ final class PhoneNumber
     public static function fromString(string $e164FormattedPhoneNumber): self
     {
         $e164FormattedPhoneNumber = preg_replace('/\s+/', '', trim($e164FormattedPhoneNumber));
-        if (strpos($e164FormattedPhoneNumber, '+') !== 0) {
+        if (!str_starts_with($e164FormattedPhoneNumber, '+')) {
             throw InvalidPhoneNumber::create(
                 'Phone number must be start with "+".',
                 ['error' => 'phone-number/must-be-start-with-plus']

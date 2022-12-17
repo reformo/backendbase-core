@@ -16,15 +16,8 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class GetCategoryList implements RequestHandlerInterface
 {
-    private ContentRepository $contentsRepository;
-    private GenericRepository $genericRepository;
-
-    public function __construct(
-        ContentRepository $contentsRepository,
-        GenericRepository $genericRepository
-    ) {
-        $this->contentsRepository = $contentsRepository;
-        $this->genericRepository  = $genericRepository;
+    public function __construct(private ContentRepository $contentsRepository, private GenericRepository $genericRepository)
+    {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

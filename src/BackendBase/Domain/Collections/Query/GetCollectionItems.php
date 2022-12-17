@@ -8,15 +8,8 @@ use BackendBase\Shared\CQRS\HandlerAttribute;
 #[HandlerAttribute(GetCollectionItemsHandler::class)]
 class GetCollectionItems
 {
-    private ?string $parentId;
-    private int $limit;
-    private int $offset;
-
-    public function __construct(?string $parentId, ?int $offset = 0, ?int $limit = 25)
+    public function __construct(private ?string $parentId, private ?int $offset = 0, private ?int $limit = 25)
     {
-        $this->parentId = $parentId;
-        $this->offset   = $offset;
-        $this->limit    = $limit;
     }
 
     public function payload(): array

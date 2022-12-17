@@ -25,11 +25,8 @@ use const JSON_THROW_ON_ERROR;
 
 class CommandLogger implements MiddlewareInterface
 {
-    private Connection $doctrineDbal;
-
-    public function __construct(Connection $doctrineDbal)
+    public function __construct(private Connection $doctrineDbal)
     {
-        $this->doctrineDbal = $doctrineDbal;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -44,12 +41,12 @@ class CommandLogger implements MiddlewareInterface
         $acceptHeader = $request->getHeaderLine('Accept');
         $source       = 'unknown';
         $apiVersion   = 'unknown';
-        if (strpos($acceptHeader, 'private-backendbase') !== false) {
+        if (str_contains($acceptHeader, 'private-backendbase')) {
             $source     = 'private-api';
             $apiVersion = $acceptHeader;
         }
 
-        if (strpos($acceptHeader, 'public-backendbase') !== false) {
+        if (str_contains($acceptHeader, 'public-backendbase')) {
             $source     = 'public-web';
             $apiVersion = $acceptHeader;
         }
@@ -90,8 +87,8 @@ class CommandLogger implements MiddlewareInterface
             'user_id' => $request->getAttribute('loggedUserId'),
             'source' => $source,
             'api_version' => $apiVersion,
-            'request' => json_encode($requestData),
-            'response' => json_encode($responseData),
+            'request' => json_encode($requestData, JSON_THROW_ON_ERROR),
+            'response' => json_encode($responseData, JSON_THROW_ON_ERROR),
             'logged_at' => (new DateTimeImmutable('now', new DateTimeZone('UTC')))->format(DATE_ATOM),
         ];
         $this->doctrineDbal->insert('admin.command_logs', $logData);

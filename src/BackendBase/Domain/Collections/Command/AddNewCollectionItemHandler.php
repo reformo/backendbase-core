@@ -14,11 +14,8 @@ use function sprintf;
 
 class AddNewCollectionItemHandler
 {
-    private CollectionRepository $repository;
-
-    public function __construct(CollectionRepository $repository)
+    public function __construct(private CollectionRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function __invoke(AddNewCollectionItem $command): void
@@ -39,7 +36,7 @@ class AddNewCollectionItemHandler
             throw CollectionExists::create(
                 sprintf('Collection exists with the provided key %s ', $collection->key())
             );
-        } catch (CollectionNotFound $e) {
+        } catch (CollectionNotFound) {
         }
 
         try {
@@ -48,7 +45,7 @@ class AddNewCollectionItemHandler
             throw CollectionExists::create(
                 sprintf('Collection exists with the provided parentId %s and slug %s ', $collection->parentId(), $collection->slug())
             );
-        } catch (CollectionNotFound $e) {
+        } catch (CollectionNotFound) {
         }
 
         $this->repository->addNewCollection($collection);

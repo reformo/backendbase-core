@@ -11,13 +11,8 @@ class RegisterUser implements CommandInterface
 {
     public const COMMAND_NAME = 'user.register';
 
-    private array $payload;
-    private string $id;
-
-    public function __construct(string $id, array $payload)
+    public function __construct(private string $id, private array $payload)
     {
-        $this->id      = $id;
-        $this->payload = $payload;
     }
 
     public function id()

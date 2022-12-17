@@ -18,18 +18,8 @@ use function array_key_exists;
 
 class GetContentListByCategory implements RequestHandlerInterface
 {
-    private ContentRepository $contentsRepository;
-    private GenericRepository $genericRepository;
-    private array $config;
-
-    public function __construct(
-        ContentRepository $contentsRepository,
-        GenericRepository $genericRepository,
-        array $config
-    ) {
-        $this->contentsRepository = $contentsRepository;
-        $this->genericRepository  = $genericRepository;
-        $this->config             = $config;
+    public function __construct(private ContentRepository $contentsRepository, private GenericRepository $genericRepository, private array $config)
+    {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

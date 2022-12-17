@@ -10,11 +10,9 @@ use BackendBase\Shared\CQRS\Interfaces\Query;
 class GetUserById implements Query
 {
     public const QUERY_NAME = 'users.get_user_by_id';
-    private string $userId;
 
-    public function __construct(string $userId)
+    public function __construct(private string $userId)
     {
-        $this->userId = $userId;
     }
 
     public function userId(): string

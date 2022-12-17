@@ -17,16 +17,8 @@ use Redislabs\Module\ReJSON\ReJSON;
 
 class CollectionRepository implements CollectionRepositoryInterface
 {
-    protected EntityManager $entityManager;
-    protected Connection $connection;
-
-    private ReJSON $reJSON;
-
-    public function __construct(EntityManager $entityManager, Connection $connection, ReJSON $reJSON)
+    public function __construct(protected EntityManager $entityManager, protected Connection $connection, private ReJSON $reJSON)
     {
-        $this->connection    = $connection;
-        $this->entityManager = $entityManager;
-        $this->reJSON        = $reJSON;
     }
 
     private function convertResultObjectToCollection(CollectionResultObject $persistedObject): Collection

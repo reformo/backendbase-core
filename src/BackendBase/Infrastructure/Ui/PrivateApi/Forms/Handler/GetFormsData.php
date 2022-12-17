@@ -18,12 +18,8 @@ use function ceil;
 
 class GetFormsData implements RequestHandlerInterface
 {
-    private GenericRepository $genericRepository;
-
-    public function __construct(
-        GenericRepository $genericRepository
-    ) {
-        $this->genericRepository = $genericRepository;
+    public function __construct(private GenericRepository $genericRepository)
+    {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

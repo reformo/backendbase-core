@@ -22,13 +22,8 @@ use const JSON_THROW_ON_ERROR;
 
 class CacheAndServePagesMiddleware implements MiddlewareInterface
 {
-    private Redis $redis;
-    private array $config;
-
-    public function __construct(Redis $redis, array $config)
+    public function __construct(private Redis $redis, private array $config)
     {
-        $this->redis  = $redis;
-        $this->config = $config;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

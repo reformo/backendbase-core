@@ -8,17 +8,9 @@ namespace BackendBase\Domain\Collections\Command;
 class AddNewCollectionItem
 {
     public const COMMAND_NAME = 'collection.create_item';
-    public string $name;
-    public string $key;
-    public ?array $metadata;
-    public ?string $parentId;
 
-    public function __construct(string $name, string $key, ?string $parentId, ?array $metadata)
+    public function __construct(public string $name, public string $key, public ?string $parentId, public ?array $metadata)
     {
-        $this->name     = $name;
-        $this->key      = $key;
-        $this->parentId = $parentId;
-        $this->metadata = $metadata;
     }
 
     public function payload(): array

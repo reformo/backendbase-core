@@ -10,13 +10,9 @@ use BackendBase\Shared\CQRS\Interfaces\Query;
 class AuthenticateUserWithEmail implements Query
 {
     public const QUERY_NAME = 'users.authenticate';
-    private string $email;
-    private string $password;
 
-    public function __construct(string $email, string $password)
+    public function __construct(private string $email, private string $password)
     {
-        $this->email    = $email;
-        $this->password = $password;
     }
 
     public function email(): string

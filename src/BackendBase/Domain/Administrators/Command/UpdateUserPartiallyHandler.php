@@ -9,11 +9,8 @@ use BackendBase\Domain\Administrators\Model\UserId;
 
 class UpdateUserPartiallyHandler
 {
-    private $repository;
-
-    public function __construct(UserRepository $repository)
+    public function __construct(private UserRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function __invoke(UpdateUserPartially $command): void

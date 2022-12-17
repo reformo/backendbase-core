@@ -11,13 +11,8 @@ use BackendBase\Shared\CQRS\Interfaces\QueryHandler;
 
 class GetUserByIdHandler implements QueryHandler
 {
-    private GetUserByIdQuery $getUserByIdQuery;
-    private GetPermissionsListByRole $getPermissionsListByRoleQuery;
-
-    public function __construct(GetUserByIdQuery $getUserByIdQuery, GetPermissionsListByRole $getPermissionsListByRoleQuery)
+    public function __construct(private GetUserByIdQuery $getUserByIdQuery, private GetPermissionsListByRole $getPermissionsListByRoleQuery)
     {
-        $this->getUserByIdQuery              = $getUserByIdQuery;
-        $this->getPermissionsListByRoleQuery = $getPermissionsListByRoleQuery;
     }
 
     public function __invoke(GetUserById $query): User

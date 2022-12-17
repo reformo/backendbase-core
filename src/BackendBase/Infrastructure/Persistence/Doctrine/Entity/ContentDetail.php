@@ -34,10 +34,10 @@ class ContentDetail
     protected string $serpTitle;
 
     #[ORM\Column(type: 'string')]
-    protected ?string $description;
+    protected ?string $description = null;
 
     #[ORM\Column(type: 'string')]
-    protected ?string $keywords;
+    protected ?string $keywords = null;
 
     #[ORM\Column(type: 'json', nullable: true, options: ['jsonb' => true])]
     protected ?array $body = [];
@@ -133,9 +133,6 @@ class ContentDetail
         return $this->body;
     }
 
-    /**
-     * @param array|null $body
-     */
     public function setBody(?array $body): void
     {
         $this->body = $body;

@@ -45,7 +45,7 @@ class FileRepository extends GenericRepository
         return $this->entityManager->find(File::class, $fileId);
     }
 
-    public function update(File $file): void
+    public function update(File $file, string $entityId, array $entityData): void
     {
         $this->entityManager->persist($file);
         $this->entityManager->flush();

@@ -22,7 +22,7 @@ class Person
     {
         try {
             Assert::minLength($firstName, 1);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             throw InvalidPersonFirstName::create(
                 'Name must be at least 1 character long',
                 ['error' => 'person/invalid-first-name']
@@ -31,7 +31,7 @@ class Person
 
         try {
             Assert::minLength($familyName, 2);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             throw InvalidPersonFamilyName::create(
                 'Family name must be at least 2 character long',
                 ['error' => 'person/invalid-family-name']

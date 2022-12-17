@@ -18,14 +18,12 @@ use Psr\Http\Server\RequestHandlerInterface;
 class CollectionsList implements RequestHandlerInterface
 {
     private const RESULT_ROWS_LIMIT = 100;
-    private array $config;
     private QueryBus $queryBus;
 
     public function __construct(
         QueryBus $queryBus,
-        array $config
+        private array $config
     ) {
-        $this->config   = $config;
         $this->queryBus = $queryBus;
     }
 

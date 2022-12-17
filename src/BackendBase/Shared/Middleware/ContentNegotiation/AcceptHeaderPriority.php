@@ -13,11 +13,11 @@ use function strpos;
 
 class AcceptHeaderPriority
 {
-    private $type       = 'application/json';
+    private string $type       = 'application/json';
     private $charset    = 'UTF-8';
     private $q          = 1.0;
-    private $parameters = [];
-    private $version;
+    private array $parameters = [];
+    private ?string $version = null;
 
     private function __construct()
     {
@@ -42,7 +42,7 @@ class AcceptHeaderPriority
 
     private function checkAcceptType(string $acceptType): void
     {
-        if (strpos($acceptType, '/') === false) {
+        if (!str_contains($acceptType, '/')) {
             return;
         }
 
@@ -53,7 +53,7 @@ class AcceptHeaderPriority
     private function checkVersionInAcceptType(string $acceptType): void
     {
         $subParts = explode('/', $acceptType);
-        if (strpos($subParts[1], '.') === false) {
+        if (!str_contains($subParts[1], '.')) {
             return;
         }
 
@@ -72,7 +72,7 @@ class AcceptHeaderPriority
 
     private function setParameters(string $acceptParameter): void
     {
-        if (strpos($acceptParameter, '=') === false) {
+        if (!str_contains($acceptParameter, '=')) {
             return;
         }
 

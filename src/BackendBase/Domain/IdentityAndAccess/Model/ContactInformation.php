@@ -9,13 +9,8 @@ use BackendBase\Shared\ValueObject\PhoneNumber;
 
 class ContactInformation
 {
-    private Email $email;
-    private ?PhoneNumber $mobile;
-
-    public function __construct(Email $email, ?PhoneNumber $mobile = null)
+    public function __construct(private Email $email, private ?\BackendBase\Shared\ValueObject\PhoneNumber $mobile = null)
     {
-        $this->email  = $email;
-        $this->mobile = $mobile;
     }
 
     public function email(): Email

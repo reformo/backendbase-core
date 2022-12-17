@@ -18,21 +18,15 @@ use function str_replace;
 
 class PageHandler implements RequestHandlerInterface
 {
-    private ?TemplateRendererInterface $template = null;
-    private $config;
     private $queryBus;
-    private ContentRepository $contentRepository;
 
     public function __construct(
         QueryBus $queryBus,
-        TemplateRendererInterface $template,
-        ContentRepository $contentRepository,
-        array $config
+        private ?\Mezzio\Template\TemplateRendererInterface $template,
+        private ContentRepository $contentRepository,
+        private array $config
     ) {
-        $this->template          = $template;
-        $this->config            = $config;
         $this->queryBus          = $queryBus;
-        $this->contentRepository = $contentRepository;
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface
@@ -46,7 +40,7 @@ class PageHandler implements RequestHandlerInterface
 
             $template = $page['templateFile'];
             $data     = ['page' => $page];
-        } catch (ContentNotFound $exception) {
+        } catch (ContentNotFound) {
             $template = 'error::404';
             $data     = ['error' => 404];
         } catch (Throwable $throwable) {

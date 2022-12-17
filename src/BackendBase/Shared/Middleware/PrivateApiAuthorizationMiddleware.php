@@ -26,13 +26,8 @@ use function str_replace;
 
 final class PrivateApiAuthorizationMiddleware implements MiddlewareInterface
 {
-    private RolesRepository $rolesRepository;
-    private array $config;
-
-    public function __construct(RolesRepository $rolesRepository, array $config)
+    public function __construct(private RolesRepository $rolesRepository, private array $config)
     {
-        $this->rolesRepository = $rolesRepository;
-        $this->config          = $config;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

@@ -20,13 +20,8 @@ use const JSON_THROW_ON_ERROR;
 
 class UserRoles implements RequestHandlerInterface
 {
-    private RolesRepository $rolesRepository;
-
-    public function __construct(
-        RolesRepository $rolesRepository,
-        array $config
-    ) {
-        $this->rolesRepository = $rolesRepository;
+    public function __construct(private RolesRepository $rolesRepository, array $config)
+    {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

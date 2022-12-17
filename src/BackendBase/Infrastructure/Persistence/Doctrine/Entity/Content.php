@@ -45,13 +45,13 @@ class Content
     protected string $robots;
 
     #[ORM\Column(name: 'redirect_url', type: 'string')]
-    protected ?string $redirectUrl;
+    protected ?string $redirectUrl = null;
 
     #[ORM\Column(name: 'cover_image_landscape', type: 'string')]
-    protected ?string $coverImageLandscape;
+    protected ?string $coverImageLandscape = null;
 
     #[ORM\Column(name: 'cover_image_portrait', type: 'string')]
-    protected ?string $coverImagePortrait;
+    protected ?string $coverImagePortrait = null;
 
     #[ORM\Column(name: 'sort_order', type: 'string')]
     protected string $sortOrder;
@@ -87,9 +87,6 @@ class Content
         return $this->tags;
     }
 
-    /**
-     * @param array $tags
-     */
     public function setTags(array $tags): void
     {
         $this->tags = $tags;
@@ -242,7 +239,7 @@ class Content
 
 
     /** @Column(type="datetimetz_immutable", name="expire_at") */
-    protected ?DateTimeImmutable $expireAt;
+    protected ?DateTimeImmutable $expireAt = null;
 
     public static function generateSortValue(): string
     {

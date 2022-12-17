@@ -31,11 +31,8 @@ use const LC_MESSAGES;
 
 final class LanguageSelectorMiddleware implements MiddlewareInterface
 {
-    private $config;
-
-    public function __construct(array $config)
+    public function __construct(private array $config)
     {
-        $this->config = $config;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface

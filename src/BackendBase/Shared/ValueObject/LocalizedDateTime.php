@@ -11,11 +11,8 @@ use DateTimeZone;
 
 class LocalizedDateTime
 {
-    private DateTimeImmutable $datetime;
-
-    private function __construct(DateTimeImmutable $datetime)
+    private function __construct(private DateTimeImmutable $datetime)
     {
-        $this->datetime = $datetime;
     }
 
     public static function fromString(string $datetime, ?string $timezone = 'UTC'): self

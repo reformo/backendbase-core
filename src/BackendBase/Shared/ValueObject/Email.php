@@ -17,7 +17,7 @@ final class Email implements EmailInterface
     {
         try {
             Assert::email($email);
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             throw InvalidEmailAddress::create('Invalid email address: ' . $email);
         }
 

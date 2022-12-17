@@ -13,20 +13,16 @@ use BackendBase\Shared\CQRS\Interfaces\QueryHandler;
 class AuthenticateUserWithEmailHandler implements QueryHandler
 {
     private const CALLABLE_VERIFY_FUNCTION = 'password_verify';
-    private GetUserByEmail $getUserByEmailQuery;
-    private GetPermissionsListByRole $getPermissionsListByRoleQuery;
 
-    public function __construct(GetUserByEmail $getUserByEmailQuery, GetPermissionsListByRole $getPermissionsListByRoleQuery)
+    public function __construct(private GetUserByEmail $getUserByEmailQuery, private GetPermissionsListByRole $getPermissionsListByRoleQuery)
     {
-        $this->getUserByEmailQuery           = $getUserByEmailQuery;
-        $this->getPermissionsListByRoleQuery = $getPermissionsListByRoleQuery;
     }
 
     public function __invoke(AuthenticateUserWithEmail $query): User
     {
         $parameters = ['email' => $query->email()];
         $user       = $this->getUserByEmailQuery->query($parameters);
-        $this->verifyPassword($query->password(), $user->passwordHash(), self::CALLABLE_VERIFY_FUNCTION);
+        $this->verifyPassword($query->password(), $user->passwordHash());
         $user->unset('passwordHash', 'passwordHashAlgo');
         $user->setPermissions($this->getPermissionsListByRoleQuery->query(['roleType' => $user->role()]));
 

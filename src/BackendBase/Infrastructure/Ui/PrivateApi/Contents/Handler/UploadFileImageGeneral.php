@@ -40,29 +40,18 @@ class UploadFileImageGeneral implements RequestHandlerInterface
 {
     private const RESULT_ROWS_LIMIT = 25;
     private const ULID_LOWERCASE    = true;
-
-    private array $config;
-    private Filesystem $fileSystem;
-    private FileRepository $fileRepository;
     private CommandBus $commandBus;
-    private CollectionRepository $collectionRepository;
-    private GenericRepository $genericRepository;
     private Slugify $slugifier;
 
     public function __construct(
         CommandBus $commandBus,
-        FileRepository $fileRepository,
-        CollectionRepository $collectionRepository,
-        GenericRepository $genericRepository,
-        Filesystem $fileSystem,
-        array $config
+        private FileRepository $fileRepository,
+        private CollectionRepository $collectionRepository,
+        private GenericRepository $genericRepository,
+        private Filesystem $fileSystem,
+        private array $config
     ) {
-        $this->config               = $config;
         $this->commandBus           = $commandBus;
-        $this->fileSystem           = $fileSystem;
-        $this->fileRepository       = $fileRepository;
-        $this->genericRepository    = $genericRepository;
-        $this->collectionRepository = $collectionRepository;
         $this->slugifier            = new Slugify(['rulesets' => ['default', 'turkish']]);
     }
 

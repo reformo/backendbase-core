@@ -51,9 +51,6 @@ class FormData
         $this->formId = $formId;
     }
 
-    /**
-     * @param array $postData
-     */
     public function setPostData(array $postData): void
     {
         $this->postData = $postData;

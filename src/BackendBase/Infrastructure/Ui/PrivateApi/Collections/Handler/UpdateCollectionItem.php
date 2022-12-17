@@ -17,14 +17,12 @@ use Selami\Stdlib\Arrays\PayloadSanitizer;
 
 class UpdateCollectionItem implements RequestHandlerInterface
 {
-    private $config;
     private $commandBus;
 
     public function __construct(
         CommandBus $commandBus,
-        array $config
+        private array $config
     ) {
-        $this->config     = $config;
         $this->commandBus = $commandBus;
     }
 

@@ -63,9 +63,6 @@ class File
         return $this->metadata;
     }
 
-    /**
-     * @param array $metadata
-     */
     public function setMetadata(array $metadata): void
     {
         $this->metadata = $metadata;

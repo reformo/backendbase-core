@@ -22,15 +22,8 @@ use const SORT_NATURAL;
 
 class CollectionQuery implements CollectionQueryInterface
 {
-    protected EntityManager $entityManager;
-    protected Connection $connection;
-    private ReJSON $reJSON;
-
-    public function __construct(EntityManager $entityManager, Connection $connection, ReJSON $reJSON)
+    public function __construct(protected EntityManager $entityManager, protected Connection $connection, private ReJSON $reJSON)
     {
-        $this->connection    = $connection;
-        $this->entityManager = $entityManager;
-        $this->reJSON        = $reJSON;
     }
 
     public function findById(string $id): CollectionResultObject
@@ -81,7 +74,7 @@ class CollectionQuery implements CollectionQueryInterface
                 'id' => $item['key'],
                 'name' => $item['name'],
                 'slug' => $item['slug'],
-                'metadata' => json_decode($item['metadata'] ?? '{}', (bool) JSON_OBJECT_AS_ARRAY),
+                'metadata' => json_decode($item['metadata'] ?? '{}', (bool) JSON_OBJECT_AS_ARRAY, 512, JSON_THROW_ON_ERROR),
                 'items' => $this->getChildrenKeys($item['id']),
             ];
         }

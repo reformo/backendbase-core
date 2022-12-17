@@ -9,11 +9,8 @@ use BackendBase\Domain\Collections\Model\Collections;
 
 class GetCollectionItemsHandler
 {
-    private CollectionQuery $collectionQuery;
-
-    public function __construct(CollectionQuery $collectionQuery)
+    public function __construct(private CollectionQuery $collectionQuery)
     {
-        $this->collectionQuery = $collectionQuery;
     }
 
     public function __invoke(GetCollectionItems $query): Collections

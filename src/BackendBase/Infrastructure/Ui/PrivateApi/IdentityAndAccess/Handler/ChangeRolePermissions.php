@@ -20,16 +20,8 @@ use function in_array;
 
 class ChangeRolePermissions implements RequestHandlerInterface
 {
-    private RolesRepository $rolesRepository;
-    private GenericRepository $genericRepository;
-
-    public function __construct(
-        RolesRepository $rolesRepository,
-        GenericRepository $genericRepository,
-        array $config
-    ) {
-        $this->rolesRepository   = $rolesRepository;
-        $this->genericRepository = $genericRepository;
+    public function __construct(private RolesRepository $rolesRepository, private GenericRepository $genericRepository, array $config)
+    {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

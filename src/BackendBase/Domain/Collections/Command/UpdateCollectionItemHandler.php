@@ -9,11 +9,8 @@ use Ramsey\Uuid\Uuid;
 
 class UpdateCollectionItemHandler
 {
-    private CollectionRepository $repository;
-
-    public function __construct(CollectionRepository $repository)
+    public function __construct(private CollectionRepository $repository)
     {
-        $this->repository = $repository;
     }
 
     public function __invoke(UpdateCollectionItem $command): void

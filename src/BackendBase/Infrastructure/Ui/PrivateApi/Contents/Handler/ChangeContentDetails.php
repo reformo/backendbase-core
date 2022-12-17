@@ -31,21 +31,8 @@ use const JSON_THROW_ON_ERROR;
 
 class ChangeContentDetails implements RequestHandlerInterface
 {
-    private ContentRepository $contentsRepository;
-    private GenericRepository $genericRepository;
-    private CollectionQuery $collectionQuery;
-    private array $config;
-
-    public function __construct(
-        ContentRepository $contentsRepository,
-        GenericRepository $genericRepository,
-        CollectionQuery $collectionQuery,
-        array $config
-    ) {
-        $this->contentsRepository = $contentsRepository;
-        $this->genericRepository  = $genericRepository;
-        $this->collectionQuery    = $collectionQuery;
-        $this->config             = $config;
+    public function __construct(private ContentRepository $contentsRepository, private GenericRepository $genericRepository, private CollectionQuery $collectionQuery, private array $config)
+    {
     }
 
     public function handle(ServerRequestInterface $request): ResponseInterface

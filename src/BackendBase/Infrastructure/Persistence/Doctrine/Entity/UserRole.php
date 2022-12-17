@@ -73,9 +73,6 @@ class UserRole
         return $this->permissions;
     }
 
-    /**
-     * @param array|null $permissions
-     */
     public function setPermissions(?array $permissions): void
     {
         $this->permissions = $permissions;
